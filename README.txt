@@ -1,17 +1,7 @@
-# Vikas CSC Jan Sewa Kendra Website
+# Vikas CSC Jan Sewa Kendra — GitHub Pages
 
-Files:
-- index.html — main website
-- style.css — premium 3D/glow styling
-- script.js — services, search, admin panel and UPI QR generator
-- assets/logo.png — uploaded CSC logo
-- assets/premium-banner.png — uploaded premium banner
-
-Open index.html in a browser to preview.
-
-OWNER ADMIN
-Default demo password: Vikas@2026
-Change this password in script.js before public deployment.
-
-IMPORTANT
-The included admin is browser/localStorage based for a static website. It is NOT server-side security. For a truly owner-only public admin panel, deploy with a backend/database and real authentication.
+1. Upload all files/folders from this package to the root of your GitHub Pages repository.
+2. Keep the `assets` folder with `logo.jpg` and `upi-qr.png`.
+3. The site uses the supplied CSC logo and UPI ID `vikas3841@nyes`.
+4. The Admin panel is client-side: the password is not displayed, but GitHub Pages is a static site, so this is not a secure server-side authentication system. New services added from the panel are stored in that browser's localStorage.
+5. To publish a newly added service for every visitor, add it to the `services` array in `script.js` and commit the change to GitHub.
