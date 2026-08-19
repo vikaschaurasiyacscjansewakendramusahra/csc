@@ -1,34 +1,79 @@
-const services=[
-{name:'Aadhaar Services',cat:'Government',icon:'🪪',desc:'Aadhaar से जुड़े ऑनलाइन कार्य और सहायता'},
-{name:'PAN Card',cat:'Government',icon:'💳',desc:'PAN आवेदन, सुधार और ऑनलाइन सहायता'},
-{name:'Ayushman Bharat',cat:'Government',icon:'🏥',desc:'Ayushman कार्ड संबंधी सहायता'},
-{name:'PM Kisan',cat:'Government',icon:'🌾',desc:'PM-Kisan पंजीकरण और संबंधित कार्य'},
-{name:'e-Shram Card',cat:'Government',icon:'👷',desc:'e-Shram पंजीकरण और सहायता'},
-{name:'Voter ID',cat:'Government',icon:'🗳️',desc:'मतदाता पहचान पत्र आवेदन/सुधार'},
-{name:'Income / Caste / Residence',cat:'Government',icon:'📜',desc:'आय, जाति और निवास प्रमाण-पत्र सहायता'},
-{name:'Birth / Death Certificate',cat:'Government',icon:'📄',desc:'जन्म एवं मृत्यु प्रमाण-पत्र संबंधी कार्य'},
-{name:'Online Forms',cat:'Online Form',icon:'📝',desc:'सरकारी/शैक्षणिक ऑनलाइन फॉर्म भरना'},
-{name:'Bill Payment',cat:'Banking & Payment',icon:'💡',desc:'बिजली, पानी और अन्य बिल भुगतान'},
-{name:'Mobile Recharge',cat:'Banking & Payment',icon:'📱',desc:'मोबाइल और DTH रिचार्ज'},
-{name:'Banking / BC Services',cat:'Banking & Payment',icon:'🏦',desc:'उपलब्ध बैंकिंग/BC सेवाओं में सहायता'},
-{name:'Insurance',cat:'Banking & Payment',icon:'🛡️',desc:'बीमा संबंधी ऑनलाइन सहायता'},
-{name:'Pension Services',cat:'Government',icon:'👴',desc:'पेंशन से जुड़े ऑनलाइन कार्य'},
-{name:'Railway Ticket',cat:'Online Form',icon:'🚆',desc:'रेल टिकट संबंधी ऑनलाइन सहायता'},
-{name:'Passport Services',cat:'Government',icon:'🌐',desc:'पासपोर्ट आवेदन संबंधी सहायता'},
-{name:'Print / Scan',cat:'Document',icon:'🖨️',desc:'प्रिंट, स्कैन और दस्तावेज़ सेवाएँ'},
-{name:'Photo / Typing',cat:'Document',icon:'⌨️',desc:'फोटो, टाइपिंग और डिजिटल दस्तावेज़'},
+const DEFAULT_SERVICES = [
+ {icon:"🏦",title:"बैंकिंग एवं आधार सेवाएँ",desc:"दैनिक डिजिटल और नागरिक सेवाएँ एक ही जगह।",items:["AEPS बैंकिंग – जमा / निकासी","बैलेंस, मिनी स्टेटमेंट","वृद्धावस्था / विधवा / दिव्यांग पेंशन","जीवन प्रमाण पत्र (Jeevan Pramaan)","आधार में पता अपडेट","आयुष्मान कार्ड – नया / पात्रता जाँच","ABHA Health ID"]},
+ {icon:"🚗",title:"RTO / वाहन सेवाएँ",desc:"ड्राइविंग लाइसेंस और वाहन संबंधी सेवाएँ।",items:["ड्राइविंग लाइसेंस – नया / रिन्यू / डुप्लीकेट","वाहन ट्रांसफर, परमिट, फिटनेस","HSRP नंबर प्लेट – बुकिंग + ट्रैकिंग","फैंसी नंबर प्लेट (पसंदीदा नंबर)","e-Challan भुगतान – ऑनलाइन","वाहन बीमा / FASTag","जिले: संत कबीर नगर, सिद्धार्थनगर, गोरखपुर, महाराजगंज, बस्ती"]},
+ {icon:"📜",title:"प्रमाण पत्र एवं सरकारी दस्तावेज",desc:"सरकारी प्रमाण-पत्र और ऑनलाइन दस्तावेजी सेवाएँ।",items:["आय / जाति / निवास / राशन कार्ड","खतौनी (प्रमाणित / अभिलेख)","भू-नक्शा / भूमि नक्शा","विवाह पंजीकरण","चरित्र प्रमाण पत्र (Police Verification)","UDID कार्ड / दिव्यांग प्रमाण पत्र","e-District – सभी प्रमाण पत्र"]},
+ {icon:"📊",title:"टैक्स / व्यवसाय सेवाएँ",desc:"व्यापार, टैक्स और पंजीकरण संबंधी ऑनलाइन काम।",items:["GST रजिस्ट्रेशन – नया / संशोधन","GST फाइलिंग – मासिक / वार्षिक","ITR फाइलिंग – सभी आय वर्ग","FSSAI लाइसेंस – नया / रिन्यूअल","MSME / उद्यम रजिस्ट्रेशन","DSC / डिजिटल सिग्नेचर"]},
+ {icon:"🎓",title:"शिक्षा / छात्र सेवाएँ",desc:"छात्रों और शिक्षा से जुड़ी सुविधाएँ।",items:["छात्रवृत्ति आवेदन – राज्य / केंद्र","ABC ID / APAAR","बोर्ड / यूनिवर्सिटी रिजल्ट","कॉलेज प्रवेश फॉर्म"]},
+ {icon:"✈️",title:"यात्रा / टिकटिंग सेवाएँ",desc:"रेल, बस, फ्लाइट और पासपोर्ट सेवाएँ।",items:["रेलवे टिकट – PNR स्टेटस","बस टिकट (रीजनल / इंटरस्टेट)","फ्लाइट टिकट (Domestic / International)","पासपोर्ट सेवाएँ – PSK / ऑनलाइन"]},
+ {icon:"🌾",title:"कृषि व किसान सेवाएँ",desc:"किसानों के लिए डिजिटल सहायता।",items:["किसान पंजीकरण","PM-Kisan स्थिति / सुधार","कृषि सहायता / मुद्रा प्रशिक्षण","KCC लोन आवेदन","MPACS समिति सेवाएँ"]},
+ {icon:"🧰",title:"अन्य आवश्यक सेवाएँ",desc:"रोजमर्रा की कई ऑनलाइन सुविधाएँ।",items:["सभी ऑनलाइन फॉर्म","फोटो / फोटो कॉपी / स्कैन / PDF","Resume (CV) बनाना (Excel/Word)","मोबाइल / DTH रिचार्ज","बिजली बिल भुगतान / नया कनेक्शन","ई-श्रम / श्रम कार्ड","उज्ज्वला – LPG कनेक्शन","EPFO – UAN / PF Withdrawal","Airtel / Jio नई SIM","Cyber Cafe सभी सेवाएँ","केंद्र व राज्य की सभी योजनाएँ"]},
+ {icon:"🚀",title:"नई एवं एडवांस सेवाएँ (2026–2027)",desc:"नई डिजिटल सुविधाएँ समय के साथ जोड़ी जा सकती हैं।",items:["PAN कार्ड – नया / सुधार","DigiLocker दस्तावेज सेवाएँ","eSign – डिजिटल हस्ताक्षर","NPS / APY पेंशन सेवाएँ","Ayushman 2.0 & Health Services","PM Vishwakarma योजना","Skill India / रोजगार पंजीकरण","GeM Seller Registration सहायता","Tele-Law – कानूनी सहायता","Insurance – Life / Health / Motor","e-Shram 2.0 अपडेट","CSC के नए G2C / B2C डिजिटल सेवाएँ","आधार आधारित e-KYC व वेरिफिकेशन","ऑनलाइन प्रीपेड / अन्य कोई भी नई डिजिटल सेवा"]}
 ];
-let added=JSON.parse(localStorage.getItem('vikas_csc_services')||'[]');
-function all(){return [...services,...added]}
-function render(filter=''){const grid=document.getElementById('serviceGrid');const q=filter.trim().toLowerCase();const list=all().filter(s=>(s.name+' '+s.cat+' '+s.desc).toLowerCase().includes(q));grid.innerHTML=list.map((s,i)=>`<article class="service-card"><div class="service-icon">${s.icon||'🧾'}</div><h3>${escapeHtml(s.name)}</h3><p>${escapeHtml(s.desc||'Digital service')}</p><span class="tag">${escapeHtml(s.cat||'Other')}</span></article>`).join('');document.getElementById('emptyState').hidden=list.length!==0}
-function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
-async function sha256(s){const b=new TextEncoder().encode(s);const h=await crypto.subtle.digest('SHA-256',b);return [...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,'0')).join('')}
-const modal=document.getElementById('adminModal');
-document.getElementById('adminOpen').onclick=()=>{modal.classList.add('show');modal.setAttribute('aria-hidden','false')};
-document.getElementById('adminClose').onclick=()=>{modal.classList.remove('show');modal.setAttribute('aria-hidden','true')};
-document.getElementById('serviceSearch').oninput=e=>render(e.target.value);
-document.getElementById('copyUpi').onclick=async()=>{await navigator.clipboard.writeText('vikas3841@nyes');document.getElementById('copyUpi').textContent='कॉपी हो गया ✓';setTimeout(()=>document.getElementById('copyUpi').textContent='UPI ID कॉपी करें',1600)};
-document.getElementById('loginBtn').onclick=async()=>{const pass=document.getElementById('adminPassword').value;const ok=(await sha256(pass))===window.ADMIN_HASH;const msg=document.getElementById('loginMsg');if(ok){document.getElementById('loginView').hidden=true;document.getElementById('adminView').hidden=false;msg.textContent=''}else{msg.textContent='गलत password।';document.getElementById('adminPassword').value=''}};
-document.getElementById('addService').onclick=()=>{const name=document.getElementById('newName').value.trim();if(!name){document.getElementById('addMsg').textContent='Service name डालें।';return}added.push({name,cat:document.getElementById('newCat').value,icon:document.getElementById('newIcon').value.trim()||'🧾',desc:'नई जोड़ी गई सेवा'});localStorage.setItem('vikas_csc_services',JSON.stringify(added));render(document.getElementById('serviceSearch').value);document.getElementById('newName').value='';document.getElementById('newIcon').value='';document.getElementById('addMsg').textContent='Service जोड़ दी गई ✓'};
-document.getElementById('logoutBtn').onclick=()=>{document.getElementById('adminView').hidden=true;document.getElementById('loginView').hidden=false;document.getElementById('adminPassword').value=''};
-render();
+
+let services = JSON.parse(localStorage.getItem("vikas_csc_services") || "null") || DEFAULT_SERVICES;
+let isAdmin = false;
+
+function renderServices(){
+  const grid = document.getElementById("serviceGrid");
+  const q = (document.getElementById("serviceSearch").value || "").toLowerCase().trim();
+  const filtered = services.filter(s => (s.title+" "+s.desc+" "+s.items.join(" ")).toLowerCase().includes(q));
+  grid.innerHTML = filtered.map((s,i)=>`
+    <article class="service-card" onclick='openService(${JSON.stringify(s).replace(/'/g,"&#39;")})'>
+      <div class="service-icon">${s.icon}</div>
+      <h3>${escapeHtml(s.title)}</h3>
+      <p>${escapeHtml(s.desc)}</p>
+      <ul>${s.items.slice(0,6).map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
+      ${s.items.length>6?'<small style="color:#ffd65a">+ और सेवाएँ…</small>':''}
+    </article>`).join("") || '<div class="service-card"><h3>कोई सेवा नहीं मिली</h3><p>दूसरा शब्द खोजकर देखें।</p></div>';
+}
+
+function escapeHtml(str){return String(str).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
+
+function openService(s){
+ document.getElementById("modalIcon").textContent=s.icon;
+ document.getElementById("modalTitle").textContent=s.title;
+ document.getElementById("modalDescription").textContent=s.desc;
+ document.getElementById("modalItems").innerHTML=s.items.map(x=>`<li>${escapeHtml(x)}</li>`).join("");
+ document.getElementById("serviceModal").classList.add("show");
+}
+function closeModal(){document.getElementById("serviceModal").classList.remove("show")}
+function openAdmin(){document.getElementById("adminModal").classList.add("show")}
+function closeAdmin(){document.getElementById("adminModal").classList.remove("show")}
+function adminLogin(){
+ const pass=document.getElementById("adminPass").value;
+ if(pass==="Vikas@2026"){
+   isAdmin=true;document.getElementById("loginView").classList.add("hidden");document.getElementById("adminView").classList.remove("hidden");
+ }else alert("गलत Admin Password");
+}
+function adminLogout(){isAdmin=false;document.getElementById("loginView").classList.remove("hidden");document.getElementById("adminView").classList.add("hidden");document.getElementById("adminPass").value=""}
+function addService(){
+ if(!isAdmin)return;
+ const title=document.getElementById("newTitle").value.trim();
+ const icon=document.getElementById("newIcon").value.trim()||"⭐";
+ const desc=document.getElementById("newDesc").value.trim()||"नई ऑनलाइन सेवा";
+ const items=document.getElementById("newItems").value.split("\n").map(x=>x.trim()).filter(Boolean);
+ if(!title || !items.length){alert("Title और कम-से-कम एक Service लिखें.");return}
+ services.push({icon,title,desc,items});
+ localStorage.setItem("vikas_csc_services",JSON.stringify(services));
+ ["newTitle","newDesc","newItems"].forEach(id=>document.getElementById(id).value="");
+ renderServices();alert("नई Service जोड़ दी गई।");
+}
+function resetServices(){
+ if(confirm("क्या आप सभी custom services हटाकर default services वापस लाना चाहते हैं?")){
+   services=DEFAULT_SERVICES;localStorage.removeItem("vikas_csc_services");renderServices();
+ }
+}
+function copyUPI(){
+  const id="vikas3841@nyes";
+  navigator.clipboard.writeText(id).then(()=>{
+    const el=document.getElementById("upiCopyStatus");
+    el.textContent="UPI ID कॉपी हो गई।";
+    setTimeout(()=>el.textContent="",2500);
+  }).catch(()=>{
+    document.getElementById("upiCopyStatus").textContent="UPI ID: "+id;
+  });
+}
+function scrollToTop(){window.scrollTo({top:0,behavior:"smooth"})}
+document.getElementById("year").textContent=new Date().getFullYear();
+renderServices();
+window.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();closeAdmin()}});

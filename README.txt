@@ -1,7 +1,13 @@
-# Vikas CSC Jan Sewa Kendra — GitHub Pages
+# Vikas CSC Jan Sewa Kendra
 
-1. Upload all files/folders from this package to the root of your GitHub Pages repository.
-2. Keep the `assets` folder with `logo.jpg` and `upi-qr.png`.
-3. The site uses the supplied CSC logo and UPI ID `vikas3841@nyes`.
-4. The Admin panel is client-side: the password is not displayed, but GitHub Pages is a static site, so this is not a secure server-side authentication system. New services added from the panel are stored in that browser's localStorage.
-5. To publish a newly added service for every visitor, add it to the `services` array in `script.js` and commit the change to GitHub.
+- Existing services, contact details and address are preserved.
+- Supplied CSC logo is used.
+- Premium banner removed.
+- Fixed UPI ID: vikas3841@nyes
+- Fixed UPI QR and direct UPI-app payment button added.
+- QR generation form removed.
+- Owner/Admin service-add panel retained.
+- Admin password is not displayed in the UI; authentication checks a SHA-256 hash.
+- Custom services are saved in browser localStorage.
+
+GitHub Pages is static, so this owner panel cannot provide true server-side authentication or publish browser-added services to every visitor without a backend/database.
