@@ -10,7 +10,7 @@ Files:
 Open index.html in a browser to preview.
 
 OWNER ADMIN
-Default demo password: Vikas@2026
+Default demo password: Vik@9582
 Change this password in script.js before public deployment.
 
 IMPORTANT
