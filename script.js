@@ -64,7 +64,7 @@ function resetServices(){
  }
 }
 function generateUPI(){
- const id=document.getElementById("upiId").value.trim();
+ const id=document.getElementById("upiId").value.trim(vikas3841@nyes);
  const name=document.getElementById("upiName").value.trim()||"Vikas CSC";
  const err=document.getElementById("upiError"),box=document.getElementById("qrcode"),link=document.getElementById("upiLink");
  if(!id || !id.includes("@")){err.textContent="कृपया सही UPI ID डालें, जैसे name@upi";return}
