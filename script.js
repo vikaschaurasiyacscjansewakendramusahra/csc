@@ -67,7 +67,7 @@ function generateUPI(){
  const id=document.getElementById("upiId").value.trim();
  const name=document.getElementById("upiName").value.trim()||"Vikas CSC";
  const err=document.getElementById("upiError"),box=document.getElementById("qrcode"),link=document.getElementById("upiLink");
- if(!id||!id.includes("@")){err.textContent="कृपया सही UPI ID डालें, जैसे name@upi";return}
+ if(!id || !id.includes("@")){err.textContent="कृपया सही UPI ID डालें, जैसे name@upi";return}
  err.textContent="";
  const upi=`upi://pay?pa=${encodeURIComponent(id)}&pn=${encodeURIComponent(name)}&cu=INR`;
  box.innerHTML="";
