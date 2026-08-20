@@ -15,6 +15,3 @@ Change this password in script.js before public deployment.
 
 IMPORTANT
 The included admin is browser/localStorage based for a static website. It is NOT server-side security. For a truly owner-only public admin panel, deploy with a backend/database and real authentication.
-
-
-Latest visual change: top hero logo removed; main heading changed to English 'Vikas CSC Jan Sewa Kendra' with thick glossy 3D gold lettering.

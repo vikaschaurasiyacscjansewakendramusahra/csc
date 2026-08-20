@@ -64,6 +64,7 @@ function resetServices(){
  }
 }
 function generateUPI(){
+ const upi="7355353841@okbizaxis"; document.getElementById("upiId").value=upi;
  const id=document.getElementById("upiId").value.trim();
  const name=document.getElementById("upiName").value.trim()||"Vikas CSC";
  const err=document.getElementById("upiError"),box=document.getElementById("qrcode"),link=document.getElementById("upiLink");

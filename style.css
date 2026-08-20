@@ -16,40 +16,11 @@ nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap}nav a{padding:8px 12p
 .admin-btn,.small-btn{border:1px solid #70521a;background:#181226;color:#ffe28b;border-radius:10px;padding:9px 13px;font-weight:800;cursor:pointer}
 .hero{max-width:1250px;margin:auto;min-height:650px;padding:70px 5vw 45px;display:grid;grid-template-columns:1.2fr .8fr;align-items:center;gap:35px}
 .eyebrow{color:#ffd76c;letter-spacing:1.5px;font-size:13px;font-weight:900;text-transform:uppercase}
-.hero h1{
-font-size:clamp(58px,9vw,125px);
-line-height:.86;
-margin:15px 0 10px;
-letter-spacing:-4px;
-font-weight:1000;
-font-family:Georgia,"Times New Roman",serif;
-background:linear-gradient(180deg,#fff9b8 0%,#ffe56b 16%,#ffc72c 36%,#f39a00 55%,#8a4a00 72%,#ffd95a 88%,#fff4a8 100%);
--webkit-background-clip:text;
-background-clip:text;
-color:transparent;
--webkit-text-stroke:2px #6b3b00;
-text-shadow:
-0 2px 0 #6b3600,
-0 5px 0 #9a5700,
-0 8px 12px rgba(0,0,0,.85),
-0 0 18px rgba(255,193,43,.48),
-0 0 42px rgba(255,171,0,.22);
-filter:drop-shadow(0 8px 12px rgba(0,0,0,.5));
-}
-.hero h1 strong{color:#fff0a1}.hero h2{
-font-size:clamp(30px,5vw,70px);
-margin:0 0 15px;
-padding:0;
-display:block;
-background:linear-gradient(180deg,#fff9c7 0%,#ffe16a 18%,#ffb817 45%,#a85b00 67%,#ffe37a 86%,#fff4b2 100%);
--webkit-background-clip:text;
-background-clip:text;
-color:transparent;
--webkit-text-stroke:1.5px #6d3b00;
-text-shadow:0 3px 0 #6a3500,0 7px 14px #000,0 0 20px rgba(255,190,30,.35);
-font-weight:1000;
-letter-spacing:-1px;
-}
+.hero h1{font-size:clamp(58px,9vw,125px);line-height:.8;margin:15px 0 10px;letter-spacing:-4px;font-weight:900;
+background:linear-gradient(180deg,#fff8be 0,#ffc82f 34%,#ff7c00 58%,#6e2600 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+text-shadow:0 5px 0 #5a2100,0 11px 22px rgba(255,160,0,.4)}
+.hero h1 strong{color:#fff0a1}.hero h2{font-size:clamp(30px,5vw,70px);margin:0 0 15px;padding:10px 24px;display:inline-block;border-radius:18px;
+background:linear-gradient(180deg,#fff,#b9b9b9 35%,#5b5b5b 60%,#161616);color:#15100c;border:3px solid #f6b72e;box-shadow:0 10px 0 #40240a,0 15px 35px #000;font-weight:900}
 .hero-line{font-size:18px;color:#e7e1f0;max-width:720px}.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin:25px 0}
 .gold-btn,.call-btn,.wa-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 18px;border-radius:13px;font-weight:900;border:1px solid #ffdb66;cursor:pointer}
 .gold-btn{background:linear-gradient(135deg,#fff0a4,#ffb400 45%,#a65a00);color:#211200;box-shadow:0 8px 24px rgba(255,167,0,.28)}
@@ -68,4 +39,63 @@ footer{padding:28px 5vw;text-align:center;border-top:1px solid #2e263b;color:#bf
 @media(max-width:900px){.hero{grid-template-columns:1fr;text-align:center}.hero-line{margin-left:auto;margin-right:auto}.hero-actions,.trust-row{justify-content:center}.service-grid{grid-template-columns:repeat(2,1fr)}.payment-card{grid-template-columns:1fr}.about-card{grid-template-columns:1fr;text-align:center}.about-logo img{width:130px}.districts{justify-content:center}.contact-grid{grid-template-columns:1fr}nav a{display:none}.topbar{padding:10px 4vw}}
 @media(max-width:560px){.hero{padding-top:45px}.hero h1{font-size:62px;letter-spacing:-2px}.hero h2{font-size:31px}.service-grid{grid-template-columns:1fr}.section{padding:40px 4vw}.section-head{align-items:stretch;flex-direction:column}.service-tools{width:100%}.service-tools input{width:100%;min-width:0}.upi-form{grid-template-columns:1fr}.upi-form .gold-btn{grid-column:auto}.floating-badge{position:static;margin-top:14px}.hero-art{flex-direction:column;align-items:center}.banner-section{padding-left:3vw;padding-right:3vw}}
 
-.hero-art{display:none}
+.upi-direct-pay{
+  margin-top:16px;
+  padding:16px;
+  border:1px solid #6f531f;
+  border-radius:16px;
+  background:linear-gradient(135deg,rgba(255,193,7,.08),rgba(255,255,255,.02));
+  text-align:center;
+}
+.upi-direct-title{
+  font-weight:1000;
+  font-size:18px;
+  color:#ffe27a;
+  margin-bottom:6px;
+}
+.upi-direct-id{
+  font-size:16px;
+  font-weight:800;
+  color:#fff0a8;
+  margin-bottom:10px;
+}
+.upi-app-button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:13px 18px;
+  border-radius:13px;
+  background:linear-gradient(135deg,#fff1a6,#ffb600 48%,#9a5400);
+  color:#211200;
+  font-weight:1000;
+  text-decoration:none;
+  border:1px solid #ffe06a;
+  box-shadow:0 8px 24px rgba(255,174,0,.25);
+}
+.upi-direct-pay small{
+  display:block;
+  margin-top:8px;
+  color:#c9c2d2;
+}
+#upiId[readonly]{
+  cursor:default;
+  color:#ffe17b;
+  font-weight:900;
+}
+.best-service-title{
+  margin:24px 0 12px;
+  font-size:clamp(20px,2.5vw,31px);
+  font-weight:1000;
+  letter-spacing:.7px;
+  background:linear-gradient(180deg,#fff7b2,#ffd84d 25%,#ffad00 55%,#8b4a00 78%,#ffe98a);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  -webkit-text-stroke:1px #6b3b00;
+  text-shadow:0 3px 0 #633300,0 6px 12px rgba(0,0,0,.75);
+}
+.districts span{
+  font-size:17px;
+  font-weight:800;
+  padding:9px 14px;
+}
