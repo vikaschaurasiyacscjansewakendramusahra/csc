@@ -39,41 +39,54 @@ footer{padding:28px 5vw;text-align:center;border-top:1px solid #2e263b;color:#bf
 @media(max-width:900px){.hero{grid-template-columns:1fr;text-align:center}.hero-line{margin-left:auto;margin-right:auto}.hero-actions,.trust-row{justify-content:center}.service-grid{grid-template-columns:repeat(2,1fr)}.payment-card{grid-template-columns:1fr}.about-card{grid-template-columns:1fr;text-align:center}.about-logo img{width:130px}.districts{justify-content:center}.contact-grid{grid-template-columns:1fr}nav a{display:none}.topbar{padding:10px 4vw}}
 @media(max-width:560px){.hero{padding-top:45px}.hero h1{font-size:62px;letter-spacing:-2px}.hero h2{font-size:31px}.service-grid{grid-template-columns:1fr}.section{padding:40px 4vw}.section-head{align-items:stretch;flex-direction:column}.service-tools{width:100%}.service-tools input{width:100%;min-width:0}.upi-form{grid-template-columns:1fr}.upi-form .gold-btn{grid-column:auto}.floating-badge{position:static;margin-top:14px}.hero-art{flex-direction:column;align-items:center}.banner-section{padding-left:3vw;padding-right:3vw}}
 
-/* Final requested main heading: full glossy golden lettering */
+.hero-art{display:none!important}
+.hero-copy{width:100%;text-align:center}
 .hero h1{
-  font-size:clamp(52px,8.5vw,112px);
-  line-height:.88;
-  margin:12px 0 8px;
   font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(48px,8.5vw,116px);
+  line-height:.88;
+  margin:10px 0 6px;
   font-weight:1000;
   letter-spacing:-3px;
-  background:linear-gradient(180deg,#fffbd0 0%,#fff09a 10%,#ffd84a 25%,#ffb300 45%,#d77a00 62%,#8a4500 75%,#ffc82f 88%,#fff3a0 100%);
+  background:linear-gradient(180deg,#fffde0 0%,#fff1a0 10%,#ffe05a 24%,#ffc22b 39%,#f29a00 53%,#a95700 68%,#743900 76%,#ffc62e 89%,#fff2a0 100%);
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
-  -webkit-text-stroke:2px #704000;
-  text-shadow:
-    0 2px 0 #6b3500,
-    0 5px 0 #9a5700,
-    0 8px 14px rgba(0,0,0,.9),
-    0 0 18px rgba(255,205,55,.55),
-    0 0 42px rgba(255,170,0,.28);
-  filter:drop-shadow(0 8px 12px rgba(0,0,0,.55));
+  -webkit-text-stroke:2px #633500;
+  text-shadow:0 2px 0 #542900,0 4px 0 #8b4800,0 7px 0 #b86a00,0 10px 16px rgba(0,0,0,.92),0 0 20px rgba(255,204,55,.58),0 0 46px rgba(255,167,0,.30);
+  filter:drop-shadow(0 7px 10px rgba(0,0,0,.55));
 }
 .hero h2{
-  font-size:clamp(27px,4.7vw,62px);
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(28px,5vw,64px);
+  line-height:1;
+  margin:4px 0 14px;
   font-weight:1000;
   letter-spacing:-1px;
-  background:linear-gradient(180deg,#fffbd0,#ffe56c 25%,#ffb300 50%,#8c4800 72%,#fff09b 100%);
+  background:linear-gradient(180deg,#fffde0 0%,#ffe978 18%,#ffc029 40%,#e48700 57%,#8b4700 73%,#ffd957 91%,#fff1a2 100%);
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
-  -webkit-text-stroke:1.5px #704000;
-  text-shadow:0 3px 0 #6a3500,0 6px 14px rgba(0,0,0,.9),0 0 20px rgba(255,190,30,.38);
+  -webkit-text-stroke:1.5px #633500;
+  text-shadow:0 3px 0 #542900,0 6px 13px rgba(0,0,0,.9),0 0 22px rgba(255,190,30,.42);
 }
-.hero-art{display:none}
-.upi-permanent-pay{margin:20px 0;padding:22px;border:2px solid #c58a16;border-radius:18px;background:linear-gradient(135deg,rgba(255,193,7,.12),rgba(255,255,255,.025));text-align:center;box-shadow:0 12px 32px rgba(0,0,0,.35)}
-.upi-permanent-title{font-size:22px;font-weight:1000;color:#ffe27a;margin-bottom:7px}
-.upi-permanent-id{font-size:20px;font-weight:900;color:#fff0a8;margin-bottom:13px}
-.upi-permanent-button{display:flex;min-height:54px;align-items:center;justify-content:center;border-radius:14px;background:linear-gradient(135deg,#fff2aa,#ffb900 48%,#9b5400);color:#211200;font-weight:1000;text-decoration:none;border:1px solid #ffe06a;box-shadow:0 8px 25px rgba(255,174,0,.3)}
 #upiId[readonly]{color:#ffe17b;font-weight:900;cursor:default}
+.upi-permanent-pay{
+  margin:18px 0 0;
+  padding:20px;
+  border:2px solid #c58a16;
+  border-radius:18px;
+  background:linear-gradient(135deg,rgba(255,193,7,.12),rgba(255,255,255,.025));
+  text-align:center;
+  box-shadow:0 12px 32px rgba(0,0,0,.35);
+}
+.upi-permanent-title{font-size:22px;font-weight:1000;color:#ffe27a;margin-bottom:6px}
+.upi-permanent-id{font-size:19px;font-weight:900;color:#fff0a8;margin-bottom:12px}
+.upi-permanent-button{
+  display:flex;min-height:56px;align-items:center;justify-content:center;
+  border-radius:14px;
+  background:linear-gradient(135deg,#fff2aa,#ffb900 48%,#9b5400);
+  color:#211200;font-weight:1000;text-decoration:none;
+  border:1px solid #ffe06a;
+  box-shadow:0 8px 25px rgba(255,174,0,.3);
+}

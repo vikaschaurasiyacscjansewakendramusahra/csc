@@ -41,7 +41,7 @@ function openAdmin(){document.getElementById("adminModal").classList.add("show")
 function closeAdmin(){document.getElementById("adminModal").classList.remove("show")}
 function adminLogin(){
  const pass=document.getElementById("adminPass").value;
- if(pass==="Vikas@2026"){
+ if(pass==="Vikas@9582"){
    isAdmin=true;document.getElementById("loginView").classList.add("hidden");document.getElementById("adminView").classList.remove("hidden");
  }else alert("गलत Admin Password");
 }
@@ -64,16 +64,24 @@ function resetServices(){
  }
 }
 function generateUPI(){
- const upi="7355353841@okbizaxis"; document.getElementById("upiId").value=upi;
- const id=document.getElementById("upiId").value.trim();
- const name=document.getElementById("upiName").value.trim()||"Vikas CSC";
- const err=document.getElementById("upiError"),box=document.getElementById("qrcode"),link=document.getElementById("upiLink");
- if(!id || !id.includes("@")){err.textContent="कृपया सही UPI ID डालें, जैसे name@upi";return}
- err.textContent="";
- const upi=`upi://pay?pa=${encodeURIComponent(id)}&pn=${encodeURIComponent(name)}&cu=INR`;
- box.innerHTML="";
- new QRCode(box,{text:upi,width:200,height:200,correctLevel:QRCode.CorrectLevel.H});
- link.href=upi;link.classList.remove("hidden");
+ const id="7355353841@okbizaxis";
+ const name=(document.getElementById("upiName")?.value||"Vikas CSC Jan Sewa Kendra").trim();
+ const err=document.getElementById("upiError");
+ const box=document.getElementById("qrcode");
+ const link=document.getElementById("upiLink");
+ const upiUrl=`upi://pay?pa=${encodeURIComponent(id)}&pn=${encodeURIComponent(name)}&cu=INR`;
+ document.getElementById("upiId").value=id;
+ if(err) err.textContent="";
+ if(box){
+   box.innerHTML="";
+   const img=document.createElement("img");
+   img.alt="UPI QR Code";
+   img.width=220; img.height=220;
+   img.src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data="+encodeURIComponent(upiUrl);
+   img.onerror=()=>{box.innerHTML="<span>QR requires an internet connection.</span>";};
+   box.appendChild(img);
+ }
+ if(link){ link.href=upiUrl; link.classList.remove("hidden"); }
 }
 function scrollToTop(){window.scrollTo({top:0,behavior:"smooth"})}
 document.getElementById("year").textContent=new Date().getFullYear();
