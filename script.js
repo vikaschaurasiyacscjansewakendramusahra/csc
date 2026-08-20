@@ -39,19 +39,11 @@ function openService(s){
 function closeModal(){document.getElementById("serviceModal").classList.remove("show")}
 function openAdmin(){document.getElementById("adminModal").classList.add("show")}
 function closeAdmin(){document.getElementById("adminModal").classList.remove("show")}
-async function adminLogin(){
+function adminLogin(){
  const pass=document.getElementById("adminPass").value;
- const digest=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(pass));
- const hash=Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,"0")).join("");
- if(hash==="a136d62e7c8bfb415b674d758851838893c2a741546fb52a3a9ddd3c5291c89d"){
-   isAdmin=true;
-   document.getElementById("loginView").classList.add("hidden");
-   document.getElementById("adminView").classList.remove("hidden");
-   document.getElementById("adminPass").value="";
- }else{
-   document.getElementById("adminPass").value="";
-   alert("गलत Admin Password");
- }
+ if(pass==="Vikas@2026"){
+   isAdmin=true;document.getElementById("loginView").classList.add("hidden");document.getElementById("adminView").classList.remove("hidden");
+ }else alert("गलत Admin Password");
 }
 function adminLogout(){isAdmin=false;document.getElementById("loginView").classList.remove("hidden");document.getElementById("adminView").classList.add("hidden");document.getElementById("adminPass").value=""}
 function addService(){
@@ -71,14 +63,16 @@ function resetServices(){
    services=DEFAULT_SERVICES;localStorage.removeItem("vikas_csc_services");renderServices();
  }
 }
-function copyUPI(){
- const id="vikas3841@nyes";
- navigator.clipboard.writeText(id).then(()=>{
-   document.getElementById("upiCopyStatus").textContent="UPI ID कॉपी हो गई।";
-   setTimeout(()=>document.getElementById("upiCopyStatus").textContent="",2500);
- }).catch(()=>{
-   document.getElementById("upiCopyStatus").textContent="UPI ID: "+id;
- });
+function generateUPI(){
+ const id=document.getElementById("upiId").value.trim();
+ const name=document.getElementById("upiName").value.trim()||"Vikas CSC";
+ const err=document.getElementById("upiError"),box=document.getElementById("qrcode"),link=document.getElementById("upiLink");
+ if(!id || !id.includes("@")){err.textContent="कृपया सही UPI ID डालें, जैसे name@upi";return}
+ err.textContent="";
+ const upi=`upi://pay?pa=${encodeURIComponent(id)}&pn=${encodeURIComponent(name)}&cu=INR`;
+ box.innerHTML="";
+ new QRCode(box,{text:upi,width:200,height:200,correctLevel:QRCode.CorrectLevel.H});
+ link.href=upi;link.classList.remove("hidden");
 }
 function scrollToTop(){window.scrollTo({top:0,behavior:"smooth"})}
 document.getElementById("year").textContent=new Date().getFullYear();

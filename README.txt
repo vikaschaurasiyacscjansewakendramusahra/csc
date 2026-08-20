@@ -1,11 +1,20 @@
-Vikas CSC Jan Sewa Kendra — corrected version
+# Vikas CSC Jan Sewa Kendra Website
 
-This version is based on the original website files.
-- ALL original services are preserved.
-- Service cards still open the same detailed modal when tapped.
-- Search and service-add/admin functionality are preserved.
-- Contact and address are preserved.
-- Supplied CSC logo is used.
-- Premium banner removed.
-- UPI generator replaced by fixed UPI ID vikas3841@nyes, fixed QR and direct UPI-app payment.
-- Admin password is Vikas@9582; it is not displayed in the UI and is checked via SHA-256 hash.
+Files:
+- index.html — main website
+- style.css — premium 3D/glow styling
+- script.js — services, search, admin panel and UPI QR generator
+- assets/logo.png — uploaded CSC logo
+- assets/premium-banner.png — uploaded premium banner
+
+Open index.html in a browser to preview.
+
+OWNER ADMIN
+Default demo password: Vikas@2026
+Change this password in script.js before public deployment.
+
+IMPORTANT
+The included admin is browser/localStorage based for a static website. It is NOT server-side security. For a truly owner-only public admin panel, deploy with a backend/database and real authentication.
+
+
+Latest visual change: top hero logo removed; main heading changed to English 'Vikas CSC Jan Sewa Kendra' with thick glossy 3D gold lettering.
