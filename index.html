@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css?v=4">
+  <link rel="stylesheet" href="./style.css?v=5">
 </head>
 <body>
   <div class="ambient"></div>
@@ -31,13 +31,12 @@
 
   <main id="home">
     <section class="hero">
-      <div class="hero-watermark" aria-hidden="true"><img src="./logo.png" alt=""></div>
+      <div class="hero-watermark" aria-hidden="true"><img src="./premium-banner.png" alt=""></div>
       <div class="hero-copy"><img class="hero-logo-main" src="./logo.png" alt="Vikas Chaurasiya CSC Jan Sewa Kendra logo" loading="eager">
         <div class="eyebrow">डिजिटल सेवा • सबका अधिकार • सबका विकास</div>
-        <div class="hero-kicker">VIKAS CHAURASIYA</div>
         <h1>VIKAS <span>CSC</span></h1>
         <h2>JAN SEWA KENDRA</h2>
-        <div class="hero-location">ग्राम व पोस्ट — मुसहरा • तहसील — मेहदावल • जनपद — संत कबीर नगर • उत्तर प्रदेश — 272154</div>
+        <a class="csc-watermark" href="https://digitalseva.csc.gov.in/" target="_blank" rel="noopener" aria-label="CSC ID 646444540015 — Digital Seva Login">CSC ID • 646444540015</a><div class="hero-location">ग्राम व पोस्ट — मुसहरा • तहसील — मेहदावल • जनपद — संत कबीर नगर • उत्तर प्रदेश — 272154</div>
         <p class="hero-line">आपका अपना विश्वसनीय जन सेवा केन्द्र — आधुनिक, तेज और भरोसेमंद सेवाओं के साथ</p>
         <div class="hero-actions">
           <a class="gold-btn" href="#services">✨ सभी सेवाएँ देखें</a>
@@ -46,11 +45,6 @@
         </div>
         <div class="trust-row"><span>⚡ तेज प्रक्रिया</span><span>🛡️ विश्वसनीय सेवा</span><span>👥 अनुभवी टीम</span><span>🔒 सुरक्षित</span></div>
       </div>
-    </section>
-
-    <section class="banner-section">
-      <div class="banner-label">✦ हमारा प्रीमियम CSC ब्रांड बैनर ✦</div>
-      <div class="banner-frame"><img src="./premium-banner.png" alt="Vikas Chaurasiya CSC Jan Sewa Kendra premium banner" loading="eager" onerror="this.style.display='none';document.getElementById('bannerFallback').classList.add('show')"><div id="bannerFallback" class="banner-fallback">VIKAS CSC • JAN SEWA KENDRA<br><small>Premium banner file not found — please upload premium-banner.png with index.html</small></div></div>
     </section>
 
     <section class="ticker-wrap" aria-label="सेवा सूची">
@@ -106,7 +100,22 @@
     </section>
   </main>
 
-  <a class="ai-float" href="https://gemini.google.com/" target="_blank" rel="noopener" aria-label="AI पूछताछ">🤖 <span>AI पूछताछ</span></a>
+  <button class="ai-float" type="button" onclick="toggleAIHelp()" aria-expanded="false" aria-controls="aiHelpPanel">🤖<span>AI पूछताछ</span></button>
+  <aside id="aiHelpPanel" class="ai-panel" aria-hidden="true">
+    <button class="ai-close" type="button" onclick="toggleAIHelp()" aria-label="AI panel बंद करें">×</button>
+    <div class="ai-panel-icon">🤖</div>
+    <h3>Vikas CSC Jan Sewa Kendra में आपका स्वागत है</h3>
+    <p id="aiGreeting">नमस्कार! मैं इस वेबसाइट की सेवाओं के बारे में जानकारी देने के लिए यहाँ हूँ। बताइए, मैं आपकी किस प्रकार मदद कर सकती हूँ?</p>
+    <div class="ai-chat-row"><input id="aiQuestion" type="text" placeholder="जैसे: PAN Card कहाँ खुलेगा?" onkeydown="if(event.key==='Enter') askSiteAI()"><button type="button" onclick="askSiteAI()">पूछें</button></div>
+    <div id="aiAnswer" class="ai-answer">आप बैंकिंग, Aadhaar, PAN, RTO, प्रमाण पत्र, पेंशन, GST, छात्रवृत्ति, यात्रा, किसान सेवाओं आदि के बारे में पूछ सकते हैं।</div>
+    <div class="ai-quick">
+      <button onclick="aiQuick('Aadhaar सेवा')">Aadhaar</button>
+      <button onclick="aiQuick('PAN Card सेवा')">PAN Card</button>
+      <button onclick="aiQuick('RTO / Driving Licence')">RTO</button>
+      <button onclick="aiQuick('प्रमाण पत्र')">प्रमाण पत्र</button>
+    </div>
+    <a class="gold-btn ai-gemini" href="https://gemini.google.com/" target="_blank" rel="noopener">✨ Gemini में पूछें</a>
+  </aside>
 
   <footer><div><b>🔥 Vikas CSC Jan Sewa Kendra, मुसहरा</b> — आपकी सेवा में सदैव तत्पर</div><div>© <span id="year"></span> Vikas Chaurasiya CSC</div></footer>
 

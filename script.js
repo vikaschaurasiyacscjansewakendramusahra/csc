@@ -27,7 +27,7 @@ function normalizeService(s){
 }
 let services=DEFAULT_SERVICES.map(normalizeService);
 async function loadPublicServices(){
-  try{ const r=await fetch('./services.json?v=4',{cache:'no-store'}); if(!r.ok) throw new Error('services.json unavailable'); const data=await r.json(); if(Array.isArray(data)){ services=data.map(normalizeService); renderServices(); renderTicker(); } }catch(e){ console.warn('Public services data could not be loaded; using built-in services.',e); }
+  try{ const r=await fetch('./services.json?v=5',{cache:'no-store'}); if(!r.ok) throw new Error('services.json unavailable'); const data=await r.json(); if(Array.isArray(data)){ services=data.map(normalizeService); renderServices(); renderTicker(); } }catch(e){ console.warn('Public services data could not be loaded; using built-in services.',e); }
 }
 function loadAdminDraft(){ try{ const raw=localStorage.getItem('vikas_csc_admin_draft'); if(raw){ const data=JSON.parse(raw); if(Array.isArray(data)) return data.map(normalizeService); } }catch(e){} return services; }
 
@@ -102,6 +102,40 @@ function exportPublicServices(){
 }
 
 function resetServices(){if(confirm('क्या आप सभी custom services हटाकर default services वापस लाना चाहते हैं?')){services=DEFAULT_SERVICES.map(normalizeService);localStorage.removeItem('vikas_csc_admin_draft');renderServices();renderTicker()}}
+
+function toggleAIHelp(){
+  const p=document.getElementById('aiHelpPanel'), b=document.querySelector('.ai-float');
+  const show=!p.classList.contains('show');
+  p.classList.toggle('show',show); p.setAttribute('aria-hidden',String(!show)); b.setAttribute('aria-expanded',String(show));
+}
+
+function askSiteAI(){
+  const input=document.getElementById('aiQuestion'), answer=document.getElementById('aiAnswer');
+  const q=(input.value||'').trim().toLowerCase();
+  if(!q){answer.textContent='कृपया अपनी सेवा का नाम या सवाल लिखें।';return;}
+  const hits=[];
+  services.forEach(s=>{
+    const hay=(s.title+' '+s.desc+' '+s.items.map(i=>i.text).join(' ')).toLowerCase();
+    if(q.split(/\s+/).some(w=>w.length>2 && hay.includes(w))) hits.push(s);
+  });
+  if(hits.length){
+    const s=hits[0];
+    const first=s.items.slice(0,3).map(x=>x.text).join(' • ');
+    answer.innerHTML=`<b>${escapeHtml(s.title)}</b><br>${escapeHtml(s.desc)}<br><span>उदाहरण: ${escapeHtml(first)}</span><br><small>किसी service point पर touch करने से उसका संबंधित portal खुलेगा।</small>`;
+  }else{
+    answer.textContent='इस सवाल का उत्तर मेरी वेबसाइट की उपलब्ध service list में नहीं मिला। नीचे “Gemini में पूछें” दबाकर Google Gemini से विस्तार से पूछ सकते हैं।';
+  }
+}
+
+function aiQuick(topic){
+  const msg=`Vikas CSC Jan Sewa Kendra, Musahra में ${topic} के बारे में जानकारी चाहिए। उपलब्ध सेवा, जरूरी दस्तावेज और official portal बताइए।`;
+  const panel=document.getElementById('aiHelpPanel');
+  const p=panel.querySelector('p');
+  p.textContent=`आपने “${topic}” चुना है। नीचे Gemini में यही सवाल पूछ सकते हैं: ${msg}`;
+  const a=panel.querySelector('.ai-gemini');
+  a.href='https://gemini.google.com/';
+}
+
 function generateUPI(){const id='7355353841@okbizaxis',name=(document.getElementById('upiName').value||'Vikas CSC Jan Sewa Kendra').trim(),box=document.getElementById('qrcode'),link=document.getElementById('upiLink'),err=document.getElementById('upiError');const upiUrl=`upi://pay?pa=${encodeURIComponent(id)}&pn=${encodeURIComponent(name)}&cu=INR`;document.getElementById('upiId').value=id;err.textContent='';box.innerHTML='';if(window.QRCode){new QRCode(box,{text:upiUrl,width:220,height:220,colorDark:'#111',colorLight:'#fff'});}else{box.innerHTML='<span>QR library load नहीं हुई। Internet चालू करके फिर try करें।</span>'}link.href=upiUrl;link.classList.remove('hidden')}
 function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'})}
 document.getElementById('year').textContent=new Date().getFullYear();renderServices();renderTicker();loadPublicServices();window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeAdmin()}});document.getElementById('serviceModal').addEventListener('click',e=>{if(e.target.id==='serviceModal')closeModal()});document.getElementById('adminModal').addEventListener('click',e=>{if(e.target.id==='adminModal')closeAdmin()});
