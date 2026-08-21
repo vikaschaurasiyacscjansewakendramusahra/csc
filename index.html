@@ -17,13 +17,12 @@
     #adminModal .modal-box.admin-box { max-height: 82vh !important; overflow-y: auto !important; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
     #adminModal { overflow-y: auto !important; align-items: flex-start !important; padding: 24px 12px !important; }
     #serviceModal .service-modal-box .close { color: #e00000 !important; background: #fff !important; border: 2px solid #e00000 !important; text-shadow: none !important; box-shadow: 0 4px 14px rgba(224,0,0,.25) !important; }
-    #serviceGrid { display:flex !important; flex-wrap:nowrap !important; width:max-content !important; max-width:none !important; gap:18px !important; overflow:visible !important; padding:4px 0 18px !important; animation:servicesMarquee 55s linear infinite !important; will-change:transform; }
-    #serviceGrid .service-card { flex:0 0 clamp(300px, 27vw, 390px) !important; width:clamp(300px, 27vw, 390px) !important; min-width:clamp(300px, 27vw, 390px) !important; }
-    .service-scroll-viewport { overflow:hidden !important; width:100% !important; position:relative !important; }
-    .service-scroll-viewport:hover #serviceGrid { animation-play-state:paused !important; }
-    @keyframes servicesMarquee { from { transform:translateX(0); } to { transform:translateX(-50%); } }
-    @media (max-width:900px){ #serviceGrid .service-card{flex-basis:330px !important;width:330px !important;min-width:330px !important;} }
-    @media (max-width:560px){ #serviceGrid{gap:12px !important;animation-duration:48s !important;} #serviceGrid .service-card{flex-basis:calc(88vw) !important;width:calc(88vw) !important;min-width:calc(88vw) !important;} }
+    /* Services: all category cards visible in a normal 3-column grid. No marquee / no card-by-card scrolling. */
+    #serviceGrid { display:grid !important; grid-template-columns:repeat(3,minmax(0,1fr)) !important; flex-wrap:initial !important; width:100% !important; max-width:none !important; gap:18px !important; overflow:visible !important; animation:none !important; transform:none !important; will-change:auto !important; }
+    #serviceGrid .service-card { width:auto !important; min-width:0 !important; max-width:none !important; flex:none !important; }
+    .service-scroll-viewport { overflow:visible !important; width:100% !important; position:relative !important; }
+    @media (max-width:900px){ #serviceGrid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;} }
+    @media (max-width:560px){ #serviceGrid{grid-template-columns:1fr !important;gap:14px !important;} #serviceGrid .service-card{width:100% !important;min-width:0 !important;} }
     .district-license-note { margin: 14px 0 8px; font-weight: 800; font-size: 1.05rem; color: #b07a00; text-align: center; }
     @media (max-width: 600px) { #adminModal { padding: 10px 8px !important; } #adminModal .modal-box.admin-box { max-height: 88vh !important; } }
   </style>

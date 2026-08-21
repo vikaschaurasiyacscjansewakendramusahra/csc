@@ -132,3 +132,11 @@ body:before{opacity:.16!important;background-image:radial-gradient(circle,rgba(1
  .service-grid .service-card{flex-basis:84vw!important;width:84vw!important;min-width:84vw!important}
  html,body{background:linear-gradient(180deg,#e2e7e2 0%,#d8dfd8 100%)!important}
 }
+
+
+/* ===== FINAL SERVICES LAYOUT: 3 CARDS PER ROW ===== */
+#serviceGrid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;width:100%!important;max-width:none!important;gap:18px!important;overflow:visible!important;animation:none!important;transform:none!important;will-change:auto!important}
+#serviceGrid .service-card{width:auto!important;min-width:0!important;max-width:none!important;flex:none!important}
+.service-scroll-viewport{overflow:visible!important;width:100%!important}
+@media(max-width:900px){#serviceGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:560px){#serviceGrid{grid-template-columns:1fr!important;gap:14px!important}#serviceGrid .service-card{width:100%!important;min-width:0!important}}
