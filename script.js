@@ -22,17 +22,52 @@ const DEFAULT_SERVICES = [
 ];
 
 function normalizeService(s){
-  const items=(s.items||[]).map(x=>Array.isArray(x)?{text:x[0],url:x[1]}:{text:String(x),url:OFFICIAL.csc});
+  const items=(s.items||[]).map(x=>Array.isArray(x)?{text:x[0],url:x[1]||autoOfficialUrl(x[0])}:{text:String(x),url:autoOfficialUrl(x)});
   return {...s,portals:s.portals||[['CSC Official Portal',OFFICIAL.csc]],items};
 }
-let services=(JSON.parse(localStorage.getItem('vikas_csc_services')||'null')||DEFAULT_SERVICES).map(normalizeService);
+let services=DEFAULT_SERVICES.map(normalizeService);
+async function loadPublicServices(){
+  try{ const r=await fetch('./services.json?v=4',{cache:'no-store'}); if(!r.ok) throw new Error('services.json unavailable'); const data=await r.json(); if(Array.isArray(data)){ services=data.map(normalizeService); renderServices(); renderTicker(); } }catch(e){ console.warn('Public services data could not be loaded; using built-in services.',e); }
+}
+function loadAdminDraft(){ try{ const raw=localStorage.getItem('vikas_csc_admin_draft'); if(raw){ const data=JSON.parse(raw); if(Array.isArray(data)) return data.map(normalizeService); } }catch(e){} return services; }
+
+const AUTO_OFFICIAL = [
+  [['pan','पैन'], 'https://www.protean-tinpan.com/'],
+  [['utiitsl','uti','पैन कार्ड'], 'https://www.utiitsl.com/'],
+  [['aadhar','aadhaar','आधार'], OFFICIAL.aadhaar],
+  [['ayushman','आयुष्मान'], OFFICIAL.ayushman],
+  [['ration','राशन'], OFFICIAL.ration],
+  [['income','आय प्रमाण','आय प्रमाण पत्र','income certificate'], OFFICIAL.edistrict],
+  [['caste','जाति प्रमाण','caste certificate'], OFFICIAL.edistrict],
+  [['domicile','निवास प्रमाण','residence certificate'], OFFICIAL.edistrict],
+  [['e-district','edistrict','e district'], OFFICIAL.edistrict],
+  [['khatoni','खतौनी','भू-नक्शा','bhulekh'], OFFICIAL.bhulekh],
+  [['marriage','विवाह पंजीकरण'], OFFICIAL.marriage],
+  [['police','चरित्र प्रमाण','police verification'], OFFICIAL.police],
+  [['udid','दिव्यांग'], OFFICIAL.udid],
+  [['gst'], OFFICIAL.gst], [['itr','income tax','आयकर'], OFFICIAL.itr],
+  [['fssai'], OFFICIAL.fssai], [['udyam','msme'], OFFICIAL.udyam],
+  [['scholarship','छात्रवृत्ति'], OFFICIAL.nsp], [['digilocker'], OFFICIAL.digilocker],
+  [['irctc','railway','रेलवे'], OFFICIAL.irctc], [['passport','पासपोर्ट'], OFFICIAL.passport],
+  [['pm kisan','pm-kisan','किसान'], OFFICIAL.pmkisan], [['kcc'], OFFICIAL.kcc],
+  [['epfo','pf withdrawal','uan'], OFFICIAL.epfo], [['e-shram','e shram'], OFFICIAL.eshram],
+  [['gem','seller registration'], OFFICIAL.gem], [['tele-law','telelaw'], OFFICIAL.telelaw],
+  [['vishwakarma'], OFFICIAL.vishwakarma], [['skill india','रोजगार'], OFFICIAL.skill],
+  [['nps'], OFFICIAL.nps], [['apy'], OFFICIAL.apy], [['insurance','बीमा'], OFFICIAL.insurance],
+  [['rto','driving licence','driving license','वाहन','dl','परमिट'], OFFICIAL.rto],
+  [['challan','e-challan'], OFFICIAL.challan], [['fastag'], OFFICIAL.fastag],
+  [['recharge','dth','mobile recharge'], OFFICIAL.recharge], [['lpg','ujjwala'], OFFICIAL.lpg],
+  [['csc'], OFFICIAL.csc], [['scheme','योजना'], OFFICIAL.myscheme]
+];
+function autoOfficialUrl(text){ const t=String(text||'').toLowerCase(); for(const [keys,url] of AUTO_OFFICIAL){ if(keys.some(k=>t.includes(k))) return url; } return OFFICIAL.csc; }
+
 let isAdmin=false;
 function escapeHtml(str){return String(str).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
 function safeUrl(url){try{const u=new URL(url);return /^https?:$/.test(u.protocol)?u.href:'#'}catch{return '#'}}
 function renderServices(){
  const grid=document.getElementById('serviceGrid'); const q=(document.getElementById('serviceSearch').value||'').toLowerCase().trim();
  const filtered=services.filter(s=>(s.title+' '+s.desc+' '+s.items.map(i=>i.text).join(' ')).toLowerCase().includes(q));
- grid.innerHTML=filtered.map((s,i)=>`<article class="service-card" onclick='openService(${JSON.stringify(s).replace(/'/g,'&#39;')})'><div class="service-icon">${s.icon}</div><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.desc)}</p><ul>${s.items.slice(0,6).map(x=>`<li><a href="${safeUrl(x.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${escapeHtml(x.text)}</a></li>`).join('')}</ul>${s.items.length>6?'<div class="more">+ और सेवाएँ… • कार्ड टच करें</div>':''}</article>`).join('')||'<div class="service-card"><h3>कोई सेवा नहीं मिली</h3><p>दूसरा शब्द खोजकर देखें।</p></div>';
+ grid.innerHTML=filtered.map((s,i)=>`<article class="service-card" onclick='openService(${JSON.stringify(s).replace(/'/g,'&#39;')})'><div class="service-icon">${s.icon}</div><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.desc)}</p><ul>${s.items.map(x=>`<li><a href="${safeUrl(x.url)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">${escapeHtml(x.text)} ↗</a></li>`).join('')}</ul><div class="more">🔗 हर सेवा पर टच करें • आधिकारिक पोर्टल खुलेगा</div></article>`).join('')||'<div class="service-card"><h3>कोई सेवा नहीं मिली</h3><p>दूसरा शब्द खोजकर देखें।</p></div>';
 }
 function renderTicker(){const labels=services.map(s=>`${s.icon} ${s.title}`);const doubled=labels.concat(labels);document.getElementById('serviceTicker').innerHTML=doubled.map(x=>`<span class="ticker-chip">${escapeHtml(x)}</span>`).join('')}
 function openService(s){
@@ -46,8 +81,27 @@ function openAdmin(){document.getElementById('adminModal').classList.add('show')
 function closeAdmin(){document.getElementById('adminModal').classList.remove('show');document.getElementById('adminModal').setAttribute('aria-hidden','true')}
 function adminLogin(){const pass=document.getElementById('adminPass').value;if(pass==='Vikas@9582'){isAdmin=true;document.getElementById('loginView').classList.add('hidden');document.getElementById('adminView').classList.remove('hidden')}else alert('गलत Admin Password')}
 function adminLogout(){isAdmin=false;document.getElementById('loginView').classList.remove('hidden');document.getElementById('adminView').classList.add('hidden');document.getElementById('adminPass').value=''}
-function addService(){if(!isAdmin)return;const title=document.getElementById('newTitle').value.trim(),icon=document.getElementById('newIcon').value.trim()||'⭐',desc=document.getElementById('newDesc').value.trim()||'नई ऑनलाइन सेवा',items=document.getElementById('newItems').value.split('\n').map(x=>x.trim()).filter(Boolean).map(x=>({text:x,url:OFFICIAL.csc}));if(!title||!items.length){alert('Title और कम-से-कम एक Service लिखें।');return}services.push({icon,title,desc,portals:[['CSC Official Portal',OFFICIAL.csc]],items});localStorage.setItem('vikas_csc_services',JSON.stringify(services));['newTitle','newDesc','newItems'].forEach(id=>document.getElementById(id).value='');renderServices();renderTicker();alert('नई Service जोड़ दी गई।')}
-function resetServices(){if(confirm('क्या आप सभी custom services हटाकर default services वापस लाना चाहते हैं?')){services=DEFAULT_SERVICES.map(normalizeService);localStorage.removeItem('vikas_csc_services');renderServices();renderTicker()}}
+function addService(){
+ if(!isAdmin)return;
+ services=loadAdminDraft();
+ const title=document.getElementById('newTitle').value.trim(), icon=document.getElementById('newIcon').value.trim()||'⭐', desc=document.getElementById('newDesc').value.trim()||'नई ऑनलाइन सेवा', customUrl=document.getElementById('newUrl').value.trim();
+ const items=document.getElementById('newItems').value.split('\n').map(x=>x.trim()).filter(Boolean).map(x=>({text:x,url:customUrl||autoOfficialUrl(x)}));
+ if(!title||!items.length){alert('Title और कम-से-कम एक Service लिखें।');return}
+ const portalUrl=customUrl||autoOfficialUrl(title);
+ services.push({icon,title,desc,portals:[[title+' — Official Portal',portalUrl]],items});
+ localStorage.setItem('vikas_csc_admin_draft',JSON.stringify(services));
+ ['newTitle','newDesc','newItems','newUrl'].forEach(id=>document.getElementById(id).value='');
+ renderServices();renderTicker();alert('नई Service जोड़ दी गई। Public site के लिए Services Data export करें।');
+}
+function exportPublicServices(){
+ if(!isAdmin)return;
+ services=loadAdminDraft();
+ const blob=new Blob([JSON.stringify(services,null,2)],{type:'application/json'});
+ const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='services.json'; a.click(); URL.revokeObjectURL(a.href);
+ alert('services.json तैयार है। इसे GitHub repository में index.html के साथ upload/replace करें।');
+}
+
+function resetServices(){if(confirm('क्या आप सभी custom services हटाकर default services वापस लाना चाहते हैं?')){services=DEFAULT_SERVICES.map(normalizeService);localStorage.removeItem('vikas_csc_admin_draft');renderServices();renderTicker()}}
 function generateUPI(){const id='7355353841@okbizaxis',name=(document.getElementById('upiName').value||'Vikas CSC Jan Sewa Kendra').trim(),box=document.getElementById('qrcode'),link=document.getElementById('upiLink'),err=document.getElementById('upiError');const upiUrl=`upi://pay?pa=${encodeURIComponent(id)}&pn=${encodeURIComponent(name)}&cu=INR`;document.getElementById('upiId').value=id;err.textContent='';box.innerHTML='';if(window.QRCode){new QRCode(box,{text:upiUrl,width:220,height:220,colorDark:'#111',colorLight:'#fff'});}else{box.innerHTML='<span>QR library load नहीं हुई। Internet चालू करके फिर try करें।</span>'}link.href=upiUrl;link.classList.remove('hidden')}
 function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'})}
-document.getElementById('year').textContent=new Date().getFullYear();renderServices();renderTicker();window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeAdmin()}});document.getElementById('serviceModal').addEventListener('click',e=>{if(e.target.id==='serviceModal')closeModal()});document.getElementById('adminModal').addEventListener('click',e=>{if(e.target.id==='adminModal')closeAdmin()});
+document.getElementById('year').textContent=new Date().getFullYear();renderServices();renderTicker();loadPublicServices();window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeAdmin()}});document.getElementById('serviceModal').addEventListener('click',e=>{if(e.target.id==='serviceModal')closeModal()});document.getElementById('adminModal').addEventListener('click',e=>{if(e.target.id==='adminModal')closeAdmin()});

@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#08060d">
+  <meta name="theme-color" content="#fbfaf3">
   <meta name="description" content="Vikas Chaurasiya CSC Jan Sewa Kendra, Musahra, Sant Kabir Nagar — banking, Aadhaar, pension, RTO, certificates, tax, education, travel, agriculture and digital services.">
   <meta name="robots" content="index, follow">
   <title>Vikas Chaurasiya CSC Jan Sewa Kendra | Musahra</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="./style.css?v=4">
 </head>
 <body>
   <div class="ambient"></div>
 
   <header class="topbar">
     <a class="brand-mini" href="#home" aria-label="Vikas CSC home">
-      <img src="assets/logo.png" alt="Vikas Chaurasiya CSC logo">
+      <img src="./logo.png" alt="Vikas Chaurasiya CSC logo">
       <div>
         <div class="mini-title">VIKAS CSC</div>
         <div class="mini-sub">जन सेवा केन्द्र • मुसहरा</div>
@@ -31,8 +31,8 @@
 
   <main id="home">
     <section class="hero">
-      <div class="hero-watermark" aria-hidden="true"><img src="assets/logo.png" alt=""></div>
-      <div class="hero-copy">
+      <div class="hero-watermark" aria-hidden="true"><img src="./logo.png" alt=""></div>
+      <div class="hero-copy"><img class="hero-logo-main" src="./logo.png" alt="Vikas Chaurasiya CSC Jan Sewa Kendra logo" loading="eager">
         <div class="eyebrow">डिजिटल सेवा • सबका अधिकार • सबका विकास</div>
         <div class="hero-kicker">VIKAS CHAURASIYA</div>
         <h1>VIKAS <span>CSC</span></h1>
@@ -50,7 +50,7 @@
 
     <section class="banner-section">
       <div class="banner-label">✦ हमारा प्रीमियम CSC ब्रांड बैनर ✦</div>
-      <div class="banner-frame"><img src="assets/premium-banner.png" alt="Vikas Chaurasiya CSC Jan Sewa Kendra premium banner"></div>
+      <div class="banner-frame"><img src="./premium-banner.png" alt="Vikas Chaurasiya CSC Jan Sewa Kendra premium banner" loading="eager" onerror="this.style.display='none';document.getElementById('bannerFallback').classList.add('show')"><div id="bannerFallback" class="banner-fallback">VIKAS CSC • JAN SEWA KENDRA<br><small>Premium banner file not found — please upload premium-banner.png with index.html</small></div></div>
     </section>
 
     <section class="ticker-wrap" aria-label="सेवा सूची">
@@ -89,7 +89,7 @@
 
     <section class="section about" id="about">
       <div class="about-card">
-        <div class="about-logo"><img src="assets/logo.png" alt="Vikas Chaurasiya CSC logo"></div>
+        <div class="about-logo"><img src="./logo.png" alt="Vikas Chaurasiya CSC logo"></div>
         <div><div class="eyebrow">आपका अपना विश्वसनीय जन सेवा केन्द्र</div><h2>Vikas Chaurasiya <span>CSC Jan Sewa Kendra</span></h2><p>मुसहरा, तहसील मेहदावल, जनपद संत कबीर नगर, उत्तर प्रदेश में डिजिटल, नागरिक और ऑनलाइन सेवाओं का एक स्थान।</p><div class="districts"><span>संत कबीर नगर</span><span>सिद्धार्थनगर</span><span>गोरखपुर</span><span>महराजगंज</span><span>बस्ती</span></div></div>
       </div>
     </section>
@@ -106,6 +106,8 @@
     </section>
   </main>
 
+  <a class="ai-float" href="https://gemini.google.com/" target="_blank" rel="noopener" aria-label="AI पूछताछ">🤖 <span>AI पूछताछ</span></a>
+
   <footer><div><b>🔥 Vikas CSC Jan Sewa Kendra, मुसहरा</b> — आपकी सेवा में सदैव तत्पर</div><div>© <span id="year"></span> Vikas Chaurasiya CSC</div></footer>
 
   <div id="serviceModal" class="modal" aria-hidden="true">
@@ -115,11 +117,11 @@
   <div id="adminModal" class="modal" aria-hidden="true">
     <div class="modal-box admin-box"><button class="close" onclick="closeAdmin()">×</button>
       <div id="loginView"><div class="modal-icon">🔐</div><h2>Owner / Admin Login</h2><p>सिर्फ वेबसाइट के मालिक के लिए।</p><input id="adminPass" type="password" placeholder="Admin Password"><button class="gold-btn full" onclick="adminLogin()">Login</button></div>
-      <div id="adminView" class="hidden"><div class="modal-icon">⚙️</div><h2>Owner Control Panel</h2><div class="admin-grid"><input id="newTitle" placeholder="नई Service का Title"><input id="newIcon" placeholder="Icon जैसे 💼" value="⭐"><textarea id="newItems" placeholder="Services लिखें, हर लाइन पर एक"></textarea><input id="newDesc" placeholder="छोटा Description"><button class="gold-btn" onclick="addService()">+ नई Service जोड़ें</button><button class="danger-btn" onclick="resetServices()">Default Services Restore</button></div><div class="admin-note">नई services इसी browser में localStorage में save होंगी। GitHub Pages पर असली server-side password security नहीं होती; sensitive credentials कभी भी यहाँ न रखें।</div><button class="small-btn" onclick="adminLogout()">Logout</button></div>
+      <div id="adminView" class="hidden"><div class="modal-icon">⚙️</div><h2>Owner Control Panel</h2><div class="admin-grid"><input id="newTitle" placeholder="नई Service का Title"><input id="newIcon" placeholder="Icon जैसे 💼" value="⭐"><textarea id="newItems" placeholder="Services लिखें, हर लाइन पर एक"></textarea><input id="newDesc" placeholder="छोटा Description"><input id="newUrl" placeholder="Official URL (खाली छोड़ें तो service के नाम से auto-match होगा)"><button class="gold-btn" onclick="addService()">+ नई Service जोड़ें</button><button class="small-btn" onclick="exportPublicServices()">⬇️ Public Services Data तैयार करें</button><button class="danger-btn" onclick="resetServices()">Default Services Restore</button></div><div class="admin-note">नई services इस device के Owner draft में save होंगी। <b>Public Services Data</b> से <code>services.json</code> डाउनलोड करके GitHub में replace करने पर सभी visitors को नई services दिखेंगी। GitHub Pages अकेले server-side database/write नहीं देता, इसलिए Owner से सीधे public site बदलना बिना backend के संभव नहीं है। Admin password केवल basic UI lock है; sensitive credentials यहाँ न रखें.</div><button class="small-btn" onclick="adminLogout()">Logout</button></div>
     </div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="script.js"></script>
+  <script src="./script.js?v=4"></script>
 </body>
 </html>

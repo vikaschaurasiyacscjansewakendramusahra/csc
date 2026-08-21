@@ -1,12 +1,13 @@
-VIKAS CHAURASIYA CSC JAN SEWA KENDRA - GitHub Pages Ready
+Vikas Chaurasiya CSC Jan Sewa Kendra — GitHub Pages package
 
-Files:
-- index.html
-- style.css
-- script.js
-- assets/logo.png
-- assets/premium-banner.png
+Upload/replace ALL files and the assets folder in the GitHub Pages repository.
+Important: keep index.html, style.css, script.js and services.json together.
+The logo and premium banner are in assets/logo.png and assets/premium-banner.png.
 
-The website uses relative asset paths, so it is ready for GitHub Pages.
-All listed service items have clickable official-portal links where an official portal is available; general CSC/umbrella services use the official CSC or scheme portal.
-UPI remains 7355353841@okbizaxis and the QR is generated in the browser.
+Owner/Admin:
+- Admin changes are saved in the current browser.
+- Use “Public Services Data” to download services.json after adding/editing services.
+- Replace the repository's services.json with that downloaded file to publish the changes to all visitors.
+- GitHub Pages is static hosting, so true cross-device database writes require a backend/auth service.
+
+The floating “AI पूछताछ” button opens Google Gemini. A Gemini API key is not embedded in this static site.
