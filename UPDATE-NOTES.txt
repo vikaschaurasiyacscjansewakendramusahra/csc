@@ -1,0 +1,3 @@
+Vikas CSC Jan Sewa Kendra - Updated package
+
+Includes premium logo/banner, admin UI improvements, exact shop map point, Gemini AI link, red service modal close button, horizontal service movement, and the final V6 slightly darker premium page background.

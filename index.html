@@ -10,7 +10,19 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css?v=5">
+  <link rel="stylesheet" href="./style.css?v=6">
+
+  <style id="vikas-csc-upgrade-css">
+    /* Upgrade: keep the existing design, add only requested fixes. */
+    #adminModal .modal-box.admin-box { max-height: 82vh !important; overflow-y: auto !important; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+    #adminModal { overflow-y: auto !important; align-items: flex-start !important; padding: 24px 12px !important; }
+    #serviceModal .service-modal-box .close { color: #e00000 !important; background: #fff !important; border: 2px solid #e00000 !important; text-shadow: none !important; box-shadow: 0 4px 14px rgba(224,0,0,.25) !important; }
+    #serviceGrid { display: flex !important; flex-wrap: nowrap !important; overflow-x: auto !important; overflow-y: hidden !important; gap: 18px !important; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+    #serviceGrid .service-card { flex: 0 0 min(360px, 86vw) !important; }
+    #serviceGrid.auto-scrolling { scroll-behavior: auto !important; }
+    .district-license-note { margin: 14px 0 8px; font-weight: 800; font-size: 1.05rem; color: #b07a00; text-align: center; }
+    @media (max-width: 600px) { #adminModal { padding: 10px 8px !important; } #adminModal .modal-box.admin-box { max-height: 88vh !important; } }
+  </style>
 </head>
 <body>
   <div class="ambient"></div>
@@ -85,7 +97,7 @@
     <section class="section about" id="about">
       <div class="about-card">
         <div class="about-logo"><img src="./logo.png" alt="Vikas Chaurasiya CSC logo"></div>
-        <div><div class="eyebrow">आपका अपना विश्वसनीय जन सेवा केन्द्र</div><h2>Vikas Chaurasiya <span>CSC Jan Sewa Kendra</span></h2><p>मुसहरा, तहसील मेहदावल, जनपद संत कबीर नगर, उत्तर प्रदेश में डिजिटल, नागरिक और ऑनलाइन सेवाओं का एक स्थान।</p><div class="districts"><span>संत कबीर नगर</span><span>सिद्धार्थनगर</span><span>गोरखपुर</span><span>महराजगंज</span><span>बस्ती</span></div></div>
+        <div><div class="eyebrow">Main Service</div><h2>Vikas Chaurasiya <span>CSC Jan Sewa Kendra</span></h2><p>मुसहरा, तहसील मेहदावल, जनपद संत कबीर नगर, उत्तर प्रदेश में डिजिटल, नागरिक और ऑनलाइन सेवाओं का एक स्थान।</p><div class="district-license-note">इन सभी जिलों का लाइसेंस बनवाने के लिए संपर्क करे</div><div class="districts"><span>संत कबीर नगर</span><span>सिद्धार्थनगर</span><span>गोरखपुर</span><span>महराजगंज</span><span>बस्ती</span></div></div>
       </div>
     </section>
 
@@ -95,7 +107,7 @@
         <a class="contact-card" href="tel:+917355353841"><span>📞</span><div><b>मोबाइल</b><strong>7355353841</strong><small>कॉल करने के लिए क्लिक करें</small></div></a>
         <a class="contact-card" href="mailto:vikaschaurasiya10925@zohomail.in"><span>✉️</span><div><b>Email</b><strong>vikaschaurasiya10925@zohomail.in</strong><small>ईमेल भेजने के लिए क्लिक करें</small></div></a>
         <a class="contact-card" href="mailto:vikaschaurasiya10925@gmail.com"><span>📧</span><div><b>Gmail</b><strong>vikaschaurasiya10925@gmail.com</strong><small>ईमेल भेजने के लिए क्लिक करें</small></div></a>
-        <a class="contact-card" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Musahra%2C%20Mehdawal%2C%20Sant%20Kabir%20Nagar%2C%20Uttar%20Pradesh%20272154"><span>📍</span><div><b>हमारा पता</b><strong>ग्राम व पोस्ट – मुसहरा</strong><small>तहसील – मेहदावल, जनपद – संत कबीर नगर, उत्तर प्रदेश – 272154</small></div></a>
+        <a class="contact-card" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=27.063557%2C83.123799"><span>📍</span><div><b>हमारा पता</b><strong>ग्राम व पोस्ट – मुसहरा</strong><small>तहसील – मेहदावल, जनपद – संत कबीर नगर, उत्तर प्रदेश – 272154</small></div></a>
         <a class="contact-card" target="_blank" rel="noopener" href="https://wa.me/917355353841"><span>💬</span><div><b>WhatsApp</b><strong>7355353841</strong><small>WhatsApp पर संदेश भेजें</small></div></a>
       </div>
     </section>
@@ -107,7 +119,7 @@
     <div class="ai-panel-icon">🤖</div>
     <h3>Vikas CSC Jan Sewa Kendra में आपका स्वागत है</h3>
     <p id="aiGreeting">नमस्कार! मैं इस वेबसाइट की सेवाओं के बारे में जानकारी देने के लिए यहाँ हूँ। बताइए, मैं आपकी किस प्रकार मदद कर सकती हूँ?</p>
-    <div class="ai-chat-row"><input id="aiQuestion" type="text" placeholder="जैसे: PAN Card कहाँ खुलेगा?" onkeydown="if(event.key==='Enter') askSiteAI()"><button type="button" onclick="askSiteAI()">पूछें</button></div>
+    <div class="ai-chat-row"><input id="aiQuestion" type="text" placeholder="जैसे: PAN Card कहाँ खुलेगा?" onkeydown="if(event.key==='Enter') askSiteAI()"><button type="button" onclick="askSiteAI()">Gemini में पूछें</button></div>
     <div id="aiAnswer" class="ai-answer">आप बैंकिंग, Aadhaar, PAN, RTO, प्रमाण पत्र, पेंशन, GST, छात्रवृत्ति, यात्रा, किसान सेवाओं आदि के बारे में पूछ सकते हैं।</div>
     <div class="ai-quick">
       <button onclick="aiQuick('Aadhaar सेवा')">Aadhaar</button>
@@ -115,7 +127,7 @@
       <button onclick="aiQuick('RTO / Driving Licence')">RTO</button>
       <button onclick="aiQuick('प्रमाण पत्र')">प्रमाण पत्र</button>
     </div>
-    <a class="gold-btn ai-gemini" href="https://gemini.google.com/" target="_blank" rel="noopener">✨ Gemini में पूछें</a>
+    <a id="geminiDirectLink" class="gold-btn ai-gemini" href="https://gemini.google.com/app" target="_blank" rel="noopener">✨ Gemini में पूछें</a>
   </aside>
 
   <footer><div><b>🔥 Vikas CSC Jan Sewa Kendra, मुसहरा</b> — आपकी सेवा में सदैव तत्पर</div><div>© <span id="year"></span> Vikas Chaurasiya CSC</div></footer>

@@ -22,8 +22,9 @@ const DEFAULT_SERVICES = [
 ];
 
 function normalizeService(s){
-  const items=(s.items||[]).map(x=>Array.isArray(x)?{text:x[0],url:x[1]||autoOfficialUrl(x[0])}:{text:String(x),url:autoOfficialUrl(x)});
-  return {...s,portals:s.portals||[['CSC Official Portal',OFFICIAL.csc]],items};
+  const items=(s.items||[]).map(x=>{ const text=Array.isArray(x)?x[0]:String(x); const raw=Array.isArray(x)?(x[1]||autoOfficialUrl(text)):autoOfficialUrl(text); return {text,url:normalizeFallbackUrl(raw)}; });
+  const portals=(s.portals||[['CSC Official Portal',OFFICIAL.csc]]).map(p=>[p[0],normalizeFallbackUrl(p[1])]);
+  return {...s,portals,items};
 }
 let services=DEFAULT_SERVICES.map(normalizeService);
 async function loadPublicServices(){
@@ -31,6 +32,8 @@ async function loadPublicServices(){
 }
 function loadAdminDraft(){ try{ const raw=localStorage.getItem('vikas_csc_admin_draft'); if(raw){ const data=JSON.parse(raw); if(Array.isArray(data)) return data.map(normalizeService); } }catch(e){} return services; }
 
+const VIKAS_FALLBACK_URL = 'https://www.google.com/search?q=VIKAS+CSC+e-governance+BLS+CSC+Uttar+Pradesh+Jan+Sewa+Kendra+Near+CSC+Center+Cyber+Cafe';
+function normalizeFallbackUrl(url){ const u=String(url||'').trim(); if(!u || u==='https://www.csc.gov.in/' || u==='https://www.csc.gov.in') return VIKAS_FALLBACK_URL; return u; }
 const AUTO_OFFICIAL = [
   [['pan','पैन'], 'https://www.protean-tinpan.com/'],
   [['utiitsl','uti','पैन कार्ड'], 'https://www.utiitsl.com/'],
@@ -79,7 +82,7 @@ function openService(s){
 function closeModal(){document.getElementById('serviceModal').classList.remove('show');document.getElementById('serviceModal').setAttribute('aria-hidden','true')}
 function openAdmin(){document.getElementById('adminModal').classList.add('show');document.getElementById('adminModal').setAttribute('aria-hidden','false')}
 function closeAdmin(){document.getElementById('adminModal').classList.remove('show');document.getElementById('adminModal').setAttribute('aria-hidden','true')}
-function adminLogin(){const pass=document.getElementById('adminPass').value;if(pass==='Vikas@9582'){isAdmin=true;document.getElementById('loginView').classList.add('hidden');document.getElementById('adminView').classList.remove('hidden')}else alert('गलत Admin Password')}
+async function adminLogin(){const pass=document.getElementById('adminPass').value;const data=new TextEncoder().encode(pass);const digest=await crypto.subtle.digest('SHA-256',data);const hash=Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('');if(hash==='a136d62e7c8bfb415b674d758851838893c2a741546fb52a3a9ddd3c5291c89d'){isAdmin=true;document.getElementById('loginView').classList.add('hidden');document.getElementById('adminView').classList.remove('hidden');document.getElementById('adminPass').value=''}else alert('गलत Admin Password')}
 function adminLogout(){isAdmin=false;document.getElementById('loginView').classList.remove('hidden');document.getElementById('adminView').classList.add('hidden');document.getElementById('adminPass').value=''}
 function addService(){
  if(!isAdmin)return;
@@ -111,21 +114,16 @@ function toggleAIHelp(){
 
 function askSiteAI(){
   const input=document.getElementById('aiQuestion'), answer=document.getElementById('aiAnswer');
-  const q=(input.value||'').trim().toLowerCase();
-  if(!q){answer.textContent='कृपया अपनी सेवा का नाम या सवाल लिखें।';return;}
-  const hits=[];
-  services.forEach(s=>{
-    const hay=(s.title+' '+s.desc+' '+s.items.map(i=>i.text).join(' ')).toLowerCase();
-    if(q.split(/\s+/).some(w=>w.length>2 && hay.includes(w))) hits.push(s);
-  });
-  if(hits.length){
-    const s=hits[0];
-    const first=s.items.slice(0,3).map(x=>x.text).join(' • ');
-    answer.innerHTML=`<b>${escapeHtml(s.title)}</b><br>${escapeHtml(s.desc)}<br><span>उदाहरण: ${escapeHtml(first)}</span><br><small>किसी service point पर touch करने से उसका संबंधित portal खुलेगा।</small>`;
-  }else{
-    answer.textContent='इस सवाल का उत्तर मेरी वेबसाइट की उपलब्ध service list में नहीं मिला। नीचे “Gemini में पूछें” दबाकर Google Gemini से विस्तार से पूछ सकते हैं।';
-  }
+  const q=(input.value||'').trim();
+  if(!q){answer.textContent='कृपया अपना सवाल लिखें।';input.focus();return;}
+  const prompt=`Vikas Chaurasiya CSC Jan Sewa Kendra, Musahra के लिए इस ग्राहक के सवाल का सरल हिंदी में उत्तर दें। उपलब्ध हो तो संबंधित official website भी बताएं। ग्राहक का सवाल: ${q}`;
+  const geminiUrl='https://gemini.google.com/app?q='+encodeURIComponent(prompt);
+  const direct=document.getElementById('geminiDirectLink');
+  if(direct) direct.href=geminiUrl;
+  window.open(geminiUrl,'_blank','noopener');
+  answer.innerHTML='<b>Gemini खोला जा रहा है…</b><br>आपका सवाल Gemini में भेज दिया गया है।';
 }
+
 
 function aiQuick(topic){
   const msg=`Vikas CSC Jan Sewa Kendra, Musahra में ${topic} के बारे में जानकारी चाहिए। उपलब्ध सेवा, जरूरी दस्तावेज और official portal बताइए।`;
@@ -133,9 +131,28 @@ function aiQuick(topic){
   const p=panel.querySelector('p');
   p.textContent=`आपने “${topic}” चुना है। नीचे Gemini में यही सवाल पूछ सकते हैं: ${msg}`;
   const a=panel.querySelector('.ai-gemini');
-  a.href='https://gemini.google.com/';
+  a.href='https://gemini.google.com/app?q='+encodeURIComponent(msg);
 }
 
 function generateUPI(){const id='7355353841@okbizaxis',name=(document.getElementById('upiName').value||'Vikas CSC Jan Sewa Kendra').trim(),box=document.getElementById('qrcode'),link=document.getElementById('upiLink'),err=document.getElementById('upiError');const upiUrl=`upi://pay?pa=${encodeURIComponent(id)}&pn=${encodeURIComponent(name)}&cu=INR`;document.getElementById('upiId').value=id;err.textContent='';box.innerHTML='';if(window.QRCode){new QRCode(box,{text:upiUrl,width:220,height:220,colorDark:'#111',colorLight:'#fff'});}else{box.innerHTML='<span>QR library load नहीं हुई। Internet चालू करके फिर try करें।</span>'}link.href=upiUrl;link.classList.remove('hidden')}
 function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'})}
 document.getElementById('year').textContent=new Date().getFullYear();renderServices();renderTicker();loadPublicServices();window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeAdmin()}});document.getElementById('serviceModal').addEventListener('click',e=>{if(e.target.id==='serviceModal')closeModal()});document.getElementById('adminModal').addEventListener('click',e=>{if(e.target.id==='adminModal')closeAdmin()});
+
+let serviceAutoTimer=null;
+function startServiceAutoScroll(){
+  const grid=document.getElementById('serviceGrid'); if(!grid) return;
+  if(serviceAutoTimer) clearInterval(serviceAutoTimer);
+  serviceAutoTimer=setInterval(()=>{
+    if(document.hidden || grid.matches(':hover')) return;
+    const max=grid.scrollWidth-grid.clientWidth;
+    if(max<=0) return;
+    const step=grid.querySelector('.service-card')?.getBoundingClientRect().width||320;
+    const next=grid.scrollLeft+Math.max(1,Math.round(step*0.035));
+    if(next>=max-2) grid.scrollTo({left:0,behavior:'auto'}); else grid.scrollLeft=next;
+  },80);
+  grid.addEventListener('mouseenter',()=>grid.classList.add('auto-scrolling'));
+  grid.addEventListener('mouseleave',()=>grid.classList.remove('auto-scrolling'));
+}
+window.addEventListener('load',startServiceAutoScroll);
+const _renderServicesOriginal=renderServices;
+renderServices=function(){_renderServicesOriginal();startServiceAutoScroll();};
