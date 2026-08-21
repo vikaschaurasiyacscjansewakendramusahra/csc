@@ -140,3 +140,56 @@ body:before{opacity:.16!important;background-image:radial-gradient(circle,rgba(1
 .service-scroll-viewport{overflow:visible!important;width:100%!important}
 @media(max-width:900px){#serviceGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 @media(max-width:560px){#serviceGrid{grid-template-columns:1fr!important;gap:14px!important}#serviceGrid .service-card{width:100%!important;min-width:0!important}}
+
+
+/* ===== V9: WHOLE 3-COLUMN SERVICE GROUP AUTO-SCROLL ===== */
+.service-scroll-viewport{
+  width:100%!important;
+  overflow:hidden!important;
+  position:relative!important;
+  padding:4px 0 20px!important;
+  touch-action:pan-y!important;
+  overscroll-behavior-x:contain!important;
+}
+.service-track{
+  display:flex!important;
+  width:200%!important;
+  align-items:flex-start!important;
+  animation:serviceGroupRTL 34s linear infinite!important;
+  will-change:transform!important;
+}
+.service-track:hover{animation-play-state:paused!important}
+.service-track.is-searching{
+  width:100%!important;
+  animation:none!important;
+}
+.service-grid{
+  flex:0 0 50%!important;
+  width:50%!important;
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:18px!important;
+  overflow:visible!important;
+  padding:8px 4px 18px!important;
+  min-width:0!important;
+  touch-action:pan-y!important;
+}
+.service-grid .service-card{
+  width:auto!important;
+  min-width:0!important;
+  max-width:none!important;
+  flex:none!important;
+}
+@keyframes serviceGroupRTL{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(-50%,0,0)}
+}
+@media(max-width:900px){
+  .service-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important}
+}
+@media(max-width:560px){
+  .service-scroll-viewport{overflow:hidden!important;touch-action:pan-y!important}
+  .service-track{animation-duration:30s!important}
+  .service-grid{grid-template-columns:1fr!important;gap:14px!important;padding:6px 2px 16px!important}
+  .service-grid .service-card{width:100%!important}
+}
