@@ -150,29 +150,38 @@ function generateUPI(){const id='7355353841@okbizaxis',name=(document.getElement
 function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'})}
 document.getElementById('year').textContent=new Date().getFullYear();renderServices();renderTicker();loadPublicServices();window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeAdmin()}});document.getElementById('serviceModal').addEventListener('click',e=>{if(e.target.id==='serviceModal')closeModal()});document.getElementById('adminModal').addEventListener('click',e=>{if(e.target.id==='adminModal')closeAdmin()});
 
-// Services: one 3x3 grid only. Auto-moves gently after 6s idle; any touch/mouse stops it.
+// Services: one 3x3 grid only. Auto-moves after 6s idle; touch/mouse pauses it.
 (function(){
- let timer=null, autoTimer=null, dragging=false, startX=0, startY=0, startOffset=0, offset=0, moved=false, autoDir=-1;
+ let autoTimer=null, dragging=false, startX=0, startY=0, startOffset=0, offset=0, moved=false, autoDir=-1, autoAnim=null;
  function setup(){
   const vp=document.querySelector('.service-scroll-viewport');
   if(!vp || vp.dataset.ready) return;
   vp.dataset.ready='1';
   const track=document.getElementById('serviceTrack');
-  const grid=document.getElementById('serviceGrid');
-  const stop=()=>{ if(autoTimer){clearTimeout(autoTimer);autoTimer=null;} if(timer){cancelAnimationFrame(timer);timer=null;} track.classList.add('user-paused'); };
+  const stop=()=>{ if(autoTimer){clearTimeout(autoTimer);autoTimer=null;} if(autoAnim){clearTimeout(autoAnim);autoAnim=null;} track.classList.add('user-paused'); };
   const schedule=()=>{ if(track.classList.contains('is-searching')) return; if(autoTimer) clearTimeout(autoTimer); autoTimer=setTimeout(()=>autoStep(),6000); };
   const applyOffset=()=>{ track.style.transform=`translate3d(${offset}%,0,0)`; };
   const autoStep=()=>{
     if(track.classList.contains('is-searching') || dragging) return schedule();
     track.classList.remove('manual');
     autoDir = autoDir===-1 ? 1 : -1;
-    offset = autoDir===-1 ? -4 : 0;
-    track.style.transition='transform 4.2s ease-in-out';
+    offset = autoDir===-1 ? -7 : 0;
+    track.style.transition='transform 4.8s ease-in-out';
     applyOffset();
-    setTimeout(()=>{ track.style.transition='transform .9s ease'; schedule(); },4200);
+    autoAnim=setTimeout(()=>{ track.style.transition='none'; schedule(); },4800);
   };
   const down=(x,y)=>{stop(); dragging=true;moved=false;startX=x;startY=y;startOffset=offset;track.style.transition='none';};
-  const move=(x,y,e)=>{if(!dragging)return; const dx=x-startX,dy=y-startY; if(!moved && Math.abs(dy)>Math.abs(dx) && Math.abs(dy)>8){dragging=false;schedule();return;} if(Math.abs(dx)>8){moved=true; e.preventDefault(); const range=4; offset=Math.max(-range,Math.min(0,startOffset+(dx/window.innerWidth)*100)); track.classList.add('manual'); applyOffset();}};
+  const move=(x,y,e)=>{
+    if(!dragging)return;
+    const dx=x-startX,dy=y-startY;
+    if(!moved && Math.abs(dy)>Math.abs(dx) && Math.abs(dy)>8){ dragging=false; schedule(); return; }
+    if(Math.abs(dx)>8){
+      moved=true; e.preventDefault();
+      const range=7;
+      offset=Math.max(-range,Math.min(0,startOffset+(dx/window.innerWidth)*100));
+      track.classList.add('manual'); applyOffset();
+    }
+  };
   const up=()=>{if(!dragging)return;dragging=false;track.style.transition='transform .35s ease';applyOffset();schedule();};
   vp.addEventListener('pointerdown',e=>down(e.clientX,e.clientY));
   vp.addEventListener('pointermove',e=>move(e.clientX,e.clientY,e),{passive:false});
