@@ -110,3 +110,25 @@ body:before{opacity:.10!important;background-image:radial-gradient(circle,rgba(1
 footer{background:#d7ddd7!important;border-top-color:#c2cbc1!important;color:#5e655c!important}
 .modal-box{background:linear-gradient(145deg,#f8faf7,#e8eee7)!important}
 .admin-note{background:#e8eee7!important}
+
+/* ===== V6 FINAL USER UPDATE: DARKER PREMIUM BACKGROUND + SERVICE CAROUSEL + ADMIN SCROLL ===== */
+html,body{background:linear-gradient(180deg,#dfe5df 0%,#d5ddd6 45%,#e5e9e5 100%)!important;color:#24251f!important}
+body:before{opacity:.16!important;background-image:radial-gradient(circle,rgba(105,88,38,.22) 1px,transparent 1px)!important;background-size:30px 30px!important}
+.hero{background:linear-gradient(180deg,#edf1ed 0%,#e4e9e4 70%,#d8e0d8 100%)!important}
+.ticker-wrap{background:rgba(228,233,228,.9)!important}
+.section{position:relative}
+.service-grid{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;overflow-y:hidden!important;gap:18px!important;padding:8px 4px 24px!important;scroll-behavior:smooth!important;scrollbar-width:thin!important;scrollbar-color:#c49a32 #d8dfd8!important;touch-action:pan-x!important}
+.service-grid::-webkit-scrollbar{height:9px!important}
+.service-grid::-webkit-scrollbar-track{background:#d8dfd8!important;border-radius:99px!important}
+.service-grid::-webkit-scrollbar-thumb{background:linear-gradient(90deg,#8e6509,#e5bd4d,#9a6a09)!important;border-radius:99px!important}
+.service-grid .service-card{flex:0 0 min(360px,82vw)!important;width:min(360px,82vw)!important;min-width:min(360px,82vw)!important}
+.service-grid:hover{scrollbar-color:#b8881d #d3dbd4!important}
+.modal-box{max-height:90vh!important;overflow-y:auto!important}
+#adminModal .modal-box{max-height:calc(100vh - 30px)!important;overflow-y:auto!important;overscroll-behavior:contain!important}
+#adminView{max-height:none!important;overflow:visible!important}
+#adminModal .close,#serviceModal .close{color:#e11d2e!important;font-weight:1000!important;text-shadow:0 1px 2px rgba(0,0,0,.12)!important}
+@media(max-width:560px){
+ .service-grid{gap:14px!important;padding-bottom:20px!important}
+ .service-grid .service-card{flex-basis:84vw!important;width:84vw!important;min-width:84vw!important}
+ html,body{background:linear-gradient(180deg,#e2e7e2 0%,#d8dfd8 100%)!important}
+}

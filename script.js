@@ -28,12 +28,16 @@ function normalizeService(s){
 }
 let services=DEFAULT_SERVICES.map(normalizeService);
 async function loadPublicServices(){
-  try{ const r=await fetch('./services.json?v=5',{cache:'no-store'}); if(!r.ok) throw new Error('services.json unavailable'); const data=await r.json(); if(Array.isArray(data)){ services=data.map(normalizeService); renderServices(); renderTicker(); } }catch(e){ console.warn('Public services data could not be loaded; using built-in services.',e); }
+  try{ const r=await fetch('./services.json?v=6',{cache:'no-store'}); if(!r.ok) throw new Error('services.json unavailable'); const data=await r.json(); if(Array.isArray(data)){ services=data.map(normalizeService); renderServices(); renderTicker(); } }catch(e){ console.warn('Public services data could not be loaded; using built-in services.',e); }
 }
 function loadAdminDraft(){ try{ const raw=localStorage.getItem('vikas_csc_admin_draft'); if(raw){ const data=JSON.parse(raw); if(Array.isArray(data)) return data.map(normalizeService); } }catch(e){} return services; }
 
-const VIKAS_FALLBACK_URL = 'https://www.google.com/search?q=VIKAS+CSC+e-governance+BLS+CSC+Uttar+Pradesh+Jan+Sewa+Kendra+Near+CSC+Center+Cyber+Cafe';
-function normalizeFallbackUrl(url){ const u=String(url||'').trim(); if(!u || u==='https://www.csc.gov.in/' || u==='https://www.csc.gov.in') return VIKAS_FALLBACK_URL; return u; }
+function normalizeFallbackUrl(url){
+  const u=String(url||'').trim();
+  if(!u || u==='https://www.csc.gov.in/' || u==='https://www.csc.gov.in')
+    return 'https://www.google.com/search?q=VIKAS+CSC+e-governance+BLS+CSC+Uttar+Pradesh+Jan+Sewa+Kendra+Near+CSC+Center+Cyber+Cafe';
+  return u;
+}
 const AUTO_OFFICIAL = [
   [['pan','पैन'], 'https://www.protean-tinpan.com/'],
   [['utiitsl','uti','पैन कार्ड'], 'https://www.utiitsl.com/'],
@@ -82,7 +86,7 @@ function openService(s){
 function closeModal(){document.getElementById('serviceModal').classList.remove('show');document.getElementById('serviceModal').setAttribute('aria-hidden','true')}
 function openAdmin(){document.getElementById('adminModal').classList.add('show');document.getElementById('adminModal').setAttribute('aria-hidden','false')}
 function closeAdmin(){document.getElementById('adminModal').classList.remove('show');document.getElementById('adminModal').setAttribute('aria-hidden','true')}
-async function adminLogin(){const pass=document.getElementById('adminPass').value;const data=new TextEncoder().encode(pass);const digest=await crypto.subtle.digest('SHA-256',data);const hash=Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('');if(hash==='a136d62e7c8bfb415b674d758851838893c2a741546fb52a3a9ddd3c5291c89d'){isAdmin=true;document.getElementById('loginView').classList.add('hidden');document.getElementById('adminView').classList.remove('hidden');document.getElementById('adminPass').value=''}else alert('गलत Admin Password')}
+async function adminLogin(){const pass=document.getElementById('adminPass').value;const data=new TextEncoder().encode(pass);const digest=await crypto.subtle.digest('SHA-256',data);const hash=Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('');if(hash==='929dfb98067eccee61b09e7cac9d7c5b473f13f7f5c4b38378b09f9c43f8e4cc'){isAdmin=true;document.getElementById('loginView').classList.add('hidden');document.getElementById('adminView').classList.remove('hidden');document.getElementById('adminPass').value=''}else alert('गलत Admin Password')}
 function adminLogout(){isAdmin=false;document.getElementById('loginView').classList.remove('hidden');document.getElementById('adminView').classList.add('hidden');document.getElementById('adminPass').value=''}
 function addService(){
  if(!isAdmin)return;

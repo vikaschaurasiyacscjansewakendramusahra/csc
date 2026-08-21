@@ -1,3 +1,9 @@
-Vikas CSC Jan Sewa Kendra - Updated package
-
-Includes premium logo/banner, admin UI improvements, exact shop map point, Gemini AI link, red service modal close button, horizontal service movement, and the final V6 slightly darker premium page background.
+V6 FINAL UPDATE
+- Restored/fixed public services loading.
+- Kept all 9 service categories / 66 individual service entries.
+- Admin password is Vik@9585; source contains only SHA-256 hash, not the plain password.
+- CSC/no-official-portal fallback opens the VIKAS CSC search destination.
+- Kept requested shop map point, Gemini AI opening, red close button and admin modal scrolling.
+- Added darker premium page background.
+- Added horizontal auto-scrolling/swipeable services carousel.
+- Updated script/cache version to v6.
