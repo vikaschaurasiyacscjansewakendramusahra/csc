@@ -193,3 +193,14 @@ body:before{opacity:.16!important;background-image:radial-gradient(circle,rgba(1
   .service-grid{grid-template-columns:1fr!important;gap:14px!important;padding:6px 2px 16px!important}
   .service-grid .service-card{width:100%!important}
 }
+
+/* ===== V10 SERVICES: ONE 3x3 GRID, NO DUPLICATE CARDS ===== */
+.service-scroll-viewport{position:relative!important;width:100%!important;overflow:hidden!important;touch-action:auto!important;overscroll-behavior-x:contain!important;padding:6px 0 20px!important}
+.service-track{display:block!important;width:100%!important;transform:translate3d(0,0,0)!important;animation:none!important;transition:transform .9s ease!important;will-change:transform!important}
+.service-track.auto-glide{transform:translate3d(-4%,0,0)!important}
+.service-track.manual{transition:none!important}
+.service-track.is-searching{transform:none!important}
+.service-grid{display:grid!important;width:100%!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:18px!important;padding:8px 4px 18px!important;overflow:visible!important;transform:none!important;animation:none!important}
+.service-grid .service-card{width:auto!important;min-width:0!important;max-width:none!important}
+@media(max-width:900px){.service-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important}}
+@media(max-width:560px){.service-scroll-viewport{touch-action:auto!important}.service-grid{grid-template-columns:1fr!important;gap:14px!important;padding:6px 2px 16px!important}}
