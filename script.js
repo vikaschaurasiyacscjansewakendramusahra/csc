@@ -28,7 +28,7 @@ function normalizeService(s){
 }
 let services=DEFAULT_SERVICES.map(normalizeService);
 async function loadPublicServices(){
-  try{ const r=await fetch('./services.json?v=6',{cache:'no-store'}); if(!r.ok) throw new Error('services.json unavailable'); const data=await r.json(); if(Array.isArray(data)){ services=data.map(normalizeService); renderServices(); renderTicker(); } }catch(e){ console.warn('Public services data could not be loaded; using built-in services.',e); }
+  try{ const r=await fetch('./services.json?v=7',{cache:'no-store'}); if(!r.ok) throw new Error('services.json unavailable'); const data=await r.json(); if(Array.isArray(data)){ services=data.map(normalizeService); renderServices(); renderTicker(); } }catch(e){ console.warn('Public services data could not be loaded; using built-in services.',e); }
 }
 function loadAdminDraft(){ try{ const raw=localStorage.getItem('vikas_csc_admin_draft'); if(raw){ const data=JSON.parse(raw); if(Array.isArray(data)) return data.map(normalizeService); } }catch(e){} return services; }
 
@@ -74,7 +74,8 @@ function safeUrl(url){try{const u=new URL(url);return /^https?:$/.test(u.protoco
 function renderServices(){
  const grid=document.getElementById('serviceGrid'); const q=(document.getElementById('serviceSearch').value||'').toLowerCase().trim();
  const filtered=services.filter(s=>(s.title+' '+s.desc+' '+s.items.map(i=>i.text).join(' ')).toLowerCase().includes(q));
- grid.innerHTML=filtered.map((s,i)=>`<article class="service-card" onclick='openService(${JSON.stringify(s).replace(/'/g,'&#39;')})'><div class="service-icon">${s.icon}</div><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.desc)}</p><ul>${s.items.map(x=>`<li><a href="${safeUrl(x.url)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">${escapeHtml(x.text)} ↗</a></li>`).join('')}</ul><div class="more">🔗 हर सेवा पर टच करें • आधिकारिक पोर्टल खुलेगा</div></article>`).join('')||'<div class="service-card"><h3>कोई सेवा नहीं मिली</h3><p>दूसरा शब्द खोजकर देखें।</p></div>';
+ const cards=filtered.map((s,i)=>`<article class="service-card" onclick='openService(${JSON.stringify(s).replace(/'/g,'&#39;')})'><div class="service-icon">${s.icon}</div><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.desc)}</p><ul>${s.items.map(x=>`<li><a href="${safeUrl(x.url)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">${escapeHtml(x.text)} ↗</a></li>`).join('')}</ul><div class="more">🔗 हर सेवा पर टच करें • आधिकारिक पोर्टल खुलेगा</div></article>`).join('');
+ grid.innerHTML=cards ? (q ? cards : cards+cards) : '<div class="service-card"><h3>कोई सेवा नहीं मिली</h3><p>दूसरा शब्द खोजकर देखें।</p></div>';
 }
 function renderTicker(){const labels=services.map(s=>`${s.icon} ${s.title}`);const doubled=labels.concat(labels);document.getElementById('serviceTicker').innerHTML=doubled.map(x=>`<span class="ticker-chip">${escapeHtml(x)}</span>`).join('')}
 function openService(s){

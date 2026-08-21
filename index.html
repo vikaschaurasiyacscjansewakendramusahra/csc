@@ -10,19 +10,48 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css?v=6">
+  <link rel="stylesheet" href="./style.css?v=7">
 
   <style id="vikas-csc-upgrade-css">
     /* Upgrade: keep the existing design, add only requested fixes. */
     #adminModal .modal-box.admin-box { max-height: 82vh !important; overflow-y: auto !important; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
     #adminModal { overflow-y: auto !important; align-items: flex-start !important; padding: 24px 12px !important; }
     #serviceModal .service-modal-box .close { color: #e00000 !important; background: #fff !important; border: 2px solid #e00000 !important; text-shadow: none !important; box-shadow: 0 4px 14px rgba(224,0,0,.25) !important; }
-    #serviceGrid { display: flex !important; flex-wrap: nowrap !important; overflow-x: auto !important; overflow-y: hidden !important; gap: 18px !important; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
-    #serviceGrid .service-card { flex: 0 0 min(360px, 86vw) !important; }
-    #serviceGrid.auto-scrolling { scroll-behavior: auto !important; }
+    #serviceGrid { display:flex !important; flex-wrap:nowrap !important; width:max-content !important; max-width:none !important; gap:18px !important; overflow:visible !important; padding:4px 0 18px !important; animation:servicesMarquee 55s linear infinite !important; will-change:transform; }
+    #serviceGrid .service-card { flex:0 0 clamp(300px, 27vw, 390px) !important; width:clamp(300px, 27vw, 390px) !important; min-width:clamp(300px, 27vw, 390px) !important; }
+    .service-scroll-viewport { overflow:hidden !important; width:100% !important; position:relative !important; }
+    .service-scroll-viewport:hover #serviceGrid { animation-play-state:paused !important; }
+    @keyframes servicesMarquee { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+    @media (max-width:900px){ #serviceGrid .service-card{flex-basis:330px !important;width:330px !important;min-width:330px !important;} }
+    @media (max-width:560px){ #serviceGrid{gap:12px !important;animation-duration:48s !important;} #serviceGrid .service-card{flex-basis:calc(88vw) !important;width:calc(88vw) !important;min-width:calc(88vw) !important;} }
     .district-license-note { margin: 14px 0 8px; font-weight: 800; font-size: 1.05rem; color: #b07a00; text-align: center; }
     @media (max-width: 600px) { #adminModal { padding: 10px 8px !important; } #adminModal .modal-box.admin-box { max-height: 88vh !important; } }
   </style>
+
+<style id="gold-24k-heading">
+/* 24K pure-gold illuminated main heading */
+.hero h1{
+  color:#ffd700 !important;
+  background:linear-gradient(115deg,#fffbe0 0%,#ffe97a 12%,#ffd700 25%,#fff2a6 38%,#ffd700 50%,#e8ad00 63%,#fff8c7 76%,#ffd700 88%,#fff0a0 100%) !important;
+  background-size:220% 100% !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+  -webkit-text-stroke:1.5px #c89400 !important;
+  text-shadow:0 1px 0 #fff8c8,0 3px 7px rgba(184,130,0,.28),0 0 18px rgba(255,215,0,.42) !important;
+  animation:gold24kShine 4.5s linear infinite !important;
+}
+.hero h1 span{
+  background:inherit !important;
+  background-size:220% 100% !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+}
+.hero h1:after{background:linear-gradient(90deg,transparent,#fff6b0,#ffd700,#fff6b0,transparent) !important;box-shadow:0 0 12px rgba(255,215,0,.65) !important;}
+@keyframes gold24kShine{0%{background-position:200% 0}100%{background-position:-20% 0}}
+</style>
+
 </head>
 <body>
   <div class="ambient"></div>
@@ -69,7 +98,7 @@
         <div><div class="eyebrow">ONE PLACE • ALL ONLINE SERVICES</div><h2>हमारी <span>प्रमुख सेवाएँ</span></h2><p class="section-note">हर सेवा/बुलेट को टच करने पर संबंधित आधिकारिक पोर्टल खुलेगा।</p></div>
         <div class="service-tools"><input id="serviceSearch" type="search" placeholder="🔎 सेवा खोजें..." oninput="renderServices()"><button class="small-btn" onclick="scrollToTop()">↑ ऊपर</button></div>
       </div>
-      <div id="serviceGrid" class="service-grid"></div>
+      <div class="service-scroll-viewport"><div id="serviceGrid" class="service-grid"></div></div>
     </section>
 
     <section class="payment section">
