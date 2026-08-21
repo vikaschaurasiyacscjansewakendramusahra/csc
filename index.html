@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#05030b">
-  <meta name="description" content="Vikas Chaurasiya CSC Jan Sewa Kendra, Musahra, Sant Kabir Nagar — digital, banking, Aadhaar, pension, RTO, government and online services.">
-  <title>Vikas Chaurasiya CSC Jan Sewa Kendra Musahra</title>
+  <meta name="theme-color" content="#08060d">
+  <meta name="description" content="Vikas Chaurasiya CSC Jan Sewa Kendra, Musahra, Sant Kabir Nagar — banking, Aadhaar, pension, RTO, certificates, tax, education, travel, agriculture and digital services.">
+  <meta name="robots" content="index, follow">
+  <title>Vikas Chaurasiya CSC Jan Sewa Kendra | Musahra</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -15,54 +16,51 @@
   <div class="ambient"></div>
 
   <header class="topbar">
-    <div class="brand-mini">
-      <img src="assets/logo.png" alt="Vikas CSC Logo">
+    <a class="brand-mini" href="#home" aria-label="Vikas CSC home">
+      <img src="assets/logo.png" alt="Vikas Chaurasiya CSC logo">
       <div>
         <div class="mini-title">VIKAS CSC</div>
         <div class="mini-sub">जन सेवा केन्द्र • मुसहरा</div>
       </div>
-    </div>
+    </a>
     <nav>
-      <a href="#home">होम</a>
-      <a href="#services">सेवाएँ</a>
-      <a href="#about">हमारे बारे में</a>
-      <a href="#contact">संपर्क</a>
+      <a href="#home">होम</a><a href="#services">सेवाएँ</a><a href="#about">हमारे बारे में</a><a href="#contact">संपर्क</a>
       <button class="admin-btn" onclick="openAdmin()">🔐 Owner / Admin</button>
     </nav>
   </header>
 
   <main id="home">
     <section class="hero">
+      <div class="hero-watermark" aria-hidden="true"><img src="assets/logo.png" alt=""></div>
       <div class="hero-copy">
         <div class="eyebrow">डिजिटल सेवा • सबका अधिकार • सबका विकास</div>
-        <h1>VIKAS CSC</h1><h2>JAN SEWA KENDRA</h2>
+        <div class="hero-kicker">VIKAS CHAURASIYA</div>
+        <h1>VIKAS <span>CSC</span></h1>
+        <h2>JAN SEWA KENDRA</h2>
+        <div class="hero-location">ग्राम व पोस्ट — मुसहरा • तहसील — मेहदावल • जनपद — संत कबीर नगर • उत्तर प्रदेश — 272154</div>
         <p class="hero-line">आपका अपना विश्वसनीय जन सेवा केन्द्र — आधुनिक, तेज और भरोसेमंद सेवाओं के साथ</p>
         <div class="hero-actions">
           <a class="gold-btn" href="#services">✨ सभी सेवाएँ देखें</a>
           <a class="call-btn" href="tel:+917355353841">📞 7355353841 पर कॉल करें</a>
           <a class="wa-btn" href="https://wa.me/917355353841?text=नमस्ते%20Vikas%20CSC%20Jan%20Sewa%20Kendra%2C%20मुझे%20एक%20सेवा%20के%20बारे%20में%20जानकारी%20चाहिए।" target="_blank" rel="noopener">💬 WhatsApp</a>
         </div>
-        <div class="trust-row">
-          <span>⚡ तेज प्रक्रिया</span><span>🛡️ विश्वसनीय सेवा</span><span>👥 अनुभवी टीम</span><span>🔒 सुरक्षित</span>
-        </div>
+        <div class="trust-row"><span>⚡ तेज प्रक्रिया</span><span>🛡️ विश्वसनीय सेवा</span><span>👥 अनुभवी टीम</span><span>🔒 सुरक्षित</span></div>
       </div>
-      
     </section>
 
     <section class="banner-section">
-      <img src="assets/premium-banner.png" alt="Vikas Chaurasiya CSC Jan Sewa Kendra premium banner">
+      <div class="banner-label">✦ हमारा प्रीमियम CSC ब्रांड बैनर ✦</div>
+      <div class="banner-frame"><img src="assets/premium-banner.png" alt="Vikas Chaurasiya CSC Jan Sewa Kendra premium banner"></div>
+    </section>
+
+    <section class="ticker-wrap" aria-label="सेवा सूची">
+      <div class="ticker-track" id="serviceTicker"></div>
     </section>
 
     <section class="section" id="services">
       <div class="section-head">
-        <div>
-          <div class="eyebrow">ONE PLACE • ALL ONLINE SERVICES</div>
-          <h2>हमारी <span>प्रमुख सेवाएँ</span></h2>
-        </div>
-        <div class="service-tools">
-          <input id="serviceSearch" type="search" placeholder="🔎 सेवा खोजें..." oninput="renderServices()">
-          <button class="small-btn" onclick="scrollToTop()">↑ ऊपर</button>
-        </div>
+        <div><div class="eyebrow">ONE PLACE • ALL ONLINE SERVICES</div><h2>हमारी <span>प्रमुख सेवाएँ</span></h2><p class="section-note">हर सेवा/बुलेट को टच करने पर संबंधित आधिकारिक पोर्टल खुलेगा।</p></div>
+        <div class="service-tools"><input id="serviceSearch" type="search" placeholder="🔎 सेवा खोजें..." oninput="renderServices()"><button class="small-btn" onclick="scrollToTop()">↑ ऊपर</button></div>
       </div>
       <div id="serviceGrid" class="service-grid"></div>
     </section>
@@ -72,102 +70,52 @@
         <div>
           <div class="eyebrow">DIGITAL PAYMENT</div>
           <h2>💳 UPI से आसान भुगतान</h2>
-          <p></p>
+          <p>UPI ID पहले से सेट है। QR Generate करें या सीधे UPI App से भुगतान खोलें।</p>
           <div class="upi-form">
-            <input id="upiId" placeholder="जैसे: yourname@upi" value="7355353841@okbizaxis" readonly>
-            <input id="upiName" placeholder="दुकान/नाम (वैकल्पिक)" value="Vikas CSC Jan Sewa Kendra">
+            <input id="upiId" value="7355353841@okbizaxis" readonly>
+            <input id="upiName" value="Vikas CSC Jan Sewa Kendra" placeholder="दुकान/नाम">
             <button class="gold-btn" onclick="generateUPI()">QR Generate करें</button>
           </div>
           <div id="upiError" class="error"></div>
-          <div id="direct-upi-payment-final" class="upi-permanent-pay">
+          <div class="upi-permanent-pay">
             <div class="upi-permanent-title">DIRECT UPI PAYMENT</div>
             <div class="upi-permanent-id">7355353841@okbizaxis</div>
-            <a class="upi-permanent-button" href="upi://pay?pa=7355353841%40okbizaxis&pn=Vikas%20CSC%20Jan%20Sewa%20Kendra&cu=INR">PAY DIRECTLY WITH UPI APP</a>
+            <a class="upi-permanent-button" href="upi://pay?pa=7355353841%40okbizaxis&amp;pn=Vikas%20CSC%20Jan%20Sewa%20Kendra&amp;cu=INR">📲 PAY DIRECTLY WITH UPI APP</a>
           </div>
         </div>
-        <div class="qr-wrap">
-          <div id="qrcode"><span>QR यहाँ दिखाई देगा</span></div>
-          <a id="upiLink" class="pay-link hidden" href="#">📲 UPI App में खोलें</a>
-        </div>
+        <div class="qr-wrap"><div id="qrcode"><span>QR Generate करें</span></div><a id="upiLink" class="pay-link hidden" href="#">📲 UPI App में खोलें</a></div>
       </div>
     </section>
 
     <section class="section about" id="about">
       <div class="about-card">
-        <div class="about-logo"><img src="assets/logo.png" alt="CSC Logo"></div>
-        <div>
-          <div class="eyebrow">आपका अपना विश्वसनीय जन सेवा केन्द्र</div>
-          <h2>Vikas Chaurasiya <span>CSC Jan Sewa Kendra</span></h2>
-          <p>मुसहरा, तहसील मेहदावल, जनपद संत कबीर नगर, उत्तर प्रदेश में आपके लिए डिजिटल और नागरिक सेवाओं का एक स्थान।</p>
-          <div class="districts">
-            <span>संत कबीर नगर</span><span>सिद्धार्थनगर</span><span>गोरखपुर</span><span>महराजगंज</span><span>बस्ती</span>
-          </div>
-        </div>
+        <div class="about-logo"><img src="assets/logo.png" alt="Vikas Chaurasiya CSC logo"></div>
+        <div><div class="eyebrow">आपका अपना विश्वसनीय जन सेवा केन्द्र</div><h2>Vikas Chaurasiya <span>CSC Jan Sewa Kendra</span></h2><p>मुसहरा, तहसील मेहदावल, जनपद संत कबीर नगर, उत्तर प्रदेश में डिजिटल, नागरिक और ऑनलाइन सेवाओं का एक स्थान।</p><div class="districts"><span>संत कबीर नगर</span><span>सिद्धार्थनगर</span><span>गोरखपुर</span><span>महराजगंज</span><span>बस्ती</span></div></div>
       </div>
     </section>
 
-    <section class="contact section" id="contact">
-      <div class="section-head">
-        <div>
-          <div class="eyebrow">CONTACT US</div>
-          <h2>हमसे <span>संपर्क करें</span></h2>
-        </div>
-      </div>
+    <section class="section contact" id="contact">
+      <div class="section-head"><div><div class="eyebrow">CONTACT US</div><h2>हमसे <span>संपर्क करें</span></h2></div></div>
       <div class="contact-grid">
         <a class="contact-card" href="tel:+917355353841"><span>📞</span><div><b>मोबाइल</b><strong>7355353841</strong><small>कॉल करने के लिए क्लिक करें</small></div></a>
         <a class="contact-card" href="mailto:vikaschaurasiya10925@zohomail.in"><span>✉️</span><div><b>Email</b><strong>vikaschaurasiya10925@zohomail.in</strong><small>ईमेल भेजने के लिए क्लिक करें</small></div></a>
         <a class="contact-card" href="mailto:vikaschaurasiya10925@gmail.com"><span>📧</span><div><b>Gmail</b><strong>vikaschaurasiya10925@gmail.com</strong><small>ईमेल भेजने के लिए क्लिक करें</small></div></a>
-        <a class="contact-card" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Musahra%2C%20Mehdawal%2C%20Sant%20Kabir%20Nagar%2C%20Uttar%20Pradesh%20272154"><span>📍</span><div><b>हमारा पता</b><strong>ग्राम व पोस्ट – मुसहरा</strong><small>तहसील – मेहदावल, जनपद – संत कबीर नगर, उत्तर प्रदेश – 272154</small></div></a>
+        <a class="contact-card" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Musahra%2C%20Mehdawal%2C%20Sant%20Kabir%20Nagar%2C%20Uttar%20Pradesh%20272154"><span>📍</span><div><b>हमारा पता</b><strong>ग्राम व पोस्ट – मुसहरा</strong><small>तहसील – मेहदावल, जनपद – संत कबीर नगर, उत्तर प्रदेश – 272154</small></div></a>
         <a class="contact-card" target="_blank" rel="noopener" href="https://wa.me/917355353841"><span>💬</span><div><b>WhatsApp</b><strong>7355353841</strong><small>WhatsApp पर संदेश भेजें</small></div></a>
       </div>
     </section>
   </main>
 
-  <footer>
-    <div><b>🔥 Vikas CSC Jan Sewa Kendra, मुसहरा</b> — आपकी सेवा में सदैव तत्पर</div>
-    <div>© <span id="year"></span> Vikas Chaurasiya CSC</div>
-  </footer>
+  <footer><div><b>🔥 Vikas CSC Jan Sewa Kendra, मुसहरा</b> — आपकी सेवा में सदैव तत्पर</div><div>© <span id="year"></span> Vikas Chaurasiya CSC</div></footer>
 
-  <!-- Service details modal -->
   <div id="serviceModal" class="modal" aria-hidden="true">
-    <div class="modal-box">
-      <button class="close" onclick="closeModal()">×</button>
-      <div id="modalIcon" class="modal-icon">💼</div>
-      <h2 id="modalTitle"></h2>
-      <p id="modalDescription"></p>
-      <ul id="modalItems"></ul>
-      <div class="modal-actions">
-        <a class="gold-btn" href="tel:+917355353841">📞 सेवा के लिए कॉल करें</a>
-        <a class="wa-btn" target="_blank" rel="noopener" href="https://wa.me/917355353841">💬 WhatsApp</a>
-      </div>
-    </div>
+    <div class="modal-box service-modal-box"><button class="close" onclick="closeModal()">×</button><div id="modalIcon" class="modal-icon">💼</div><h2 id="modalTitle"></h2><p id="modalDescription"></p><div class="modal-official-title">🔗 आधिकारिक पोर्टल</div><div id="modalPortals" class="portal-row"></div><ul id="modalItems" class="modal-items"></ul><div class="modal-actions"><a class="gold-btn" href="tel:+917355353841">📞 सेवा के लिए कॉल करें</a><a class="wa-btn" target="_blank" rel="noopener" href="https://wa.me/917355353841">💬 WhatsApp</a></div></div>
   </div>
 
-  <!-- Owner Admin -->
   <div id="adminModal" class="modal" aria-hidden="true">
-    <div class="modal-box admin-box">
-      <button class="close" onclick="closeAdmin()">×</button>
-      <div id="loginView">
-        <div class="modal-icon">🔐</div>
-        <h2>Owner / Admin Login</h2>
-        <p>सिर्फ वेबसाइट के मालिक के लिए।</p>
-        <input id="adminPass" type="password" placeholder="Admin Password">
-        <button class="gold-btn full" onclick="adminLogin()">Login</button>
-      </div>
-      <div id="adminView" class="hidden">
-        <div class="modal-icon">⚙️</div>
-        <h2>Owner Control Panel</h2>
-        <div class="admin-grid">
-          <input id="newTitle" placeholder="नई Service का Title">
-          <input id="newIcon" placeholder="Icon जैसे 💼" value="⭐">
-          <textarea id="newItems" placeholder="Services लिखें, हर लाइन पर एक"></textarea>
-          <input id="newDesc" placeholder="छोटा Description">
-          <button class="gold-btn" onclick="addService()">+ नई Service जोड़ें</button>
-          <button class="danger-btn" onclick="resetServices()">Default Services Restore</button>
-        </div>
-        <div class="admin-note">नई services आपके browser में सुरक्षित रूप से localStorage में save होंगी। Public website पर वास्तविक server-side owner security के लिए backend/authentication लगाना जरूरी है।</div>
-        <button class="small-btn" onclick="adminLogout()">Logout</button>
-      </div>
+    <div class="modal-box admin-box"><button class="close" onclick="closeAdmin()">×</button>
+      <div id="loginView"><div class="modal-icon">🔐</div><h2>Owner / Admin Login</h2><p>सिर्फ वेबसाइट के मालिक के लिए।</p><input id="adminPass" type="password" placeholder="Admin Password"><button class="gold-btn full" onclick="adminLogin()">Login</button></div>
+      <div id="adminView" class="hidden"><div class="modal-icon">⚙️</div><h2>Owner Control Panel</h2><div class="admin-grid"><input id="newTitle" placeholder="नई Service का Title"><input id="newIcon" placeholder="Icon जैसे 💼" value="⭐"><textarea id="newItems" placeholder="Services लिखें, हर लाइन पर एक"></textarea><input id="newDesc" placeholder="छोटा Description"><button class="gold-btn" onclick="addService()">+ नई Service जोड़ें</button><button class="danger-btn" onclick="resetServices()">Default Services Restore</button></div><div class="admin-note">नई services इसी browser में localStorage में save होंगी। GitHub Pages पर असली server-side password security नहीं होती; sensitive credentials कभी भी यहाँ न रखें।</div><button class="small-btn" onclick="adminLogout()">Logout</button></div>
     </div>
   </div>
 

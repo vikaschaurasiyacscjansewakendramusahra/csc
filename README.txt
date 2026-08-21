@@ -1,17 +1,12 @@
-# Vikas CSC Jan Sewa Kendra Website
+VIKAS CHAURASIYA CSC JAN SEWA KENDRA - GitHub Pages Ready
 
 Files:
-- index.html — main website
-- style.css — premium 3D/glow styling
-- script.js — services, search, admin panel and UPI QR generator
-- assets/logo.png — uploaded CSC logo
-- assets/premium-banner.png — uploaded premium banner
+- index.html
+- style.css
+- script.js
+- assets/logo.png
+- assets/premium-banner.png
 
-Open index.html in a browser to preview.
-
-OWNER ADMIN
-Default demo password: Vikas@2026
-Change this password in script.js before public deployment.
-
-IMPORTANT
-The included admin is browser/localStorage based for a static website. It is NOT server-side security. For a truly owner-only public admin panel, deploy with a backend/database and real authentication.
+The website uses relative asset paths, so it is ready for GitHub Pages.
+All listed service items have clickable official-portal links where an official portal is available; general CSC/umbrella services use the official CSC or scheme portal.
+UPI remains 7355353841@okbizaxis and the QR is generated in the browser.
