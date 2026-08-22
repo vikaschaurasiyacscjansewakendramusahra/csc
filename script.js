@@ -175,8 +175,10 @@ function speakAI(text){
 function speakLastAI(){if(lastAIText)speakAI(lastAIText);}
 
 
-// ===== Service grid: smooth left-right scrolling, equal on both sides =====
-let serviceTimer=null, serviceAnim=null, serviceDragging=false, serviceIntent=null, serviceX=0, serviceDir=-1, serviceLast=0;
+// ===== Service grid: smooth left-right auto scroll + 6s touch/mouse pause + manual drag =====
+let serviceTimer=null, serviceAnim=null, serviceResumeTimer=null;
+let serviceDragging=false, serviceX=0, serviceDir=-1, serviceLast=0;
+let servicePointerId=null, serviceStartX=0, serviceStartY=0, serviceDragStartX=0, serviceDragActive=false;
 function serviceViewport(){return document.getElementById('serviceViewport')}
 function computeMaxShift(){
  const vp=serviceViewport(), grid=document.getElementById('serviceGrid');
@@ -185,15 +187,31 @@ function computeMaxShift(){
 }
 function applyServiceX(x){
  const grid=document.getElementById('serviceGrid'); if(!grid)return;
- const max=computeMaxShift(); const half=max/2;
+ const max=computeMaxShift(), half=max/2;
  serviceX=Math.max(-half,Math.min(half,Number(x)||0));
  grid.style.transform=`translate3d(${serviceX}px,0,0)`;
 }
-function stopServiceMotion(pause=true){if(serviceAnim){cancelAnimationFrame(serviceAnim);serviceAnim=null;}clearTimeout(serviceTimer);serviceTimer=null;serviceLast=0;}
-function scheduleServiceMotion(){clearTimeout(serviceTimer);serviceTimer=setTimeout(startServiceAuto,900);}
+function stopServiceMotion(){
+ if(serviceAnim){cancelAnimationFrame(serviceAnim);serviceAnim=null;}
+ clearTimeout(serviceTimer); serviceTimer=null;
+ clearTimeout(serviceResumeTimer); serviceResumeTimer=null;
+ serviceLast=0;
+}
+function scheduleServiceMotion(delay=900){
+ clearTimeout(serviceTimer);
+ serviceTimer=setTimeout(startServiceAuto,delay);
+}
+function pauseServiceForSixSeconds(){
+ stopServiceMotion();
+ clearTimeout(serviceResumeTimer);
+ serviceResumeTimer=setTimeout(()=>scheduleServiceMotion(0),6000);
+}
 function startServiceAuto(){
- stopServiceMotion(false); serviceLast=performance.now();
+ stopServiceMotion();
+ if(serviceDragging)return;
+ serviceLast=performance.now();
  const tick=(now)=>{
+  if(serviceDragging)return;
   const max=computeMaxShift();
   if(max<=1){serviceAnim=null;return;}
   const half=max/2, dt=Math.min(40,now-serviceLast)/1000; serviceLast=now;
@@ -206,8 +224,47 @@ function startServiceAuto(){
  };
  serviceAnim=requestAnimationFrame(tick);
 }
-function resetServiceMotion(){stopServiceMotion(false);serviceDragging=false;serviceIntent=null;serviceX=0;serviceDir=-1;applyServiceX(0);scheduleServiceMotion();}
-function initServiceTouch(){const vp=serviceViewport(),grid=document.getElementById('serviceGrid');if(!vp||!grid)return;applyServiceX(0);scheduleServiceMotion();}
+function resetServiceMotion(){
+ stopServiceMotion();
+ serviceDragging=false;serviceDragActive=false;servicePointerId=null;serviceX=0;serviceDir=-1;
+ applyServiceX(0);scheduleServiceMotion(900);
+}
+function initServiceTouch(){
+ const vp=serviceViewport(),grid=document.getElementById('serviceGrid');
+ if(!vp||!grid)return;
+ applyServiceX(0);
+ const pointerDown=(e)=>{
+  if(e.pointerType==='mouse' && e.button!==0)return;
+  servicePointerId=e.pointerId;
+  serviceStartX=e.clientX;serviceStartY=e.clientY;serviceDragStartX=serviceX;
+  serviceDragActive=false;
+  pauseServiceForSixSeconds();
+  try{vp.setPointerCapture(e.pointerId)}catch(_){ }
+ };
+ const pointerMove=(e)=>{
+  if(servicePointerId!==e.pointerId)return;
+  const dx=e.clientX-serviceStartX, dy=e.clientY-serviceStartY;
+  if(!serviceDragActive){
+   if(Math.abs(dx)<8 && Math.abs(dy)<8)return;
+   if(Math.abs(dx)<=Math.abs(dy)){return;}
+   serviceDragActive=true;
+  }
+  e.preventDefault();
+  applyServiceX(serviceDragStartX+dx);
+ };
+ const pointerUp=(e)=>{
+  if(servicePointerId!==e.pointerId)return;
+  servicePointerId=null;serviceDragActive=false;
+  try{vp.releasePointerCapture(e.pointerId)}catch(_){ }
+  // Keep auto-scroll paused for the full 6 seconds after the touch/mouse interaction.
+  pauseServiceForSixSeconds();
+ };
+ vp.addEventListener('pointerdown',pointerDown,{passive:true});
+ vp.addEventListener('pointermove',pointerMove,{passive:false});
+ vp.addEventListener('pointerup',pointerUp,{passive:true});
+ vp.addEventListener('pointercancel',pointerUp,{passive:true});
+ vp.addEventListener('lostpointercapture',()=>{servicePointerId=null;serviceDragActive=false;});
+}
 
 function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'})}
 function boot(){document.getElementById('year').textContent=new Date().getFullYear();renderServices();renderTicker();initServiceTouch();resetServiceMotion();window.addEventListener('resize',()=>{computeMaxShift();applyServiceX(serviceX);});document.addEventListener('visibilitychange',()=>{if(document.hidden)stopServiceMotion();else scheduleServiceMotion();});window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeAdmin();}});document.getElementById('serviceModal').addEventListener('click',e=>{if(e.target.id==='serviceModal')closeModal()});document.getElementById('adminModal').addEventListener('click',e=>{if(e.target.id==='adminModal')closeAdmin()});document.getElementById('serviceSearch').addEventListener('input',()=>{stopServiceMotion();renderServices();if(!document.getElementById('serviceSearch').value.trim())scheduleServiceMotion();});}

@@ -274,3 +274,25 @@ html, body { overflow-x:hidden !important; max-width:100%; }
 @media(max-width:900px){#serviceGrid.service-grid{width:112% !important;}}
 @media(max-width:600px){#serviceGrid.service-grid{width:116% !important;}}
 
+
+/* V17: keep service text safely inside cards while scrolling */
+.service-viewport{padding-left:0!important;padding-right:0!important;}
+#serviceGrid.service-grid .service-card{
+  margin-left:8%!important;
+  margin-right:8%!important;
+  width:auto!important;
+  min-width:0!important;
+  overflow:hidden!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+}
+#serviceGrid.service-grid .service-card h3,
+#serviceGrid.service-grid .service-card p,
+#serviceGrid.service-grid .service-card li,
+#serviceGrid.service-grid .service-card li a{
+  overflow-wrap:anywhere!important;
+  word-break:break-word!important;
+}
+@media(max-width:600px){
+  #serviceGrid.service-grid .service-card{margin-left:9%!important;margin-right:9%!important;}
+}
