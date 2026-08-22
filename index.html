@@ -3,15 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#fbfaf3">
+  <meta name="theme-color" content="#071225">
   <meta name="description" content="Vikas Chaurasiya CSC Jan Sewa Kendra, Musahra, Sant Kabir Nagar — banking, Aadhaar, pension, RTO, certificates, tax, education, travel, agriculture and digital services.">
   <meta name="robots" content="index, follow">
+  <meta name="keywords" content="Vikas CSC, CSC Jan Sewa Kendra, Musahra CSC, Sant Kabir Nagar CSC, Aadhaar, PAN, e-District, RTO, Ayushman, pension, digital services">
+  <meta property="og:title" content="Vikas Chaurasiya CSC Jan Sewa Kendra">
+  <meta property="og:description" content="Digital services for everyone — Vikas CSC Jan Sewa Kendra, Musahra, Sant Kabir Nagar.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://vikaschaurasiyacscjansewakendramusahra.github.io/csc/">
+  <meta property="og:image" content="https://vikaschaurasiyacscjansewakendramusahra.github.io/csc/premium-banner.png">
+  <link rel="canonical" href="https://vikaschaurasiyacscjansewakendramusahra.github.io/csc/">
+
   <title>Vikas Chaurasiya CSC Jan Sewa Kendra | Musahra</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css?v=14">
-  <link rel="stylesheet" href="./ai-advanced.css?v=1">
+  <link rel="stylesheet" href="./style.css?v=20">
+  <link rel="stylesheet" href="./ai-advanced.css?v=20">
+
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"LocalBusiness",
+    "name":"Vikas Chaurasiya CSC Jan Sewa Kendra",
+    "url":"https://vikaschaurasiyacscjansewakendramusahra.github.io/csc/",
+    "telephone":"+91-7355353841",
+    "address":{
+      "@type":"PostalAddress",
+      "streetAddress":"Village and Post Musahra",
+      "addressLocality":"Mehdawal",
+      "addressRegion":"Uttar Pradesh",
+      "postalCode":"272154",
+      "addressCountry":"IN"
+    },
+    "areaServed":["Sant Kabir Nagar","Siddharthnagar","Gorakhpur","Maharajganj","Basti"],
+    "priceRange":"₹"
+  }
+  </script>
+
 </head>
 <body>
   <div class="ambient"></div>
@@ -62,29 +91,38 @@
 
     <section class="payment section">
       <div class="payment-card">
-        <div>
+        <div class="payment-info">
           <div class="eyebrow">DIGITAL PAYMENT</div>
           <h2>💳 UPI से आसान भुगतान</h2>
-          <p>UPI ID पहले से सेट है। QR Generate करें या सीधे UPI App से भुगतान खोलें।</p>
-          <div class="upi-form">
-              <select id="upiId" aria-label="UPI payment account">
-                <option value="vikas3841@nyes">UPI Account 1</option>
-                <option value="vikas.1240@superyes">UPI Account 2</option>
-              </select>
-              <input id="upiName" value="Vikas CSC Jan Sewa Kendra" placeholder="दुकान/नाम" aria-label="UPI name">
-              <button class="gold-btn" onclick="generateUPI()">QR Generate करें</button>
-            </div>
-            <div id="upiError" class="error" role="alert"></div>
-            <div class="upi-permanent-pay">
-              <div class="upi-permanent-title">SECURE UPI PAYMENT</div>
-              <div class="upi-permanent-id">UPI ID QR में ही दिखाई जाएगी</div>
-              <button class="upi-permanent-button" type="button" onclick="generateUPI()">📲 UPI QR तैयार करें</button><a id="payByUPI" class="upi-permanent-button hidden" href="#" onclick="payByUPI();return false">📲 Pay by UPI</a>
-            </div>
-            <div class="upi-permanent-id">7355353841@okbizaxis</div>
-            <a class="upi-permanent-button" href="upi://pay?pa=7355353841%40okbizaxis&amp;pn=Vikas%20CSC%20Jan%20Sewa%20Kendra&amp;cu=INR">📲 PAY DIRECTLY WITH UPI APP</a>
+          <p>UPI Account चुनें, QR Generate करें या सीधे <b>Pay by UPI</b> पर टैप करें।</p>
+
+          <div class="upi-choice">
+            <label class="upi-option">
+              <input type="radio" name="upiAccount" value="vikas3841@nyes" checked>
+              <span><b>UPI Account 1</b><small>QR/Pay by UPI</small></span>
+            </label>
+            <label class="upi-option">
+              <input type="radio" name="upiAccount" value="vikas.1240@superyes">
+              <span><b>UPI Account 2</b><small>QR/Pay by UPI</small></span>
+            </label>
           </div>
+
+          <input id="upiName" value="Vikas CSC Jan Sewa Kendra" placeholder="दुकान/नाम" aria-label="UPI name">
+
+          <div class="payment-buttons">
+            <button class="gold-btn" type="button" onclick="generateUPI()">🔳 QR Generate करें</button>
+            <a id="payByUPI" class="pay-by-upi hidden" href="#" onclick="return openPayByUPI(event)">📲 Pay by UPI</a>
+          </div>
+
+          <div id="upiError" class="error" role="alert"></div>
+          <div class="upi-note">🔐 UPI ID सामान्य text में नहीं दिखाई जाएगी; selected ID QR/UPI link में उपयोग होगी।</div>
         </div>
-        <div class="qr-wrap"><div id="qrcode"><span>QR Generate करें</span></div><a id="upiLink" class="pay-link hidden" href="#">📲 UPI App में खोलें</a></div>
+
+        <div class="qr-wrap">
+          <div class="qr-title">QR Code Scan करें</div>
+          <div id="qrcode"><span>QR Generate करें</span></div>
+          <a id="upiLink" class="pay-link hidden" href="#" onclick="return openPayByUPI(event)">📲 UPI App में खोलें</a>
+        </div>
       </div>
     </section>
 
@@ -106,40 +144,53 @@
       </div>
     </section>
   </main>
-
   <button class="ai-float" type="button" onclick="toggleAIHelp()" aria-expanded="false" aria-controls="aiHelpPanel">
-    <span class="ai-float-face"><img src="./ai-assistant-lady.png" alt="Vikas CSC AI Assistant"></span><span>Ask AI</span>
+    <span class="ai-float-face"><img src="./ai-assistant-lady.png" alt="Vikas CSC AI Assistant"></span>
+    <span class="ai-float-label">Ask AI</span>
   </button>
+
   <aside id="aiHelpPanel" class="ai-panel" aria-hidden="true">
     <button class="ai-close" type="button" onclick="toggleAIHelp()" aria-label="AI panel बंद करें">×</button>
-    <div class="ai-panel-icon ai-robot-lady"><img src="./ai-assistant-lady.png" alt="Vikas CSC AI Assistant"></div>
-    <div class="ai-header-row">
-      <div><h3>Ask AI Assistant</h3><small id="aiMode">Free Smart Mode</small></div>
-      <button class="ai-clear-btn" type="button" onclick="clearAIChat()">Clear</button>
+    <div class="ai-panel-top">
+      <div>
+        <div class="ai-online"><span></span> Online</div>
+        <h3>🤖 Ask AI Assistant</h3>
+        <p>मैं आपकी CSC सेवाओं और सामान्य सवालों में मदद कर सकती हूँ।</p>
+      </div>
+      <img class="ai-panel-photo" src="./ai-assistant-lady.png" alt="AI Assistant">
     </div>
-    <p id="aiGreeting">नमस्कार! मैं Vikas CSC AI हूँ। मैं आपकी सेवाएँ खोज सकती हूँ, official portal बता सकती हूँ, सामान्य जानकारी समझा सकती हूँ और हिंदी/Hinglish/English में बात कर सकती हूँ।</p>
-    <div id="aiChatLog" class="ai-chat-log" aria-live="polite"></div>
-    <div class="ai-controls">
-      <select id="aiLanguage" aria-label="AI language">
-        <option value="hi-IN">हिंदी</option>
-        <option value="en-IN">English</option>
-        <option value="hi-IN">Hinglish</option>
-      </select>
-      <button id="aiVoiceBtn" class="ai-voice-btn" type="button" onclick="startAIListen()" title="बोलकर पूछें">🎙️</button>
-      <button id="aiStopVoiceBtn" type="button" onclick="stopAISpeech()" title="आवाज़ बंद करें">🔇</button>
+
+    <div class="ai-language-row">
+      <button type="button" onclick="setAILang('hi-IN')">हिंदी</button>
+      <button type="button" onclick="setAILang('en-IN')">Hinglish</button>
+      <button type="button" onclick="setAILang('en-IN')">English</button>
     </div>
-    <div class="ai-chat-row">
-      <input id="aiQuestion" type="text" placeholder="जैसे: आधार में पता कैसे बदलें?" autocomplete="off" onkeydown="if(event.key==='Enter') askSiteAI()">
-      <button type="button" onclick="askSiteAI()">पूछें</button>
+
+    <div id="aiChatLog" class="ai-chat-log" aria-live="polite">
+      <div class="ai-msg assistant"><b>Vikas CSC AI</b><div>नमस्कार! सेवा, योजना, दस्तावेज, संपर्क या CSC से जुड़ा सवाल पूछिए।</div></div>
     </div>
+
     <div class="ai-quick">
-      <button onclick="aiQuick('मेरी सेवाओं में आधार और आयुष्मान की जानकारी बताओ')">आधार / आयुष्मान</button>
-      <button onclick="aiQuick('UP Scholarship के लिए क्या चाहिए?')">Scholarship</button>
-      <button onclick="aiQuick('बिजली बिल कैसे जमा करें?')">बिजली बिल</button>
-      <button onclick="aiQuick('Driving Licence की सेवा बताओ')">RTO</button>
-      <button onclick="aiQuick('मेरे पास कौन-कौन सी CSC सेवाएँ हैं?')">सभी सेवाएँ</button>
+      <button type="button" onclick="aiQuick('आधार कैसे बनाएं?')">🪪 आधार कैसे बनाएं?</button>
+      <button type="button" onclick="aiQuick('पैन कार्ड कैसे बनाएं?')">💳 पैन कार्ड</button>
+      <button type="button" onclick="aiQuick('राशन कार्ड में नाम कैसे जोड़ें?')">📄 राशन कार्ड</button>
+      <button type="button" onclick="aiQuick('Driving Licence की जानकारी')">🚗 RTO</button>
     </div>
-    <div class="ai-status">🎙️ Voice input • 🔊 Voice reply • 🔎 Service search • 🔗 Official portals</div>
+
+    <div class="ai-chat-row">
+      <input id="aiQuestion" type="text" placeholder="अपना सवाल लिखें..." autocomplete="off"
+             onkeydown="if(event.key==='Enter') askSiteAI()">
+      <button id="aiVoiceBtn" class="ai-voice-btn" type="button" onclick="startAIListen()" title="बोलकर पूछें">🎙️</button>
+      <button class="ai-send" type="button" onclick="askSiteAI()">➤</button>
+    </div>
+
+    <div id="aiAnswer" class="ai-answer">मैं आपकी उपलब्ध CSC services के आधार पर तुरंत जवाब दूँगी।</div>
+
+    <div class="ai-bottom-actions">
+      <button type="button" onclick="speakLastAI()">🔊 जवाब सुनें</button>
+      <button type="button" onclick="clearAIChat()">🗑️ चैट साफ करें</button>
+    </div>
+    <div class="ai-status">🎙️ Voice input • 🔊 Voice reply • 🔎 Service search • Free Smart Mode</div>
   </aside>
 
   <footer><div><b>🔥 Vikas CSC Jan Sewa Kendra, मुसहरा</b> — आपकी सेवा में सदैव तत्पर</div><div>© <span id="year"></span> Vikas Chaurasiya CSC</div></footer>
@@ -150,6 +201,14 @@
 </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="./script.js?v=14"></script>
+  <script src="./script.js?v=20"></script>
+
+  <div class="mobile-action-bar" aria-label="Quick actions">
+    <a href="tel:+917355353841"><span>📞</span><b>Call</b></a>
+    <a href="https://wa.me/917355353841" target="_blank" rel="noopener"><span>💬</span><b>WhatsApp</b></a>
+    <button type="button" onclick="document.getElementById('payment')?.scrollIntoView({behavior:'smooth'})"><span>💳</span><b>Pay UPI</b></button>
+    <button type="button" onclick="toggleAIHelp()"><span>🤖</span><b>Ask AI</b></button>
+  </div>
+
 </body>
 </html>

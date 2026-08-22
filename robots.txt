@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://vikaschaurasiyacscjansewakendramusahra.github.io/csc/sitemap.xml
