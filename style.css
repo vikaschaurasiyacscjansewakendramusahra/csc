@@ -103,7 +103,7 @@ body { touch-action: pan-x pan-y pinch-zoom !important; }
   width: 100%;
   overflow: hidden;
   padding: 6px 2px 18px;
-  touch-action: manipulation !important;
+  touch-action: pan-y pinch-zoom !important;
   overscroll-behavior-x: contain;
 }
 #serviceGrid.service-grid {
@@ -116,7 +116,7 @@ body { touch-action: pan-x pan-y pinch-zoom !important; }
   transform: translate3d(0,0,0);
   will-change: transform;
   transition: none !important;
-  touch-action: manipulation !important;
+  touch-action: pan-y pinch-zoom !important;
   user-select: none;
 }
 #serviceGrid.service-grid .service-card {
@@ -126,7 +126,7 @@ body { touch-action: pan-x pan-y pinch-zoom !important; }
   cursor: grab;
 }
 #serviceGrid.service-grid .service-card:active { cursor: grabbing; }
-.service-card li a { touch-action: manipulation !important; }
+.service-card li a { touch-action: pan-y pinch-zoom !important; }
 
 /* AI assistant: make it feel like a real in-site helper, not a Gemini redirect */
 .ai-chat-row button { min-width: 88px !important; font-size: 15px !important; }
@@ -149,4 +149,22 @@ body { touch-action: pan-x pan-y pinch-zoom !important; }
   .service-card p { font-size: 13px !important; }
   .service-card ul { font-size: 14px !important; line-height: 1.55 !important; }
   .service-icon { font-size: 30px !important; }
+}
+
+/* V14 AI + touch refinements */
+.ai-panel-icon.ai-robot-lady{width:118px!important;height:118px!important;margin:0 auto 10px!important;border-radius:50%;overflow:hidden;background:transparent!important;box-shadow:0 0 35px rgba(255,210,80,.25)}
+.ai-panel-icon.ai-robot-lady img{width:100%;height:100%;display:block}
+.ai-float-face{width:44px;height:44px;border-radius:50%;overflow:hidden;display:inline-block;vertical-align:middle}.ai-float-face img{width:100%;height:100%;display:block}.ai-voice-btn{min-width:48px!important;padding:0 10px!important}.ai-voice-btn.listening{animation:voicePulse 1s infinite;box-shadow:0 0 0 5px rgba(255,80,100,.2)}@keyframes voicePulse{50%{transform:scale(1.08);filter:brightness(1.25)}}.ai-thinking{font-weight:900;color:#8a620e;animation:aiBlink 1s infinite}@keyframes aiBlink{50%{opacity:.45}}
+.ai-chat-row{display:grid!important;grid-template-columns:1fr 52px 88px!important;gap:7px!important}.ai-chat-row input{min-width:0}
+
+/* V14: one 3x3 service set, continuous reversible motion without duplicates */
+#serviceGrid.service-grid {
+  width: 100% !important;
+  min-width: 100% !important;
+  transform: translate3d(0,0,0);
+  will-change: transform;
+}
+.service-viewport { overflow: hidden !important; touch-action: pan-y pinch-zoom !important; }
+@media (max-width: 560px) {
+  .service-viewport { touch-action: pan-y pinch-zoom !important; }
 }

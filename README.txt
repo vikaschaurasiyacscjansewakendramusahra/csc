@@ -1,13 +1,7 @@
-Vikas Chaurasiya CSC Jan Sewa Kendra — GitHub Pages package
+Vikas CSC Jan Sewa Kendra – Final Advanced
 
-Upload/replace ALL files and the assets folder in the GitHub Pages repository.
-Important: keep index.html, style.css, script.js and services.json together.
-The logo and premium banner are in assets/logo.png and assets/premium-banner.png.
-
-Owner/Admin:
-- Admin changes are saved in the current browser.
-- Use “Public Services Data” to download services.json after adding/editing services.
-- Replace the repository's services.json with that downloaded file to publish the changes to all visitors.
-- GitHub Pages is static hosting, so true cross-device database writes require a backend/auth service.
-
-The floating “AI पूछताछ” button opens Google Gemini. A Gemini API key is not embedded in this static site.
+Services restored to the previous set (66) plus UP Scholarship and UPPCL = 68 services.
+AI assistant includes robot-lady UI, Hindi/Hinglish/English text input, voice input and voice reply.
+For full generative ChatGPT-like answers, deploy a secure backend at /api/chat; do NOT put an AI API key in this static GitHub Pages code.
+Admin password: Vik@9585 (stored as hash in JS).
+Exact map: 27.063557,83.123799
