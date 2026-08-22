@@ -238,3 +238,5 @@ body { touch-action: pan-x pan-y pinch-zoom !important; }
   .ai-answer{max-height:105px!important}
   .ai-float{width:70px!important;height:70px!important}
 }
+
+.districts .district-link{padding:7px 11px;border-radius:999px;background:#fff!important;border:1px solid #dfcfaa!important;color:#5e4c25!important;text-decoration:none;font-size:18px;font-weight:900;display:inline-block;transition:.2s}.districts .district-link:hover{transform:translateY(-2px);border-color:#c89b35!important;box-shadow:0 6px 16px rgba(120,83,5,.12)}
