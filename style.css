@@ -168,3 +168,12 @@ body { touch-action: pan-x pan-y pinch-zoom !important; }
 @media (max-width: 560px) {
   .service-viewport { touch-action: pan-y pinch-zoom !important; }
 }
+
+/* V16 final: Ask AI face + reversible 360-style service movement */
+.ai-panel-icon.ai-robot-lady{width:154px!important;height:154px!important;margin:0 auto 12px!important}
+.ai-float-face{width:52px!important;height:52px!important}
+.ai-float span{font-size:13px!important}
+#serviceGrid.service-grid{transform:translate3d(0,0,0);will-change:transform;transition:none!important}
+.service-viewport{overflow:hidden!important;touch-action:pan-y pinch-zoom!important}
+#serviceGrid.service-grid .service-card{touch-action:pan-y pinch-zoom!important}
+@media(max-width:560px){.ai-panel-icon.ai-robot-lady{width:168px!important;height:168px!important}.ai-float-face{width:48px!important;height:48px!important}}

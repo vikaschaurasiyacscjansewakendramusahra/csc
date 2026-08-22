@@ -101,14 +101,14 @@
     </section>
   </main>
 
-  <button class="ai-float" type="button" onclick="toggleAIHelp()" aria-expanded="false" aria-controls="aiHelpPanel"><span class="ai-float-face"><img src="./ai-robot-lady.svg" alt="Vikas CSC AI"></span><span>Vikas AI</span></button>
+  <button class="ai-float" type="button" onclick="toggleAIHelp()" aria-expanded="false" aria-controls="aiHelpPanel"><span class="ai-float-face"><img src="./ai-robot-lady.svg" alt="Vikas CSC AI"></span><span>Ask AI</span></button>
   <aside id="aiHelpPanel" class="ai-panel" aria-hidden="true">
     <button class="ai-close" type="button" onclick="toggleAIHelp()" aria-label="AI panel बंद करें">×</button>
-    <div class="ai-panel-icon ai-robot-lady"><img src="./ai-robot-lady.svg" alt="Vikas CSC AI Robot Lady"></div>
-    <h3>Vikas CSC AI Assistant</h3>
+    <div class="ai-panel-icon ai-robot-lady"><img src="./ai-robot-lady.svg" alt="Ask AI Robot Lady"></div>
+    <h3>Ask AI Assistant</h3>
     <p id="aiGreeting">नमस्कार! मैं आपकी AI assistant हूँ। आप हिंदी, Hinglish या English में कुछ भी पूछ सकते हैं। चाहें तो 🎙️ दबाकर बोल भी सकते हैं।</p>
     <div class="ai-chat-row"><input id="aiQuestion" type="text" placeholder="कुछ भी पूछें…" onkeydown="if(event.key==='Enter') askSiteAI()"><button id="aiVoiceBtn" class="ai-voice-btn" type="button" onclick="startAIListen()" title="बोलकर पूछें">🎙️</button><button type="button" onclick="askSiteAI()">पूछें</button></div>
-    <div id="aiAnswer" class="ai-answer">मैं आपके सवाल का जवाब देने की कोशिश करूँगी और जरूरत होने पर संबंधित service/official portal भी दिखाऊँगी।</div>
+    <div id="aiAnswer" class="ai-answer">मैं आपके सवाल को समझकर सामान्य जानकारी और आपकी CSC सेवाओं से जुड़ी सही सहायता देने की कोशिश करूँगी।</div>
     <div class="ai-quick"><button onclick="aiQuick('UP Scholarship')">UP Scholarship</button><button onclick="aiQuick('श्रमिक कार्ड')">श्रमिक कार्ड</button><button onclick="aiQuick('बिजली बिल')">UPPCL</button><button onclick="aiQuick('Driving Licence')">RTO</button></div>
     <div class="ai-status">🎙️ Voice input + 🔊 voice reply उपलब्ध। Full ChatGPT-जैसे सामान्य उत्तरों के लिए secure AI backend जोड़ना होगा।</div>
   </aside>

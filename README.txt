@@ -1,7 +1,9 @@
-Vikas CSC Jan Sewa Kendra – Final Advanced
+Vikas CSC Jan Sewa Kendra — Final V16
 
-Services restored to the previous set (66) plus UP Scholarship and UPPCL = 68 services.
-AI assistant includes robot-lady UI, Hindi/Hinglish/English text input, voice input and voice reply.
-For full generative ChatGPT-like answers, deploy a secure backend at /api/chat; do NOT put an AI API key in this static GitHub Pages code.
-Admin password: Vik@9585 (stored as hash in JS).
-Exact map: 27.063557,83.123799
+Services are based on V10: 9 categories / 66 original services, plus only two requested additions: UP Scholarship and UPPCL official consumer service.
+
+Service movement: one 3x3 grid, reversible right-to-left / left-to-right motion; pauses on touch/mouse and resumes after 6 seconds of inactivity. Vertical page scrolling and pinch zoom are preserved.
+
+AI: button label is Ask AI, with a larger stylized robot-lady face, voice input/output. A secure backend/API is required for full generative ChatGPT-like answers.
+
+Admin password: Vik@9585 (not stored in plain text).
