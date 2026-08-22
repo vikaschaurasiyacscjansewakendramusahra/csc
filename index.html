@@ -10,7 +10,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css?v=13">
+  <link rel="stylesheet" href="./style.css?v=14">
+  <link rel="stylesheet" href="./ai-advanced.css?v=1">
 </head>
 <body>
   <div class="ambient"></div>
@@ -25,7 +26,6 @@
     </a>
     <nav>
       <a href="#home">होम</a><a href="#services">सेवाएँ</a><a href="#about">हमारे बारे में</a><a href="#contact">संपर्क</a>
-      <button class="admin-btn" onclick="openAdmin()">🔐 Owner / Admin</button>
     </nav>
     <a class="csc-corner" href="https://digitalseva.csc.gov.in/" target="_blank" rel="noopener" aria-label="CSC ID 646444540015 — Digital Seva Login">CSC ID<br><strong>646444540015</strong></a>
   </header>
@@ -67,13 +67,19 @@
           <h2>💳 UPI से आसान भुगतान</h2>
           <p>UPI ID पहले से सेट है। QR Generate करें या सीधे UPI App से भुगतान खोलें।</p>
           <div class="upi-form">
-            <input id="upiId" value="7355353841@okbizaxis" readonly>
-            <input id="upiName" value="Vikas CSC Jan Sewa Kendra" placeholder="दुकान/नाम">
-            <button class="gold-btn" onclick="generateUPI()">QR Generate करें</button>
-          </div>
-          <div id="upiError" class="error"></div>
-          <div class="upi-permanent-pay">
-            <div class="upi-permanent-title">DIRECT UPI PAYMENT</div>
+              <select id="upiId" aria-label="UPI payment account">
+                <option value="vikas3841@nyes">UPI Account 1</option>
+                <option value="vikas.1240@superyes">UPI Account 2</option>
+              </select>
+              <input id="upiName" value="Vikas CSC Jan Sewa Kendra" placeholder="दुकान/नाम" aria-label="UPI name">
+              <button class="gold-btn" onclick="generateUPI()">QR Generate करें</button>
+            </div>
+            <div id="upiError" class="error" role="alert"></div>
+            <div class="upi-permanent-pay">
+              <div class="upi-permanent-title">SECURE UPI PAYMENT</div>
+              <div class="upi-permanent-id">UPI ID QR में ही दिखाई जाएगी</div>
+              <button class="upi-permanent-button" type="button" onclick="generateUPI()">📲 UPI QR तैयार करें</button><a id="payByUPI" class="upi-permanent-button hidden" href="#" onclick="payByUPI();return false">📲 Pay by UPI</a>
+            </div>
             <div class="upi-permanent-id">7355353841@okbizaxis</div>
             <a class="upi-permanent-button" href="upi://pay?pa=7355353841%40okbizaxis&amp;pn=Vikas%20CSC%20Jan%20Sewa%20Kendra&amp;cu=INR">📲 PAY DIRECTLY WITH UPI APP</a>
           </div>
@@ -101,16 +107,39 @@
     </section>
   </main>
 
-  <button class="ai-float" type="button" onclick="toggleAIHelp()" aria-expanded="false" aria-controls="aiHelpPanel"><span class="ai-float-face"><img src="./ai-robot-lady.svg" alt="Vikas CSC AI"></span><span>Ask AI</span></button>
+  <button class="ai-float" type="button" onclick="toggleAIHelp()" aria-expanded="false" aria-controls="aiHelpPanel">
+    <span class="ai-float-face"><img src="./ai-assistant-lady.png" alt="Vikas CSC AI Assistant"></span><span>Ask AI</span>
+  </button>
   <aside id="aiHelpPanel" class="ai-panel" aria-hidden="true">
     <button class="ai-close" type="button" onclick="toggleAIHelp()" aria-label="AI panel बंद करें">×</button>
-    <div class="ai-panel-icon ai-robot-lady"><img src="./ai-robot-lady.svg" alt="Ask AI Robot Lady"></div>
-    <h3>Ask AI Assistant</h3>
-    <p id="aiGreeting">नमस्कार! मैं आपकी AI assistant हूँ। आप हिंदी, Hinglish या English में कुछ भी पूछ सकते हैं। चाहें तो 🎙️ दबाकर बोल भी सकते हैं।</p>
-    <div class="ai-chat-row"><input id="aiQuestion" type="text" placeholder="कुछ भी पूछें…" onkeydown="if(event.key==='Enter') askSiteAI()"><button id="aiVoiceBtn" class="ai-voice-btn" type="button" onclick="startAIListen()" title="बोलकर पूछें">🎙️</button><button type="button" onclick="askSiteAI()">पूछें</button></div>
-    <div id="aiAnswer" class="ai-answer">मैं आपके सवाल को समझकर सामान्य जानकारी और आपकी CSC सेवाओं से जुड़ी सही सहायता देने की कोशिश करूँगी।</div>
-    <div class="ai-quick"><button onclick="aiQuick('UP Scholarship')">UP Scholarship</button><button onclick="aiQuick('श्रमिक कार्ड')">श्रमिक कार्ड</button><button onclick="aiQuick('बिजली बिल')">UPPCL</button><button onclick="aiQuick('Driving Licence')">RTO</button></div>
-    <div class="ai-status">🎙️ Voice input + 🔊 voice reply उपलब्ध। Gemini AI + secure backend support उपलब्ध।</div>
+    <div class="ai-panel-icon ai-robot-lady"><img src="./ai-assistant-lady.png" alt="Vikas CSC AI Assistant"></div>
+    <div class="ai-header-row">
+      <div><h3>Ask AI Assistant</h3><small id="aiMode">Free Smart Mode</small></div>
+      <button class="ai-clear-btn" type="button" onclick="clearAIChat()">Clear</button>
+    </div>
+    <p id="aiGreeting">नमस्कार! मैं Vikas CSC AI हूँ। मैं आपकी सेवाएँ खोज सकती हूँ, official portal बता सकती हूँ, सामान्य जानकारी समझा सकती हूँ और हिंदी/Hinglish/English में बात कर सकती हूँ।</p>
+    <div id="aiChatLog" class="ai-chat-log" aria-live="polite"></div>
+    <div class="ai-controls">
+      <select id="aiLanguage" aria-label="AI language">
+        <option value="hi-IN">हिंदी</option>
+        <option value="en-IN">English</option>
+        <option value="hi-IN">Hinglish</option>
+      </select>
+      <button id="aiVoiceBtn" class="ai-voice-btn" type="button" onclick="startAIListen()" title="बोलकर पूछें">🎙️</button>
+      <button id="aiStopVoiceBtn" type="button" onclick="stopAISpeech()" title="आवाज़ बंद करें">🔇</button>
+    </div>
+    <div class="ai-chat-row">
+      <input id="aiQuestion" type="text" placeholder="जैसे: आधार में पता कैसे बदलें?" autocomplete="off" onkeydown="if(event.key==='Enter') askSiteAI()">
+      <button type="button" onclick="askSiteAI()">पूछें</button>
+    </div>
+    <div class="ai-quick">
+      <button onclick="aiQuick('मेरी सेवाओं में आधार और आयुष्मान की जानकारी बताओ')">आधार / आयुष्मान</button>
+      <button onclick="aiQuick('UP Scholarship के लिए क्या चाहिए?')">Scholarship</button>
+      <button onclick="aiQuick('बिजली बिल कैसे जमा करें?')">बिजली बिल</button>
+      <button onclick="aiQuick('Driving Licence की सेवा बताओ')">RTO</button>
+      <button onclick="aiQuick('मेरे पास कौन-कौन सी CSC सेवाएँ हैं?')">सभी सेवाएँ</button>
+    </div>
+    <div class="ai-status">🎙️ Voice input • 🔊 Voice reply • 🔎 Service search • 🔗 Official portals</div>
   </aside>
 
   <footer><div><b>🔥 Vikas CSC Jan Sewa Kendra, मुसहरा</b> — आपकी सेवा में सदैव तत्पर</div><div>© <span id="year"></span> Vikas Chaurasiya CSC</div></footer>
@@ -118,15 +147,9 @@
   <div id="serviceModal" class="modal" aria-hidden="true">
     <div class="modal-box service-modal-box"><button class="close" onclick="closeModal()">×</button><div id="modalIcon" class="modal-icon">💼</div><h2 id="modalTitle"></h2><p id="modalDescription"></p><div class="modal-official-title">🔗 आधिकारिक पोर्टल</div><div id="modalPortals" class="portal-row"></div><ul id="modalItems" class="modal-items"></ul><div class="modal-actions"><a class="gold-btn" href="tel:+917355353841">📞 सेवा के लिए कॉल करें</a><a class="wa-btn" target="_blank" rel="noopener" href="https://wa.me/917355353841">💬 WhatsApp</a></div></div>
   </div>
-
-  <div id="adminModal" class="modal" aria-hidden="true">
-    <div class="modal-box admin-box"><button class="close" onclick="closeAdmin()">×</button>
-      <div id="loginView"><div class="modal-icon">🔐</div><h2>Owner / Admin Login</h2><p>सिर्फ वेबसाइट के मालिक के लिए।</p><input id="adminPass" type="password" placeholder="Admin Password"><button class="gold-btn full" onclick="adminLogin()">Login</button></div>
-      <div id="adminView" class="hidden"><div class="modal-icon">⚙️</div><h2>Owner Control Panel</h2><div class="admin-grid"><input id="newTitle" placeholder="नई Service का Title"><input id="newIcon" placeholder="Icon जैसे 💼" value="⭐"><textarea id="newItems" placeholder="Services लिखें, हर लाइन पर एक"></textarea><input id="newDesc" placeholder="छोटा Description"><input id="newUrl" placeholder="Official URL (खाली छोड़ें तो service के नाम से auto-match होगा)"><button class="gold-btn" onclick="addService()">+ नई Service जोड़ें</button><button class="small-btn" onclick="exportPublicServices()">⬇️ Public Services Data तैयार करें</button><button class="danger-btn" onclick="resetServices()">Default Services Restore</button></div><div class="admin-note">नई services इस device के Owner draft में save होंगी। <b>Public Services Data</b> से <code>services.json</code> डाउनलोड करके GitHub में replace करने पर सभी visitors को नई services दिखेंगी। GitHub Pages अकेले server-side database/write नहीं देता, इसलिए Owner से सीधे public site बदलना बिना backend के संभव नहीं है। Admin password केवल basic UI lock है; sensitive credentials यहाँ न रखें.</div><button class="small-btn" onclick="adminLogout()">Logout</button></div>
-    </div>
-  </div>
+</div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="./script.js?v=13"></script>
+  <script src="./script.js?v=14"></script>
 </body>
 </html>
