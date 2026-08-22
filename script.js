@@ -124,16 +124,26 @@ function toggleAIHelp(){
   p.classList.toggle('show',show); p.setAttribute('aria-hidden',String(!show)); b.setAttribute('aria-expanded',String(show));
 }
 
+function findSiteAIAnswer(q){
+  const text=q.toLowerCase();
+  const all=services.flatMap(s=>s.items.map(x=>({category:s,title:x.text,url:x.url})).concat((s.portals||[]).map(p=>({category:s,title:p[0],url:p[1]}))));
+  const keywords=text.split(/\s+/).filter(w=>w.length>2);
+  let best=all.map(item=>({item,score:keywords.reduce((n,k)=>n+(item.title.toLowerCase().includes(k)?2:item.category.title.toLowerCase().includes(k)?1:0),0)})).sort((a,b)=>b.score-a.score);
+  if(best[0] && best[0].score>0){
+    const x=best[0].item;
+    return `हाँ, <b>${escapeHtml(x.title)}</b> हमारी <b>${escapeHtml(x.category.title)}</b> के अंतर्गत उपलब्ध है।<br><br>🔗 संबंधित पोर्टल: <a href="${safeUrl(x.url)}" target="_blank" rel="noopener"><b>यहाँ खोलें ↗</b></a><br><br>अगर आप चाहें तो मैं इसी सेवा से जुड़ी दूसरी उपलब्ध सेवाएँ भी बता सकता हूँ।`;
+  }
+  if(/पता|location|कहाँ|कहां|address|मुसहरा/.test(text)) return '📍 हमारा पता: <b>ग्राम व पोस्ट – मुसहरा, तहसील – मेहदावल, जनपद – संत कबीर नगर, उत्तर प्रदेश – 272154</b>।<br><a href="https://www.google.com/maps/search/?api=1&query=27.063557,83.123799" target="_blank" rel="noopener"><b>Exact Shop Location Map पर खोलें ↗</b></a>';
+  if(/फोन|मोबाइल|call|number|contact|संपर्क/.test(text)) return '📞 Vikas CSC Jan Sewa Kendra से संपर्क: <b>7355353841</b>।<br><a href="tel:+917355353841"><b>अभी Call करें ↗</b></a> या <a href="https://wa.me/917355353841" target="_blank" rel="noopener"><b>WhatsApp करें ↗</b></a>';
+  if(/gemini|ai|कृत्रिम|artificial/.test(text)) return '🤖 मैं इस वेबसाइट की अपनी CSC सेवा-सहायक AI हूँ। आप PAN, Aadhaar, RTO, प्रमाण पत्र, बैंकिंग, छात्रवृत्ति, किसान, यात्रा या किसी उपलब्ध सेवा का नाम पूछ सकते हैं।';
+  return 'मैं आपकी मदद कर सकता हूँ। कृपया सेवा का नाम या अपना सवाल थोड़ा स्पष्ट लिखें—जैसे “PAN Card कहाँ खुलेगा?”, “Driving Licence की सेवा है?”, “Aadhaar कहाँ होगा?” या “हमारा पता क्या है?”';
+}
 function askSiteAI(){
   const input=document.getElementById('aiQuestion'), answer=document.getElementById('aiAnswer');
   const q=(input.value||'').trim();
   if(!q){answer.textContent='कृपया अपना सवाल लिखें।';input.focus();return;}
-  const prompt=`Vikas Chaurasiya CSC Jan Sewa Kendra, Musahra के लिए इस ग्राहक के सवाल का सरल हिंदी में उत्तर दें। उपलब्ध हो तो संबंधित official website भी बताएं। ग्राहक का सवाल: ${q}`;
-  const geminiUrl='https://gemini.google.com/app?q='+encodeURIComponent(prompt);
-  const direct=document.getElementById('geminiDirectLink');
-  if(direct) direct.href=geminiUrl;
-  window.open(geminiUrl,'_blank','noopener');
-  answer.innerHTML='<b>Gemini खोला जा रहा है…</b><br>आपका सवाल Gemini में भेज दिया गया है।';
+  answer.innerHTML='<b>🤖 जवाब तैयार हो रहा है…</b>';
+  setTimeout(()=>{ answer.innerHTML=findSiteAIAnswer(q); },120);
 }
 
 
@@ -150,47 +160,47 @@ function generateUPI(){const id='7355353841@okbizaxis',name=(document.getElement
 function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'})}
 document.getElementById('year').textContent=new Date().getFullYear();renderServices();renderTicker();loadPublicServices();window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeAdmin()}});document.getElementById('serviceModal').addEventListener('click',e=>{if(e.target.id==='serviceModal')closeModal()});document.getElementById('adminModal').addEventListener('click',e=>{if(e.target.id==='adminModal')closeAdmin()});
 
-// Services: one 3x3 grid only. Auto-moves after 6s idle; touch/mouse pauses it.
+// Services: one 3x3 grid, medium-speed group auto-scroll after 6s idle.
 (function(){
- let autoTimer=null, dragging=false, startX=0, startY=0, startOffset=0, offset=0, moved=false, autoDir=-1, autoAnim=null;
+ let idleTimer=null, dragging=false, startX=0, startY=0, startOffset=0, offset=0, moved=false, animTimer=null;
+ const MAX_SHIFT=-18; // only one original grid; no duplicate cards
  function setup(){
-  const vp=document.querySelector('.service-scroll-viewport');
-  if(!vp || vp.dataset.ready) return;
+  const vp=document.querySelector('.service-scroll-viewport'), track=document.getElementById('serviceTrack');
+  if(!vp || !track || vp.dataset.ready==='1') return;
   vp.dataset.ready='1';
-  const track=document.getElementById('serviceTrack');
-  const stop=()=>{ if(autoTimer){clearTimeout(autoTimer);autoTimer=null;} if(autoAnim){clearTimeout(autoAnim);autoAnim=null;} track.classList.add('user-paused'); };
-  const schedule=()=>{ if(track.classList.contains('is-searching')) return; if(autoTimer) clearTimeout(autoTimer); autoTimer=setTimeout(()=>autoStep(),6000); };
-  const applyOffset=()=>{ track.style.transform=`translate3d(${offset}%,0,0)`; };
-  const autoStep=()=>{
-    if(track.classList.contains('is-searching') || dragging) return schedule();
-    track.classList.remove('manual');
-    autoDir = autoDir===-1 ? 1 : -1;
-    offset = autoDir===-1 ? -7 : 0;
-    track.style.transition='transform 4.8s ease-in-out';
-    applyOffset();
-    autoAnim=setTimeout(()=>{ track.style.transition='none'; schedule(); },4800);
-  };
-  const down=(x,y)=>{stop(); dragging=true;moved=false;startX=x;startY=y;startOffset=offset;track.style.transition='none';};
-  const move=(x,y,e)=>{
-    if(!dragging)return;
-    const dx=x-startX,dy=y-startY;
-    if(!moved && Math.abs(dy)>Math.abs(dx) && Math.abs(dy)>8){ dragging=false; schedule(); return; }
-    if(Math.abs(dx)>8){
-      moved=true; e.preventDefault();
-      const range=7;
-      offset=Math.max(-range,Math.min(0,startOffset+(dx/window.innerWidth)*100));
-      track.classList.add('manual'); applyOffset();
+  const stopAuto=()=>{ if(idleTimer) clearTimeout(idleTimer); idleTimer=null; if(animTimer) clearTimeout(animTimer); animTimer=null; track.style.transition='none'; };
+  const schedule=()=>{ if(idleTimer) clearTimeout(idleTimer); idleTimer=setTimeout(autoMove,6000); };
+  const apply=()=>{ track.style.transform=`translate3d(${offset}%,0,0)`; };
+  function autoMove(){
+    if(track.classList.contains('is-searching') || dragging){ schedule(); return; }
+    const target = offset < -9 ? 0 : MAX_SHIFT;
+    track.style.transition='transform 5.2s ease-in-out';
+    offset=target; apply();
+    animTimer=setTimeout(()=>{ track.style.transition='none'; schedule(); },5300);
+  }
+  function begin(x,y){ stopAuto(); dragging=true; moved=false; startX=x; startY=y; startOffset=offset; track.style.transition='none'; }
+  function move(x,y,e){
+    if(!dragging) return;
+    const dx=x-startX, dy=y-startY;
+    if(!moved && Math.abs(dx)<8 && Math.abs(dy)<8) return;
+    if(!moved && Math.abs(dy)>Math.abs(dx)) { dragging=false; schedule(); return; }
+    if(Math.abs(dx)>Math.abs(dy)){
+      moved=true;
+      e.preventDefault();
+      const delta=(dx/Math.max(1,vp.clientWidth))*100;
+      offset=Math.max(MAX_SHIFT,Math.min(0,startOffset+delta));
+      track.style.transform=`translate3d(${offset}%,0,0)`;
     }
-  };
-  const up=()=>{if(!dragging)return;dragging=false;track.style.transition='transform .35s ease';applyOffset();schedule();};
-  vp.addEventListener('pointerdown',e=>down(e.clientX,e.clientY));
+  }
+  function end(){ if(!dragging) return; dragging=false; track.style.transition='transform .25s ease-out'; apply(); schedule(); }
+  vp.addEventListener('pointerdown',e=>{begin(e.clientX,e.clientY);},{passive:true});
   vp.addEventListener('pointermove',e=>move(e.clientX,e.clientY,e),{passive:false});
-  vp.addEventListener('pointerup',up); vp.addEventListener('pointercancel',up); vp.addEventListener('pointerleave',up);
-  vp.addEventListener('click',()=>{stop();schedule();},{capture:true});
-  vp.addEventListener('wheel',()=>{stop();schedule();},{passive:true});
+  vp.addEventListener('pointerup',end); vp.addEventListener('pointercancel',end); vp.addEventListener('pointerleave',end);
+  vp.addEventListener('mouseenter',stopAuto); vp.addEventListener('mouseleave',schedule);
+  vp.addEventListener('click',()=>{stopAuto();schedule();},{capture:true});
+  vp.addEventListener('wheel',()=>{stopAuto();schedule();},{passive:true});
   schedule();
  }
  window.initServiceScroller=setup;
  window.addEventListener('load',setup);
 })();
-

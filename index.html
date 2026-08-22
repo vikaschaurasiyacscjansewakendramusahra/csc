@@ -20,11 +20,17 @@
     /* Services: all category cards visible in a normal 3-column grid. No marquee / no card-by-card scrolling. */
     #serviceGrid { display:grid !important; grid-template-columns:repeat(3,minmax(0,1fr)) !important; flex-wrap:initial !important; width:100% !important; max-width:none !important; gap:18px !important; overflow:visible !important; animation:none !important; transform:none !important; will-change:auto !important; }
     #serviceGrid .service-card { width:auto !important; min-width:0 !important; max-width:none !important; flex:none !important; }
-    .service-scroll-viewport { overflow:visible !important; width:100% !important; position:relative !important; }
+    .service-scroll-viewport { overflow:hidden !important; width:100% !important; position:relative !important; touch-action:pan-y pinch-zoom !important; }
     @media (max-width:900px){ #serviceGrid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;} }
     @media (max-width:560px){ #serviceGrid{grid-template-columns:1fr !important;gap:14px !important;} #serviceGrid .service-card{width:100% !important;min-width:0 !important;} }
     .district-license-note { margin: 14px 0 8px; font-weight: 800; font-size: 1.05rem; color: #b07a00; text-align: center; }
     @media (max-width: 600px) { #adminModal { padding: 10px 8px !important; } #adminModal .modal-box.admin-box { max-height: 88vh !important; } }
+  #serviceGrid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;width:100%!important;transform:none!important;animation:none!important;}
+    #serviceGrid .service-card{width:auto!important;min-width:0!important;}
+    .service-scroll-viewport{overflow:hidden!important;touch-action:pan-y pinch-zoom!important;}
+    .service-track{width:100%!important;display:block!important;transform:translate3d(0,0,0);transition:transform 5.2s ease-in-out;will-change:transform;}
+    @media(max-width:900px){#serviceGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+    @media(max-width:560px){#serviceGrid{grid-template-columns:1fr!important}}
   </style>
 
 <style id="gold-24k-heading">
@@ -147,15 +153,15 @@
     <div class="ai-panel-icon">🤖</div>
     <h3>Vikas CSC Jan Sewa Kendra में आपका स्वागत है</h3>
     <p id="aiGreeting">नमस्कार! मैं इस वेबसाइट की सेवाओं के बारे में जानकारी देने के लिए यहाँ हूँ। बताइए, मैं आपकी किस प्रकार मदद कर सकती हूँ?</p>
-    <div class="ai-chat-row"><input id="aiQuestion" type="text" placeholder="जैसे: PAN Card कहाँ खुलेगा?" onkeydown="if(event.key==='Enter') askSiteAI()"><button type="button" onclick="askSiteAI()">Gemini में पूछें</button></div>
-    <div id="aiAnswer" class="ai-answer">आप बैंकिंग, Aadhaar, PAN, RTO, प्रमाण पत्र, पेंशन, GST, छात्रवृत्ति, यात्रा, किसान सेवाओं आदि के बारे में पूछ सकते हैं।</div>
+    <div class="ai-chat-row"><input id="aiQuestion" type="text" placeholder="जैसे: PAN Card कहाँ खुलेगा?" onkeydown="if(event.key==='Enter') askSiteAI()"><button type="button" onclick="askSiteAI()">पूछें</button></div>
+    <div id="aiAnswer" class="ai-answer">मैं Vikas CSC की सेवाओं, संबंधित पोर्टल, पता, संपर्क और उपलब्ध सुविधाओं के बारे में सीधे बता सकता हूँ। अपना सवाल लिखिए।</div>
     <div class="ai-quick">
       <button onclick="aiQuick('Aadhaar सेवा')">Aadhaar</button>
       <button onclick="aiQuick('PAN Card सेवा')">PAN Card</button>
       <button onclick="aiQuick('RTO / Driving Licence')">RTO</button>
       <button onclick="aiQuick('प्रमाण पत्र')">प्रमाण पत्र</button>
     </div>
-    <a id="geminiDirectLink" class="gold-btn ai-gemini" href="https://gemini.google.com/app" target="_blank" rel="noopener">✨ Gemini में पूछें</a>
+    <a id="geminiDirectLink" class="gold-btn ai-gemini" href="https://gemini.google.com/app" target="_blank" rel="noopener">✨ चाहें तो Gemini में पूछें</a>
   </aside>
 
   <footer><div><b>🔥 Vikas CSC Jan Sewa Kendra, मुसहरा</b> — आपकी सेवा में सदैव तत्पर</div><div>© <span id="year"></span> Vikas Chaurasiya CSC</div></footer>
