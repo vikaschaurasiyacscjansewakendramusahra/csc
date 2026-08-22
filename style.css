@@ -177,3 +177,30 @@ body { touch-action: pan-x pan-y pinch-zoom !important; }
 .service-viewport{overflow:hidden!important;touch-action:pan-y pinch-zoom!important}
 #serviceGrid.service-grid .service-card{touch-action:pan-y pinch-zoom!important}
 @media(max-width:560px){.ai-panel-icon.ai-robot-lady{width:168px!important;height:168px!important}.ai-float-face{width:48px!important;height:48px!important}}
+
+/* FINAL SAFE MERGE: second ZIP layout + first ZIP AI photo/function. */
+#services{display:block!important;visibility:visible!important;opacity:1!important;position:relative!important;z-index:2!important}
+#services .service-viewport{display:block!important;visibility:visible!important;opacity:1!important;min-height:80px!important}
+#serviceGrid.service-grid{display:grid!important;visibility:visible!important;opacity:1!important}
+.ai-float{z-index:1200!important}
+.ai-float-face{width:54px!important;height:54px!important;border-radius:50%!important;overflow:hidden!important;display:block!important}
+.ai-float-face img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:50% 17%!important;display:block!important}
+.ai-panel{position:fixed!important;right:14px!important;bottom:88px!important;width:min(370px,calc(100vw - 28px))!important;max-height:min(70vh,620px)!important;overflow-y:auto!important;overflow-x:hidden!important;padding:13px!important;border-radius:18px!important;z-index:1201!important;box-sizing:border-box!important}
+.ai-panel-top{display:grid!important;grid-template-columns:minmax(0,1fr) 86px!important;gap:9px!important;align-items:start!important}
+.ai-panel-photo{width:86px!important;height:112px!important;border-radius:10px!important;object-fit:cover!important;object-position:50% 16%!important}
+.ai-panel-top h3{font-size:19px!important;margin:2px 0 4px!important;line-height:1.25!important}
+.ai-panel-top p{font-size:12px!important;line-height:1.4!important;margin:3px 0!important}
+.ai-language-row,.ai-quick{gap:5px!important;margin:7px 0!important}
+.ai-language-row button,.ai-quick button,.ai-bottom-actions button{padding:6px 8px!important;font-size:12px!important}
+.ai-chat-log{max-height:120px!important;gap:5px!important}
+.ai-msg{padding:7px 8px!important;font-size:12px!important;line-height:1.35!important}
+.ai-chat-row{display:grid!important;grid-template-columns:minmax(0,1fr) 44px 48px!important;gap:5px!important;margin-top:7px!important}
+.ai-chat-row input{padding:8px!important;font-size:13px!important}
+.ai-chat-row button{padding:0 8px!important;min-width:0!important}
+.ai-answer{margin-top:7px!important;padding:8px!important;min-height:45px!important;font-size:12px!important;line-height:1.45!important}
+.ai-result-title{font-size:14px!important;margin-bottom:3px!important}
+.ai-result-list{gap:4px!important;margin:7px 0!important}
+.ai-result-list a,.ai-result-link{padding:6px 7px!important;font-size:12px!important}
+.ai-bottom-actions{gap:5px!important;margin-top:6px!important}
+.ai-status{font-size:10px!important;margin-top:6px!important;padding:6px 8px!important;line-height:1.3!important}
+@media(max-width:560px){.ai-panel{right:8px!important;bottom:86px!important;width:calc(100vw - 16px)!important;max-height:68vh!important;padding:11px!important}.ai-panel-photo{width:72px!important;height:94px!important}.ai-panel-top{grid-template-columns:minmax(0,1fr) 72px!important}.ai-panel-top h3{font-size:17px!important}.ai-panel-top p{font-size:11px!important}.ai-chat-log{max-height:100px!important}.ai-float{right:8px!important;bottom:8px!important}}
