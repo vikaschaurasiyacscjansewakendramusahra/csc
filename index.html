@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#fbfaf3">
   <meta name="description" content="Vikas Chaurasiya CSC Jan Sewa Kendra, Musahra, Sant Kabir Nagar — banking, Aadhaar, pension, RTO, certificates, tax, education, travel, agriculture and digital services.">
   <meta name="robots" content="index, follow">
@@ -10,53 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css?v=11">
-
-  <style id="vikas-csc-upgrade-css">
-    /* Upgrade: keep the existing design, add only requested fixes. */
-    #adminModal .modal-box.admin-box { max-height: 82vh !important; overflow-y: auto !important; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
-    #adminModal { overflow-y: auto !important; align-items: flex-start !important; padding: 24px 12px !important; }
-    #serviceModal .service-modal-box .close { color: #e00000 !important; background: #fff !important; border: 2px solid #e00000 !important; text-shadow: none !important; box-shadow: 0 4px 14px rgba(224,0,0,.25) !important; }
-    /* Services: all category cards visible in a normal 3-column grid. No marquee / no card-by-card scrolling. */
-    #serviceGrid { display:grid !important; grid-template-columns:repeat(3,minmax(0,1fr)) !important; flex-wrap:initial !important; width:100% !important; max-width:none !important; gap:18px !important; overflow:visible !important; animation:none !important; transform:none !important; will-change:auto !important; }
-    #serviceGrid .service-card { width:auto !important; min-width:0 !important; max-width:none !important; flex:none !important; }
-    .service-scroll-viewport { overflow:hidden !important; width:100% !important; position:relative !important; touch-action:pan-y pinch-zoom !important; }
-    @media (max-width:900px){ #serviceGrid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;} }
-    @media (max-width:560px){ #serviceGrid{grid-template-columns:1fr !important;gap:14px !important;} #serviceGrid .service-card{width:100% !important;min-width:0 !important;} }
-    .district-license-note { margin: 14px 0 8px; font-weight: 800; font-size: 1.05rem; color: #b07a00; text-align: center; }
-    @media (max-width: 600px) { #adminModal { padding: 10px 8px !important; } #adminModal .modal-box.admin-box { max-height: 88vh !important; } }
-  #serviceGrid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;width:100%!important;transform:none!important;animation:none!important;}
-    #serviceGrid .service-card{width:auto!important;min-width:0!important;}
-    .service-scroll-viewport{overflow:hidden!important;touch-action:pan-y pinch-zoom!important;}
-    .service-track{width:100%!important;display:block!important;transform:translate3d(0,0,0);transition:transform 5.2s ease-in-out;will-change:transform;}
-    @media(max-width:900px){#serviceGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
-    @media(max-width:560px){#serviceGrid{grid-template-columns:1fr!important}}
-  </style>
-
-<style id="gold-24k-heading">
-/* 24K pure-gold illuminated main heading */
-.hero h1{
-  color:#ffd700 !important;
-  background:linear-gradient(115deg,#fffbe0 0%,#ffe97a 12%,#ffd700 25%,#fff2a6 38%,#ffd700 50%,#e8ad00 63%,#fff8c7 76%,#ffd700 88%,#fff0a0 100%) !important;
-  background-size:220% 100% !important;
-  -webkit-background-clip:text !important;
-  background-clip:text !important;
-  -webkit-text-fill-color:transparent !important;
-  -webkit-text-stroke:1.5px #c89400 !important;
-  text-shadow:0 1px 0 #fff8c8,0 3px 7px rgba(184,130,0,.28),0 0 18px rgba(255,215,0,.42) !important;
-  animation:gold24kShine 4.5s linear infinite !important;
-}
-.hero h1 span{
-  background:inherit !important;
-  background-size:220% 100% !important;
-  -webkit-background-clip:text !important;
-  background-clip:text !important;
-  -webkit-text-fill-color:transparent !important;
-}
-.hero h1:after{background:linear-gradient(90deg,transparent,#fff6b0,#ffd700,#fff6b0,transparent) !important;box-shadow:0 0 12px rgba(255,215,0,.65) !important;}
-@keyframes gold24kShine{0%{background-position:200% 0}100%{background-position:-20% 0}}
-</style>
-
+  <link rel="stylesheet" href="./style.css?v=5">
 </head>
 <body>
   <div class="ambient"></div>
@@ -103,7 +57,7 @@
         <div><div class="eyebrow">ONE PLACE • ALL ONLINE SERVICES</div><h2>हमारी <span>प्रमुख सेवाएँ</span></h2><p class="section-note">हर सेवा/बुलेट को टच करने पर संबंधित आधिकारिक पोर्टल खुलेगा।</p></div>
         <div class="service-tools"><input id="serviceSearch" type="search" placeholder="🔎 सेवा खोजें..." oninput="renderServices()"><button class="small-btn" onclick="scrollToTop()">↑ ऊपर</button></div>
       </div>
-      <div class="service-scroll-viewport"><div id="serviceTrack" class="service-track"><div id="serviceGrid" class="service-grid"></div></div></div>
+      <div id="serviceViewport" class="service-viewport"><div id="serviceGrid" class="service-grid"></div></div>
     </section>
 
     <section class="payment section">
@@ -131,7 +85,7 @@
     <section class="section about" id="about">
       <div class="about-card">
         <div class="about-logo"><img src="./logo.png" alt="Vikas Chaurasiya CSC logo"></div>
-        <div><div class="eyebrow">Main Service</div><h2>Vikas Chaurasiya <span>CSC Jan Sewa Kendra</span></h2><p>मुसहरा, तहसील मेहदावल, जनपद संत कबीर नगर, उत्तर प्रदेश में डिजिटल, नागरिक और ऑनलाइन सेवाओं का एक स्थान।</p><div class="district-license-note">इन सभी जिलों का लाइसेंस बनवाने के लिए संपर्क करे</div><div class="districts"><span>संत कबीर नगर</span><span>सिद्धार्थनगर</span><span>गोरखपुर</span><span>महराजगंज</span><span>बस्ती</span></div></div>
+        <div><div class="eyebrow">आपका अपना विश्वसनीय जन सेवा केन्द्र</div><h2>Vikas Chaurasiya <span>CSC Jan Sewa Kendra</span></h2><p>मुसहरा, तहसील मेहदावल, जनपद संत कबीर नगर, उत्तर प्रदेश में डिजिटल, नागरिक और ऑनलाइन सेवाओं का एक स्थान।</p><div class="districts"><span>संत कबीर नगर</span><span>सिद्धार्थनगर</span><span>गोरखपुर</span><span>महराजगंज</span><span>बस्ती</span></div></div>
       </div>
     </section>
 
@@ -141,7 +95,7 @@
         <a class="contact-card" href="tel:+917355353841"><span>📞</span><div><b>मोबाइल</b><strong>7355353841</strong><small>कॉल करने के लिए क्लिक करें</small></div></a>
         <a class="contact-card" href="mailto:vikaschaurasiya10925@zohomail.in"><span>✉️</span><div><b>Email</b><strong>vikaschaurasiya10925@zohomail.in</strong><small>ईमेल भेजने के लिए क्लिक करें</small></div></a>
         <a class="contact-card" href="mailto:vikaschaurasiya10925@gmail.com"><span>📧</span><div><b>Gmail</b><strong>vikaschaurasiya10925@gmail.com</strong><small>ईमेल भेजने के लिए क्लिक करें</small></div></a>
-        <a class="contact-card" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=27.063557%2C83.123799"><span>📍</span><div><b>हमारा पता</b><strong>ग्राम व पोस्ट – मुसहरा</strong><small>तहसील – मेहदावल, जनपद – संत कबीर नगर, उत्तर प्रदेश – 272154</small></div></a>
+        <a class="contact-card" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Musahra%2C%20Mehdawal%2C%20Sant%20Kabir%20Nagar%2C%20Uttar%20Pradesh%20272154"><span>📍</span><div><b>हमारा पता</b><strong>ग्राम व पोस्ट – मुसहरा</strong><small>तहसील – मेहदावल, जनपद – संत कबीर नगर, उत्तर प्रदेश – 272154</small></div></a>
         <a class="contact-card" target="_blank" rel="noopener" href="https://wa.me/917355353841"><span>💬</span><div><b>WhatsApp</b><strong>7355353841</strong><small>WhatsApp पर संदेश भेजें</small></div></a>
       </div>
     </section>
@@ -153,15 +107,14 @@
     <div class="ai-panel-icon">🤖</div>
     <h3>Vikas CSC Jan Sewa Kendra में आपका स्वागत है</h3>
     <p id="aiGreeting">नमस्कार! मैं इस वेबसाइट की सेवाओं के बारे में जानकारी देने के लिए यहाँ हूँ। बताइए, मैं आपकी किस प्रकार मदद कर सकती हूँ?</p>
-    <div class="ai-chat-row"><input id="aiQuestion" type="text" placeholder="जैसे: PAN Card कहाँ खुलेगा?" onkeydown="if(event.key==='Enter') askSiteAI()"><button type="button" onclick="askSiteAI()">पूछें</button></div>
-    <div id="aiAnswer" class="ai-answer">मैं Vikas CSC की सेवाओं, संबंधित पोर्टल, पता, संपर्क और उपलब्ध सुविधाओं के बारे में सीधे बता सकता हूँ। अपना सवाल लिखिए।</div>
+    <div class="ai-chat-row"><input id="aiQuestion" type="text" placeholder="आप कुछ भी पूछ सकते हैं… जैसे श्रमिक कार्ड कैसे बनेगा?" onkeydown="if(event.key==='Enter') askSiteAI()"><button type="button" onclick="askSiteAI()">पूछें</button></div>
+    <div id="aiAnswer" class="ai-answer">आप अपनी भाषा में कोई भी सवाल लिखें—मैं उपलब्ध CSC सेवाओं, दस्तावेज़, प्रक्रिया और संबंधित आधिकारिक पोर्टल की जानकारी दूँगा।</div>
     <div class="ai-quick">
       <button onclick="aiQuick('Aadhaar सेवा')">Aadhaar</button>
       <button onclick="aiQuick('PAN Card सेवा')">PAN Card</button>
       <button onclick="aiQuick('RTO / Driving Licence')">RTO</button>
       <button onclick="aiQuick('प्रमाण पत्र')">प्रमाण पत्र</button>
-    </div>
-    <a id="geminiDirectLink" class="gold-btn ai-gemini" href="https://gemini.google.com/app" target="_blank" rel="noopener">✨ चाहें तो Gemini में पूछें</a>
+    </div><div class="ai-status">🔒 यह Vikas CSC AI आपकी वेबसाइट की सेवाओं और उपलब्ध जानकारी के आधार पर उत्तर तैयार करता है।</div>
   </aside>
 
   <footer><div><b>🔥 Vikas CSC Jan Sewa Kendra, मुसहरा</b> — आपकी सेवा में सदैव तत्पर</div><div>© <span id="year"></span> Vikas Chaurasiya CSC</div></footer>
@@ -178,6 +131,6 @@
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="./script.js?v=6"></script>
+  <script src="./script.js?v=13"></script>
 </body>
 </html>

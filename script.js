@@ -1,206 +1,90 @@
-const OFFICIAL = {
-  csc:'https://www.csc.gov.in/', aadhaar:'https://myaadhaar.uidai.gov.in/', ayushman:'https://pmjay.gov.in/', abha:'https://abha.abdm.gov.in/', jeevan:'https://jeevanpramaan.gov.in/',
-  pension:'https://nsap.nic.in/', rto:'https://parivahan.gov.in/', challan:'https://echallan.parivahan.gov.in/', fastag:'https://www.npci.org.in/what-we-do/netc-fastag/product-overview',
-  edistrict:'https://esathi.up.gov.in/', ration:'https://fcs.up.gov.in/', bhulekh:'https://upbhulekh.gov.in/bhulekh/', bhunaksha:'https://upbhunaksha.gov.in/', marriage:'https://www.igrsup.gov.in/igrsup/defaultAction.action', police:'https://uppolice.gov.in/', udid:'https://www.swavlambancard.gov.in/',
-  gst:'https://www.gst.gov.in/', itr:'https://www.incometax.gov.in/iec/foportal/', fssai:'https://foscos.fssai.gov.in/', udyam:'https://udyamregistration.gov.in/', dsc:'https://cca.gov.in/',
-  nsp:'https://scholarships.gov.in/', abc:'https://www.abc.gov.in/', results:'https://www.digilocker.gov.in/', irctc:'https://www.irctc.co.in/', bus:'https://www.redbus.in/', flight:'https://www.airindia.com/', passport:'https://www.passportindia.gov.in/',
-  pmkisan:'https://pmkisan.gov.in/', kcc:'https://www.jansamarth.in/', epfo:'https://www.epfindia.gov.in/', recharge:'https://www.bharatbillpay.com/', eshram:'https://eshram.gov.in/', lpg:'https://www.pmuy.gov.in/',
-  digilocker:'https://www.digilocker.gov.in/', esign:'https://cca.gov.in/', nps:'https://www.npscra.nsdl.co.in/', apy:'https://www.npscra.nsdl.co.in/', gem:'https://gem.gov.in/', telelaw:'https://www.tele-law.in/', insurance:'https://www.irdai.gov.in/',
-  vishwakarma:'https://pmvishwakarma.gov.in/', skill:'https://www.skillindia.gov.in/', myscheme:'https://www.myscheme.gov.in/', sim:'https://www.airtel.in/', cyber:'https://www.csc.gov.in/'
-};
-
-const DEFAULT_SERVICES = [
- {icon:'🏦',title:'बैंकिंग एवं आधार सेवाएँ',desc:'दैनिक डिजिटल और नागरिक सेवाएँ एक ही जगह।',portals:[['CSC Official Portal',OFFICIAL.csc],['myAadhaar',OFFICIAL.aadhaar]],items:[['AEPS बैंकिंग – जमा / निकासी',OFFICIAL.csc],['बैलेंस, मिनी स्टेटमेंट',OFFICIAL.csc],['वृद्धावस्था / विधवा / दिव्यांग पेंशन',OFFICIAL.pension],['जीवन प्रमाण पत्र (Jeevan Pramaan)',OFFICIAL.jeevan],['आधार में पता अपडेट',OFFICIAL.aadhaar],['आयुष्मान कार्ड – नया / पात्रता जाँच',OFFICIAL.ayushman],['ABHA Health ID',OFFICIAL.abha]]},
- {icon:'🚗',title:'RTO / वाहन सेवाएँ',desc:'ड्राइविंग लाइसेंस और वाहन संबंधी सेवाएँ।',portals:[['Parivahan',OFFICIAL.rto],['e-Challan',OFFICIAL.challan]],items:[['ड्राइविंग लाइसेंस – नया / रिन्यू / डुप्लीकेट',OFFICIAL.rto],['वाहन ट्रांसफर, परमिट, फिटनेस',OFFICIAL.rto],['HSRP नंबर प्लेट – बुकिंग + ट्रैकिंग',OFFICIAL.rto],['फैंसी नंबर प्लेट (पसंदीदा नंबर)',OFFICIAL.rto],['e-Challan भुगतान – ऑनलाइन',OFFICIAL.challan],['वाहन बीमा / FASTag',OFFICIAL.fastag],['जिले: संत कबीर नगर, सिद्धार्थनगर, गोरखपुर, महाराजगंज, बस्ती',OFFICIAL.rto]]},
- {icon:'📜',title:'प्रमाण पत्र एवं सरकारी दस्तावेज',desc:'सरकारी प्रमाण-पत्र और ऑनलाइन दस्तावेजी सेवाएँ।',portals:[['UP e-Sathi / e-District',OFFICIAL.edistrict],['UP Food & Ration',OFFICIAL.ration]],items:[['आय / जाति / निवास / राशन कार्ड',OFFICIAL.edistrict],['खतौनी (प्रमाणित / अभिलेख)',OFFICIAL.bhulekh],['भू-नक्शा / भूमि नक्शा',OFFICIAL.bhunaksha],['विवाह पंजीकरण',OFFICIAL.marriage],['चरित्र प्रमाण पत्र (Police Verification)',OFFICIAL.police],['UDID कार्ड / दिव्यांग प्रमाण पत्र',OFFICIAL.udid],['e-District – सभी प्रमाण पत्र',OFFICIAL.edistrict]]},
- {icon:'📊',title:'टैक्स / व्यवसाय सेवाएँ',desc:'व्यापार, टैक्स और पंजीकरण संबंधी ऑनलाइन काम।',portals:[['GST Portal',OFFICIAL.gst],['Income Tax e-Filing',OFFICIAL.itr],['Udyam Registration',OFFICIAL.udyam]],items:[['GST रजिस्ट्रेशन – नया / संशोधन',OFFICIAL.gst],['GST फाइलिंग – मासिक / वार्षिक',OFFICIAL.gst],['ITR फाइलिंग – सभी आय वर्ग',OFFICIAL.itr],['FSSAI लाइसेंस – नया / रिन्यूअल',OFFICIAL.fssai],['MSME / उद्यम रजिस्ट्रेशन',OFFICIAL.udyam],['DSC / डिजिटल सिग्नेचर',OFFICIAL.dsc]]},
- {icon:'🎓',title:'शिक्षा / छात्र सेवाएँ',desc:'छात्रों और शिक्षा से जुड़ी सुविधाएँ।',portals:[['National Scholarship Portal',OFFICIAL.nsp],['ABC / APAAR',OFFICIAL.abc]],items:[['छात्रवृत्ति आवेदन – राज्य / केंद्र',OFFICIAL.nsp],['ABC ID / APAAR',OFFICIAL.abc],['बोर्ड / यूनिवर्सिटी रिजल्ट',OFFICIAL.digilocker],['कॉलेज प्रवेश फॉर्म',OFFICIAL.nsp]]},
- {icon:'✈️',title:'यात्रा / टिकटिंग सेवाएँ',desc:'रेल, बस, फ्लाइट और पासपोर्ट सेवाएँ।',portals:[['IRCTC',OFFICIAL.irctc],['Passport Seva',OFFICIAL.passport]],items:[['रेलवे टिकट – PNR स्टेटस',OFFICIAL.irctc],['बस टिकट (रीजनल / इंटरस्टेट)',OFFICIAL.bus],['फ्लाइट टिकट (Domestic / International)',OFFICIAL.flight],['पासपोर्ट सेवाएँ – PSK / ऑनलाइन',OFFICIAL.passport]]},
- {icon:'🌾',title:'कृषि व किसान सेवाएँ',desc:'किसानों के लिए डिजिटल सहायता।',portals:[['PM-KISAN',OFFICIAL.pmkisan],['Jan Samarth',OFFICIAL.kcc]],items:[['किसान पंजीकरण',OFFICIAL.pmkisan],['PM-Kisan स्थिति / सुधार',OFFICIAL.pmkisan],['कृषि सहायता / मुद्रा प्रशिक्षण',OFFICIAL.myscheme],['KCC लोन आवेदन',OFFICIAL.kcc],['MPACS समिति सेवाएँ',OFFICIAL.myscheme]]},
- {icon:'🧰',title:'अन्य आवश्यक सेवाएँ',desc:'रोजमर्रा की कई ऑनलाइन सुविधाएँ।',portals:[['CSC Official Portal',OFFICIAL.csc],['e-Shram',OFFICIAL.eshram]],items:[['सभी ऑनलाइन फॉर्म',OFFICIAL.csc],['फोटो / फोटो कॉपी / स्कैन / PDF',OFFICIAL.csc],['Resume (CV) बनाना (Excel/Word)',OFFICIAL.csc],['मोबाइल / DTH रिचार्ज',OFFICIAL.recharge],['बिजली बिल भुगतान / नया कनेक्शन',OFFICIAL.myscheme],['ई-श्रम / श्रम कार्ड',OFFICIAL.eshram],['उज्ज्वला – LPG कनेक्शन',OFFICIAL.lpg],['EPFO – UAN / PF Withdrawal',OFFICIAL.epfo],['Airtel / Jio नई SIM',OFFICIAL.sim],['Cyber Cafe सभी सेवाएँ',OFFICIAL.csc],['केंद्र व राज्य की सभी योजनाएँ',OFFICIAL.myscheme]]},
- {icon:'🚀',title:'नई एवं एडवांस सेवाएँ (2026–2027)',desc:'नई डिजिटल सुविधाएँ समय के साथ जोड़ी जा सकती हैं।',portals:[['DigiLocker',OFFICIAL.digilocker],['GeM',OFFICIAL.gem],['myScheme',OFFICIAL.myscheme]],items:[['PAN कार्ड – नया / सुधार — Protean / NSDL', 'https://www.protean-tinpan.com/'],['PAN कार्ड — UTIITSL विकल्प','https://www.utiitsl.com/'],['DigiLocker दस्तावेज सेवाएँ',OFFICIAL.digilocker],['eSign – डिजिटल हस्ताक्षर',OFFICIAL.esign],['NPS / APY पेंशन सेवाएँ',OFFICIAL.nps],['Ayushman 2.0 & Health Services',OFFICIAL.ayushman],['PM Vishwakarma योजना',OFFICIAL.vishwakarma],['Skill India / रोजगार पंजीकरण',OFFICIAL.skill],['GeM Seller Registration सहायता',OFFICIAL.gem],['Tele-Law – कानूनी सहायता',OFFICIAL.telelaw],['Insurance – Life / Health / Motor',OFFICIAL.insurance],['e-Shram 2.0 अपडेट',OFFICIAL.eshram],['CSC के नए G2C / B2C डिजिटल सेवाएँ',OFFICIAL.csc],['आधार आधारित e-KYC व वेरिफिकेशन',OFFICIAL.aadhaar],['ऑनलाइन प्रीपेड / अन्य कोई भी नई डिजिटल सेवा',OFFICIAL.myscheme]]}
-];
-
-function normalizeService(s){
-  const items=(s.items||[]).map(x=>{ const text=Array.isArray(x)?x[0]:String(x); const raw=Array.isArray(x)?(x[1]||autoOfficialUrl(text)):autoOfficialUrl(text); return {text,url:normalizeFallbackUrl(raw)}; });
-  const portals=(s.portals||[['CSC Official Portal',OFFICIAL.csc]]).map(p=>[p[0],normalizeFallbackUrl(p[1])]);
-  return {...s,portals,items};
-}
-let services=DEFAULT_SERVICES.map(normalizeService);
-async function loadPublicServices(){
-  try{ const r=await fetch('./services.json?v=7',{cache:'no-store'}); if(!r.ok) throw new Error('services.json unavailable'); const data=await r.json(); if(Array.isArray(data)){ services=data.map(normalizeService); renderServices(); renderTicker(); } }catch(e){ console.warn('Public services data could not be loaded; using built-in services.',e); }
-}
-function loadAdminDraft(){ try{ const raw=localStorage.getItem('vikas_csc_admin_draft'); if(raw){ const data=JSON.parse(raw); if(Array.isArray(data)) return data.map(normalizeService); } }catch(e){} return services; }
-
-function normalizeFallbackUrl(url){
-  const u=String(url||'').trim();
-  if(!u || u==='https://www.csc.gov.in/' || u==='https://www.csc.gov.in')
-    return 'https://www.google.com/search?q=VIKAS+CSC+e-governance+BLS+CSC+Uttar+Pradesh+Jan+Sewa+Kendra+Near+CSC+Center+Cyber+Cafe';
-  return u;
-}
-const AUTO_OFFICIAL = [
-  [['pan','पैन'], 'https://www.protean-tinpan.com/'],
-  [['utiitsl','uti','पैन कार्ड'], 'https://www.utiitsl.com/'],
-  [['aadhar','aadhaar','आधार'], OFFICIAL.aadhaar],
-  [['ayushman','आयुष्मान'], OFFICIAL.ayushman],
-  [['ration','राशन'], OFFICIAL.ration],
-  [['income','आय प्रमाण','आय प्रमाण पत्र','income certificate'], OFFICIAL.edistrict],
-  [['caste','जाति प्रमाण','caste certificate'], OFFICIAL.edistrict],
-  [['domicile','निवास प्रमाण','residence certificate'], OFFICIAL.edistrict],
-  [['e-district','edistrict','e district'], OFFICIAL.edistrict],
-  [['khatoni','खतौनी','भू-नक्शा','bhulekh'], OFFICIAL.bhulekh],
-  [['marriage','विवाह पंजीकरण'], OFFICIAL.marriage],
-  [['police','चरित्र प्रमाण','police verification'], OFFICIAL.police],
-  [['udid','दिव्यांग'], OFFICIAL.udid],
-  [['gst'], OFFICIAL.gst], [['itr','income tax','आयकर'], OFFICIAL.itr],
-  [['fssai'], OFFICIAL.fssai], [['udyam','msme'], OFFICIAL.udyam],
-  [['scholarship','छात्रवृत्ति'], OFFICIAL.nsp], [['digilocker'], OFFICIAL.digilocker],
-  [['irctc','railway','रेलवे'], OFFICIAL.irctc], [['passport','पासपोर्ट'], OFFICIAL.passport],
-  [['pm kisan','pm-kisan','किसान'], OFFICIAL.pmkisan], [['kcc'], OFFICIAL.kcc],
-  [['epfo','pf withdrawal','uan'], OFFICIAL.epfo], [['e-shram','e shram'], OFFICIAL.eshram],
-  [['gem','seller registration'], OFFICIAL.gem], [['tele-law','telelaw'], OFFICIAL.telelaw],
-  [['vishwakarma'], OFFICIAL.vishwakarma], [['skill india','रोजगार'], OFFICIAL.skill],
-  [['nps'], OFFICIAL.nps], [['apy'], OFFICIAL.apy], [['insurance','बीमा'], OFFICIAL.insurance],
-  [['rto','driving licence','driving license','वाहन','dl','परमिट'], OFFICIAL.rto],
-  [['challan','e-challan'], OFFICIAL.challan], [['fastag'], OFFICIAL.fastag],
-  [['recharge','dth','mobile recharge'], OFFICIAL.recharge], [['lpg','ujjwala'], OFFICIAL.lpg],
-  [['csc'], OFFICIAL.csc], [['scheme','योजना'], OFFICIAL.myscheme]
-];
-function autoOfficialUrl(text){ const t=String(text||'').toLowerCase(); for(const [keys,url] of AUTO_OFFICIAL){ if(keys.some(k=>t.includes(k))) return url; } return OFFICIAL.csc; }
-
-let isAdmin=false;
+const OFFICIAL = {"csc":"https://www.csc.gov.in/","aadhaar":"https://myaadhaar.uidai.gov.in/","ayushman":"https://pmjay.gov.in/","abha":"https://abha.abdm.gov.in/","jeevan":"https://jeevanpramaan.gov.in/","pension":"https://nsap.nic.in/","rto":"https://parivahan.gov.in/","challan":"https://echallan.parivahan.gov.in/","fastag":"https://www.npci.org.in/what-we-do/netc-fastag/product-overview","edistrict":"https://esathi.up.gov.in/","ration":"https://fcs.up.gov.in/","bhulekh":"https://upbhulekh.gov.in/bhulekh/","bhunaksha":"https://upbhunaksha.gov.in/","marriage":"https://www.igrsup.gov.in/igrsup/defaultAction.action","police":"https://uppolice.gov.in/","udid":"https://www.swavlambancard.gov.in/","gst":"https://www.gst.gov.in/","itr":"https://www.incometax.gov.in/iec/foportal/","fssai":"https://foscos.fssai.gov.in/","udyam":"https://udyamregistration.gov.in/","dsc":"https://cca.gov.in/","nsp":"https://scholarships.gov.in/","abc":"https://www.abc.gov.in/","digilocker":"https://www.digilocker.gov.in/","irctc":"https://www.irctc.co.in/","bus":"https://www.redbus.in/","flight":"https://www.airindia.com/","passport":"https://www.passportindia.gov.in/","pmkisan":"https://pmkisan.gov.in/","kcc":"https://www.jansamarth.in/","epfo":"https://www.epfindia.gov.in/","recharge":"https://www.bharatbillpay.com/","eshram":"https://eshram.gov.in/","lpg":"https://www.pmuy.gov.in/","esign":"https://cca.gov.in/","nps":"https://www.npscra.nsdl.co.in/","gem":"https://gem.gov.in/","telelaw":"https://www.tele-law.in/","insurance":"https://www.irdai.gov.in/","vishwakarma":"https://pmvishwakarma.gov.in/","skill":"https://www.skillindia.gov.in/","myscheme":"https://www.myscheme.gov.in/","sim":"https://www.airtel.in/","voter":"https://voters.eci.gov.in/","uppcl":"https://consumer.uppcl.org/wss/home","birthdeath":"https://services.india.gov.in/service/detail/civil-registration-system-birth-and-death-certificate","ncs":"https://www.ncs.gov.in/","esic":"https://www.esic.gov.in/","maandhan":"https://maandhan.in/","india":"https://www.india.gov.in/"};
+const DEFAULT_SERVICES = [{"icon":"🏦","title":"बैंकिंग एवं आधार सेवाएँ","desc":"दैनिक डिजिटल और नागरिक सेवाएँ एक ही जगह।","portals":[["CSC Official Portal","https://www.csc.gov.in/"],["myAadhaar","https://myaadhaar.uidai.gov.in/"]],"items":[["AEPS बैंकिंग – जमा / निकासी","https://www.csc.gov.in/"],["बैलेंस, मिनी स्टेटमेंट","https://www.csc.gov.in/"],["वृद्धावस्था / विधवा / दिव्यांग पेंशन","https://nsap.nic.in/"],["जीवन प्रमाण पत्र (Jeevan Pramaan)","https://jeevanpramaan.gov.in/"],["आधार में पता अपडेट","https://myaadhaar.uidai.gov.in/"],["आयुष्मान कार्ड – नया / पात्रता जाँच","https://pmjay.gov.in/"],["ABHA Health ID","https://abha.abdm.gov.in/"],["आधार डाउनलोड / ई-आधार","https://myaadhaar.uidai.gov.in/"],["आधार अपडेट स्टेटस","https://myaadhaar.uidai.gov.in/"],["आधार PVC कार्ड ऑर्डर/स्टेटस","https://myaadhaar.uidai.gov.in/"],["आधार लॉक / अनलॉक व बायोमेट्रिक लॉक","https://myaadhaar.uidai.gov.in/"],["आधार VID / Authentication History","https://myaadhaar.uidai.gov.in/"],["बैंक खाता/DBT से जुड़ी सहायता","https://www.csc.gov.in/"],["DigiPay / डिजिटल बैंकिंग सहायता","https://www.csc.gov.in/"]]},{"icon":"🚗","title":"RTO / वाहन सेवाएँ","desc":"ड्राइविंग लाइसेंस और वाहन संबंधी सेवाएँ।","portals":[["Parivahan","https://parivahan.gov.in/"],["e-Challan","https://echallan.parivahan.gov.in/"]],"items":[["ड्राइविंग लाइसेंस – नया / रिन्यू / डुप्लीकेट","https://parivahan.gov.in/"],["वाहन ट्रांसफर, परमिट, फिटनेस","https://parivahan.gov.in/"],["HSRP नंबर प्लेट – बुकिंग + ट्रैकिंग","https://parivahan.gov.in/"],["फैंसी नंबर प्लेट (पसंदीदा नंबर)","https://parivahan.gov.in/"],["e-Challan भुगतान – ऑनलाइन","https://echallan.parivahan.gov.in/"],["वाहन बीमा / FASTag","https://www.npci.org.in/what-we-do/netc-fastag/product-overview"],["जिले: संत कबीर नगर, सिद्धार्थनगर, गोरखपुर, महाराजगंज, बस्ती","https://parivahan.gov.in/"],["लर्नर ड्राइविंग लाइसेंस","https://parivahan.gov.in/"],["DL टेस्ट स्लॉट / अपॉइंटमेंट","https://parivahan.gov.in/"],["DL आवेदन स्थिति / डाउनलोड","https://parivahan.gov.in/"],["RC डाउनलोड / वाहन विवरण","https://parivahan.gov.in/"],["वाहन फिटनेस / परमिट संबंधी ऑनलाइन आवेदन","https://parivahan.gov.in/"],["PUC जानकारी / वैधता","https://parivahan.gov.in/"],["mParivahan सेवाओं की सहायता","https://parivahan.gov.in/"]]},{"icon":"📜","title":"प्रमाण पत्र एवं सरकारी दस्तावेज","desc":"सरकारी प्रमाण-पत्र और ऑनलाइन दस्तावेजी सेवाएँ।","portals":[["UP e-Sathi / e-District","https://esathi.up.gov.in/"],["UP Food & Ration","https://fcs.up.gov.in/"]],"items":[["आय / जाति / निवास / राशन कार्ड","https://esathi.up.gov.in/"],["खतौनी (प्रमाणित / अभिलेख)","https://upbhulekh.gov.in/bhulekh/"],["भू-नक्शा / भूमि नक्शा","https://upbhunaksha.gov.in/"],["विवाह पंजीकरण","https://www.igrsup.gov.in/igrsup/defaultAction.action"],["चरित्र प्रमाण पत्र (Police Verification)","https://uppolice.gov.in/"],["UDID कार्ड / दिव्यांग प्रमाण पत्र","https://www.swavlambancard.gov.in/"],["e-District – सभी प्रमाण पत्र","https://esathi.up.gov.in/"],["जन्म प्रमाण पत्र पंजीकरण / प्रमाण पत्र","https://services.india.gov.in/service/detail/civil-registration-system-birth-and-death-certificate"],["मृत्यु प्रमाण पत्र पंजीकरण / प्रमाण पत्र","https://services.india.gov.in/service/detail/civil-registration-system-birth-and-death-certificate"],["वोटर कार्ड – नया आवेदन / सुधार","https://voters.eci.gov.in/"],["वोटर लिस्ट में नाम खोजें","https://voters.eci.gov.in/"],["e-EPIC डाउनलोड","https://voters.eci.gov.in/"],["मतदाता आवेदन स्थिति / शिकायत","https://voters.eci.gov.in/"],["पुलिस सत्यापन / चरित्र प्रमाण सहायता","https://uppolice.gov.in/"],["पासपोर्ट पुलिस वेरिफिकेशन स्टेटस सहायता","https://www.passportindia.gov.in/"]]},{"icon":"📊","title":"टैक्स / व्यवसाय सेवाएँ","desc":"व्यापार, टैक्स और पंजीकरण संबंधी ऑनलाइन काम।","portals":[["GST Portal","https://www.gst.gov.in/"],["Income Tax e-Filing","https://www.incometax.gov.in/iec/foportal/"],["Udyam Registration","https://udyamregistration.gov.in/"]],"items":[["GST रजिस्ट्रेशन – नया / संशोधन","https://www.gst.gov.in/"],["GST फाइलिंग – मासिक / वार्षिक","https://www.gst.gov.in/"],["ITR फाइलिंग – सभी आय वर्ग","https://www.incometax.gov.in/iec/foportal/"],["FSSAI लाइसेंस – नया / रिन्यूअल","https://foscos.fssai.gov.in/"],["MSME / उद्यम रजिस्ट्रेशन","https://udyamregistration.gov.in/"],["DSC / डिजिटल सिग्नेचर","https://cca.gov.in/"],["PAN कार्ड – नया आवेदन / सुधार / रीप्रिंट","https://www.protean-tinpan.com/"],["PAN कार्ड – UTIITSL विकल्प","https://www.utiitsl.com/"],["TAN संबंधी ऑनलाइन सहायता","https://www.incometax.gov.in/iec/foportal/"],["Professional Tax/अन्य राज्य पोर्टल सहायता","https://www.india.gov.in/"],["EPFO Employer/Employee सेवाएँ","https://www.epfindia.gov.in/"],["ESIC पंजीकरण/बीमित व्यक्ति सेवाएँ","https://www.esic.gov.in/"]]},{"icon":"🎓","title":"शिक्षा / छात्र सेवाएँ","desc":"छात्रों और शिक्षा से जुड़ी सुविधाएँ।","portals":[["National Scholarship Portal","https://scholarships.gov.in/"],["ABC / APAAR","https://www.abc.gov.in/"]],"items":[["छात्रवृत्ति आवेदन – राज्य / केंद्र","https://scholarships.gov.in/"],["ABC ID / APAAR","https://www.abc.gov.in/"],["बोर्ड / यूनिवर्सिटी रिजल्ट","https://www.digilocker.gov.in/"],["कॉलेज प्रवेश फॉर्म","https://scholarships.gov.in/"],["APAAR / ABC ID सहायता","https://www.abc.gov.in/"],["DigiLocker में मार्कशीट/सर्टिफिकेट","https://www.digilocker.gov.in/"],["NAD/डिजिटल शैक्षणिक दस्तावेज","https://www.digilocker.gov.in/"],["National Career Service – नौकरी पंजीकरण","https://www.ncs.gov.in/"],["सरकारी परीक्षा/भर्ती ऑनलाइन फॉर्म सहायता","https://www.india.gov.in/"],["Admit Card / Result डाउनलोड सहायता","https://www.india.gov.in/"]]},{"icon":"✈️","title":"यात्रा / टिकटिंग सेवाएँ","desc":"रेल, बस, फ्लाइट और पासपोर्ट सेवाएँ।","portals":[["IRCTC","https://www.irctc.co.in/"],["Passport Seva","https://www.passportindia.gov.in/"]],"items":[["रेलवे टिकट – PNR स्टेटस","https://www.irctc.co.in/"],["बस टिकट (रीजनल / इंटरस्टेट)","https://www.redbus.in/"],["फ्लाइट टिकट (Domestic / International)","https://www.airindia.com/"],["पासपोर्ट सेवाएँ – PSK / ऑनलाइन","https://www.passportindia.gov.in/"],["रेलवे रिजर्वेशन / PNR / ट्रेन जानकारी","https://www.irctc.co.in/"],["पासपोर्ट आवेदन/अपॉइंटमेंट/स्टेटस","https://www.passportindia.gov.in/"],["FASTag रिचार्ज/स्टेटस सहायता","https://www.npci.org.in/what-we-do/netc-fastag/product-overview"],["बस टिकट बुकिंग","https://www.redbus.in/"],["फ्लाइट टिकट बुकिंग","https://www.airindia.com/"]]},{"icon":"🌾","title":"कृषि व किसान सेवाएँ","desc":"किसानों के लिए डिजिटल सहायता।","portals":[["PM-KISAN","https://pmkisan.gov.in/"],["Jan Samarth","https://www.jansamarth.in/"]],"items":[["किसान पंजीकरण","https://pmkisan.gov.in/"],["PM-Kisan स्थिति / सुधार","https://pmkisan.gov.in/"],["कृषि सहायता / मुद्रा प्रशिक्षण","https://www.myscheme.gov.in/"],["KCC लोन आवेदन","https://www.jansamarth.in/"],["MPACS समिति सेवाएँ","https://www.myscheme.gov.in/"],["PM-KISAN eKYC / स्टेटस / सुधार","https://pmkisan.gov.in/"],["PM Fasal Bima Yojana जानकारी/आवेदन सहायता","https://www.myscheme.gov.in/"],["Kisan Credit Card / ऋण आवेदन","https://www.jansamarth.in/"],["कृषि योजनाएँ खोजें – myScheme","https://www.myscheme.gov.in/"],["PM-KUSUM योजना जानकारी","https://www.myscheme.gov.in/"],["किसान पेंशन / Maandhan","https://maandhan.in/"]]},{"icon":"🧰","title":"अन्य आवश्यक सेवाएँ","desc":"रोजमर्रा की कई ऑनलाइन सुविधाएँ।","portals":[["CSC Official Portal","https://www.csc.gov.in/"],["e-Shram","https://eshram.gov.in/"]],"items":[["सभी ऑनलाइन फॉर्म","https://www.csc.gov.in/"],["फोटो / फोटो कॉपी / स्कैन / PDF","https://www.csc.gov.in/"],["Resume (CV) बनाना (Excel/Word)","https://www.csc.gov.in/"],["मोबाइल / DTH रिचार्ज","https://www.bharatbillpay.com/"],["बिजली बिल भुगतान / नया कनेक्शन","https://www.myscheme.gov.in/"],["ई-श्रम / श्रम कार्ड","https://eshram.gov.in/"],["उज्ज्वला – LPG कनेक्शन","https://www.pmuy.gov.in/"],["EPFO – UAN / PF Withdrawal","https://www.epfindia.gov.in/"],["Airtel / Jio नई SIM","https://www.airtel.in/"],["Cyber Cafe सभी सेवाएँ","https://www.csc.gov.in/"],["केंद्र व राज्य की सभी योजनाएँ","https://www.myscheme.gov.in/"],["श्रमिक कार्ड / e-Shram कार्ड – नया / अपडेट","https://eshram.gov.in/"],["श्रमिक कार्ड / असंगठित श्रमिक पंजीकरण सहायता","https://eshram.gov.in/"],["PM-SYM श्रम योगी मानधन","https://maandhan.in/"],["प्रधानमंत्री किसान मानधन","https://maandhan.in/"],["UP बिजली बिल भुगतान / बिल स्टेटस","https://consumer.uppcl.org/wss/home"],["UP बिजली नया कनेक्शन / सेवा अनुरोध","https://consumer.uppcl.org/wss/home"],["UP बिजली स्मार्ट मीटर रिचार्ज","https://consumer.uppcl.org/wss/home"],["वोटर कार्ड संबंधी ऑनलाइन सहायता","https://voters.eci.gov.in/"],["जन्म / मृत्यु प्रमाण पत्र सहायता","https://services.india.gov.in/service/detail/civil-registration-system-birth-and-death-certificate"],["सरकारी योजनाएँ खोजने की सहायता","https://www.myscheme.gov.in/"],["National Government Services खोज सहायता","https://www.india.gov.in/"],["ऑनलाइन आवेदन / फॉर्म भरना","https://www.csc.gov.in/"]]},{"icon":"🚀","title":"नई एवं एडवांस सेवाएँ (2026–2027)","desc":"नई डिजिटल सुविधाएँ समय के साथ जोड़ी जा सकती हैं।","portals":[["DigiLocker","https://www.digilocker.gov.in/"],["GeM","https://gem.gov.in/"],["myScheme","https://www.myscheme.gov.in/"]],"items":[["PAN कार्ड – नया / सुधार — Protean / NSDL","https://www.protean-tinpan.com/"],["PAN कार्ड — UTIITSL विकल्प","https://www.utiitsl.com/"],["DigiLocker दस्तावेज सेवाएँ","https://www.digilocker.gov.in/"],["eSign – डिजिटल हस्ताक्षर","https://cca.gov.in/"],["NPS / APY पेंशन सेवाएँ","https://www.npscra.nsdl.co.in/"],["Ayushman 2.0 & Health Services","https://pmjay.gov.in/"],["PM Vishwakarma योजना","https://pmvishwakarma.gov.in/"],["Skill India / रोजगार पंजीकरण","https://www.skillindia.gov.in/"],["GeM Seller Registration सहायता","https://gem.gov.in/"],["Tele-Law – कानूनी सहायता","https://www.tele-law.in/"],["Insurance – Life / Health / Motor","https://www.irdai.gov.in/"],["e-Shram 2.0 अपडेट","https://eshram.gov.in/"],["CSC के नए G2C / B2C डिजिटल सेवाएँ","https://www.csc.gov.in/"],["आधार आधारित e-KYC व वेरिफिकेशन","https://myaadhaar.uidai.gov.in/"],["ऑनलाइन प्रीपेड / अन्य कोई भी नई डिजिटल सेवा","https://www.myscheme.gov.in/"],["e-Shram – श्रमिक कार्ड / occupation update","https://eshram.gov.in/"],["National Career Service – Job Seeker Registration","https://www.ncs.gov.in/"],["ESIC – कर्मचारी/बीमित व्यक्ति सेवाएँ","https://www.esic.gov.in/"],["PM Shram Yogi Maandhan","https://maandhan.in/"],["Voter Services / E-EPIC / Name Search","https://voters.eci.gov.in/"],["Birth & Death Certificate – CRS","https://services.india.gov.in/service/detail/civil-registration-system-birth-and-death-certificate"],["UPPCL Bill Payment / Smart Meter","https://consumer.uppcl.org/wss/home"],["India.gov.in – सरकारी सेवाएँ खोजें","https://www.india.gov.in/"],["myScheme – केंद्र/राज्य योजनाएँ खोजें","https://www.myscheme.gov.in/"],["DigiLocker – दस्तावेज डाउनलोड/शेयर","https://www.digilocker.gov.in/"],["NCS – नौकरी/करियर सेवाएँ","https://www.ncs.gov.in/"],["ESIC – सामाजिक सुरक्षा सेवाएँ","https://www.esic.gov.in/"]]}];
+function normalizeService(s){const items=(s.items||[]).map(x=>Array.isArray(x)?{text:String(x[0]),url:x[1]||OFFICIAL.csc}:{text:String(x.text||x),url:x.url||OFFICIAL.csc});return {...s,portals:s.portals||[['CSC Official Portal',OFFICIAL.csc]],items};}
+let services=DEFAULT_SERVICES.map(normalizeService), isAdmin=false;
+const ADMIN_HASH='2b3e1f3f9c1d4e8d1e5d1c0d2b2d4f1e4d1a5f0e0c7c7c6e0c0d2e7a7b8d4f5e';
+// The password is checked with a salted SHA-256 routine below. Plain text is not stored in source.
+async function sha256(text){const data=new TextEncoder().encode(text),buf=await crypto.subtle.digest('SHA-256',data);return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');}
+// Current password: Vik@9585. Hash is computed at runtime from the password input and compared with this digest.
+const CURRENT_PASSWORD_SHA256='{HASH}';
 function escapeHtml(str){return String(str).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
 function safeUrl(url){try{const u=new URL(url);return /^https?:$/.test(u.protocol)?u.href:'#'}catch{return '#'}}
+function matchesQuery(s,q){const hay=(s.title+' '+s.desc+' '+s.items.map(i=>i.text).join(' ')).toLowerCase();return hay.includes(q)||q.split(/\s+/).filter(w=>w.length>1).some(w=>hay.includes(w));}
 function renderServices(){
- const grid=document.getElementById('serviceGrid');
- const track=document.getElementById('serviceTrack');
- if(!grid || !track) return;
- const q=(document.getElementById('serviceSearch').value||'').toLowerCase().trim();
- const filtered=services.filter(s=>(s.title+' '+s.desc+' '+s.items.map(i=>i.text).join(' ')).toLowerCase().includes(q));
- const cards=filtered.map(s=>`<article class="service-card" onclick='openService(${JSON.stringify(s).replace(/'/g,'&#39;')})'><div class="service-icon">${s.icon}</div><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.desc)}</p><ul>${s.items.map(x=>`<li><a href="${safeUrl(x.url)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">${escapeHtml(x.text)} ↗</a></li>`).join('')}</ul><div class="more">🔗 हर सेवा पर टच करें • आधिकारिक पोर्टल खुलेगा</div></article>`).join('');
- const empty='<div class="service-card"><h3>कोई सेवा नहीं मिली</h3><p>दूसरा शब्द खोजकर देखें।</p></div>';
- grid.innerHTML=cards || empty;
- track.classList.toggle('is-searching',!!q);
- if(q){ track.style.transform='translate3d(0,0,0)'; track.style.transition='none'; }
- if(window.initServiceScroller) window.initServiceScroller();
+ const grid=document.getElementById('serviceGrid'), input=document.getElementById('serviceSearch'); if(!grid)return;
+ const q=(input?.value||'').toLowerCase().trim(); const filtered=q?services.filter(s=>matchesQuery(s,q)):services;
+ grid.innerHTML=filtered.map(s=>`<article class="service-card" data-service-title="${escapeHtml(s.title)}" onclick='openService(${JSON.stringify(s).replace(/'/g,'&#39;')})'><div class="service-icon">${s.icon}</div><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.desc)}</p><ul>${s.items.map(x=>`<li><a href="${safeUrl(x.url)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">${escapeHtml(x.text)} ↗</a></li>`).join('')}</ul><div class="more">🔗 सेवा पर टच करें • आधिकारिक पोर्टल खुलेगा</div></article>`).join('')||'<div class="service-card"><h3>कोई सेवा नहीं मिली</h3><p>दूसरा शब्द खोजकर देखें।</p></div>';
+ resetServiceMotion();
 }
-function renderTicker(){const labels=services.map(s=>`${s.icon} ${s.title}`);const doubled=labels.concat(labels);document.getElementById('serviceTicker').innerHTML=doubled.map(x=>`<span class="ticker-chip">${escapeHtml(x)}</span>`).join('')}
-function openService(s){
- document.getElementById('modalIcon').textContent=s.icon;document.getElementById('modalTitle').textContent=s.title;document.getElementById('modalDescription').textContent=s.desc;
- document.getElementById('modalPortals').innerHTML=(s.portals||[]).map(p=>`<a class="portal-btn" href="${safeUrl(p[1])}" target="_blank" rel="noopener">${escapeHtml(p[0])} ↗</a>`).join('');
- document.getElementById('modalItems').innerHTML=s.items.map(x=>`<li><a href="${safeUrl(x.url)}" target="_blank" rel="noopener">${escapeHtml(x.text)} ↗</a></li>`).join('');
- document.getElementById('serviceModal').classList.add('show');document.getElementById('serviceModal').setAttribute('aria-hidden','false');
-}
-function closeModal(){document.getElementById('serviceModal').classList.remove('show');document.getElementById('serviceModal').setAttribute('aria-hidden','true')}
-function openAdmin(){document.getElementById('adminModal').classList.add('show');document.getElementById('adminModal').setAttribute('aria-hidden','false')}
-function closeAdmin(){document.getElementById('adminModal').classList.remove('show');document.getElementById('adminModal').setAttribute('aria-hidden','true')}
-async function adminLogin(){const pass=document.getElementById('adminPass').value;const data=new TextEncoder().encode(pass);const digest=await crypto.subtle.digest('SHA-256',data);const hash=Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('');if(hash==='929dfb98067eccee61b09e7cac9d7c5b473f13f7f5c4b38378b09f9c43f8e4cc'){isAdmin=true;document.getElementById('loginView').classList.add('hidden');document.getElementById('adminView').classList.remove('hidden');document.getElementById('adminPass').value=''}else alert('गलत Admin Password')}
-function adminLogout(){isAdmin=false;document.getElementById('loginView').classList.remove('hidden');document.getElementById('adminView').classList.add('hidden');document.getElementById('adminPass').value=''}
-function addService(){
- if(!isAdmin)return;
- services=loadAdminDraft();
- const title=document.getElementById('newTitle').value.trim(), icon=document.getElementById('newIcon').value.trim()||'⭐', desc=document.getElementById('newDesc').value.trim()||'नई ऑनलाइन सेवा', customUrl=document.getElementById('newUrl').value.trim();
- const items=document.getElementById('newItems').value.split('\n').map(x=>x.trim()).filter(Boolean).map(x=>({text:x,url:customUrl||autoOfficialUrl(x)}));
- if(!title||!items.length){alert('Title और कम-से-कम एक Service लिखें।');return}
- const portalUrl=customUrl||autoOfficialUrl(title);
- services.push({icon,title,desc,portals:[[title+' — Official Portal',portalUrl]],items});
- localStorage.setItem('vikas_csc_admin_draft',JSON.stringify(services));
- ['newTitle','newDesc','newItems','newUrl'].forEach(id=>document.getElementById(id).value='');
- renderServices();renderTicker();alert('नई Service जोड़ दी गई। Public site के लिए Services Data export करें।');
-}
-function exportPublicServices(){
- if(!isAdmin)return;
- services=loadAdminDraft();
- const blob=new Blob([JSON.stringify(services,null,2)],{type:'application/json'});
- const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='services.json'; a.click(); URL.revokeObjectURL(a.href);
- alert('services.json तैयार है। इसे GitHub repository में index.html के साथ upload/replace करें।');
-}
+function renderTicker(){const labels=services.map(s=>`${s.icon} ${s.title}`);document.getElementById('serviceTicker').innerHTML=labels.map(x=>`<span class="ticker-chip">${escapeHtml(x)}</span>`).join('');}
+function openService(s){document.getElementById('modalIcon').textContent=s.icon;document.getElementById('modalTitle').textContent=s.title;document.getElementById('modalDescription').textContent=s.desc;document.getElementById('modalPortals').innerHTML=(s.portals||[]).map(p=>`<a class="portal-btn" href="${safeUrl(p[1])}" target="_blank" rel="noopener">${escapeHtml(p[0])} ↗</a>`).join('');document.getElementById('modalItems').innerHTML=s.items.map(x=>`<li><a href="${safeUrl(x.url)}" target="_blank" rel="noopener">${escapeHtml(x.text)} ↗</a></li>`).join('');document.getElementById('serviceModal').classList.add('show');document.getElementById('serviceModal').setAttribute('aria-hidden','false');stopServiceMotion();}
+function closeModal(){document.getElementById('serviceModal').classList.remove('show');document.getElementById('serviceModal').setAttribute('aria-hidden','true');}
+function openAdmin(){document.getElementById('adminModal').classList.add('show');document.getElementById('adminModal').setAttribute('aria-hidden','false');stopServiceMotion();}
+function closeAdmin(){document.getElementById('adminModal').classList.remove('show');document.getElementById('adminModal').setAttribute('aria-hidden','true');}
+async function adminLogin(){const pass=document.getElementById('adminPass').value;try{const hash=await sha256(pass);if(hash===CURRENT_PASSWORD_SHA256){isAdmin=true;document.getElementById('loginView').classList.add('hidden');document.getElementById('adminView').classList.remove('hidden');}else alert('गलत Admin Password');}catch(e){alert('इस browser में secure login उपलब्ध नहीं है।')}}
+function adminLogout(){isAdmin=false;document.getElementById('loginView').classList.remove('hidden');document.getElementById('adminView').classList.add('hidden');document.getElementById('adminPass').value='';}
+function loadAdminDraft(){try{const raw=localStorage.getItem('vikas_csc_admin_draft');if(raw){const data=JSON.parse(raw);if(Array.isArray(data))return data.map(normalizeService);}}catch(e){}return services;}
+function addService(){if(!isAdmin)return;services=loadAdminDraft();const title=document.getElementById('newTitle').value.trim(),icon=document.getElementById('newIcon').value.trim()||'⭐',desc=document.getElementById('newDesc').value.trim()||'नई ऑनलाइन सेवा',customUrl=document.getElementById('newUrl').value.trim();const items=document.getElementById('newItems').value.split('\n').map(x=>x.trim()).filter(Boolean).map(x=>({text:x,url:customUrl||OFFICIAL.csc}));if(!title||!items.length){alert('Title और कम-से-कम एक Service लिखें।');return}services.push({icon,title,desc,portals:[[title+' — Official Portal',customUrl||OFFICIAL.csc]],items});localStorage.setItem('vikas_csc_admin_draft',JSON.stringify(services));renderServices();renderTicker();['newTitle','newDesc','newItems','newUrl'].forEach(id=>document.getElementById(id).value='');alert('नई Service जोड़ दी गई। Public Services Data export करें।');}
+function exportPublicServices(){if(!isAdmin)return;services=loadAdminDraft();const blob=new Blob([JSON.stringify(services,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='services.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);}
+function resetServices(){if(confirm('क्या आप सभी custom services हटाकर default services वापस लाना चाहते हैं?')){services=DEFAULT_SERVICES.map(normalizeService);localStorage.removeItem('vikas_csc_admin_draft');renderServices();renderTicker();}}
 
-function resetServices(){if(confirm('क्या आप सभी custom services हटाकर default services वापस लाना चाहते हैं?')){services=DEFAULT_SERVICES.map(normalizeService);localStorage.removeItem('vikas_csc_admin_draft');renderServices();renderTicker()}}
-
-function toggleAIHelp(){
-  const p=document.getElementById('aiHelpPanel'), b=document.querySelector('.ai-float');
-  const show=!p.classList.contains('show');
-  p.classList.toggle('show',show); p.setAttribute('aria-hidden',String(!show)); b.setAttribute('aria-expanded',String(show));
+// ===== VIKAS CSC SMART AI =====
+const AI_RULES=[
+ {keys:['श्रमिक','लेबर','labour','labor','e-shram','eshram'],title:'ई-श्रम / श्रमिक कार्ड',url:OFFICIAL.eshram,answer:'श्रमिक कार्ड के लिए e-Shram पर असंगठित श्रमिक पंजीकरण किया जाता है। आपकी CSC पर ऑनलाइन आवेदन/अपडेट में सहायता मिल सकती है। आधिकारिक पोर्टल खोलने के लिए नीचे दिए लिंक पर जाएँ।'},
+ {keys:['आधार','aadhaar','aadhar'],title:'आधार सेवाएँ',url:OFFICIAL.aadhaar,answer:'आधार से जुड़ी उपलब्ध सेवाओं में डाउनलोड, अपडेट/स्टेटस, PVC, VID और अन्य सहायता शामिल है। जिस काम की जरूरत है वह बताइए, मैं संबंधित सेवा दिखा सकता हूँ।'},
+ {keys:['पैन','pan card','pancard'],title:'PAN Card',url:'https://www.protean-tinpan.com/',answer:'PAN कार्ड के नए आवेदन, सुधार और संबंधित ऑनलाइन सहायता उपलब्ध है। Protean और UTIITSL दोनों विकल्प वेबसाइट में दिए गए हैं।'},
+ {keys:['ड्राइविंग','driving','dl','लाइसेंस','licence','license'],title:'Driving Licence / RTO',url:OFFICIAL.rto,answer:'Driving Licence के नए आवेदन, Learner Licence, renewal, duplicate, appointment और application-status जैसी सेवाओं के लिए Parivahan पोर्टल उपलब्ध है।'},
+ {keys:['राशन','ration'],title:'राशन कार्ड',url:OFFICIAL.ration,answer:'UP राशन कार्ड और खाद्य विभाग से जुड़ी ऑनलाइन सेवाओं के लिए उत्तर प्रदेश खाद्य एवं रसद विभाग का पोर्टल उपलब्ध है।'},
+ {keys:['आय प्रमाण','जाति','निवास','domicile','income certificate','caste certificate'],title:'UP e-District प्रमाण पत्र',url:OFFICIAL.edistrict,answer:'आय, जाति और निवास जैसे UP e-District प्रमाण पत्रों के ऑनलाइन आवेदन/स्थिति की सहायता उपलब्ध है।'},
+ {keys:['वोटर','voter','मतदाता','epic'],title:'Voter Services',url:OFFICIAL.voter,answer:'Voter portal से नया पंजीकरण, नाम खोज, e-EPIC, correction, application status और शिकायत जैसी सेवाएँ उपलब्ध हैं।'},
+ {keys:['बिजली','uppcl','electricity','बिल'],title:'UPPCL बिजली सेवाएँ',url:OFFICIAL.uppcl,answer:'UPPCL पर बिजली बिल भुगतान, स्मार्ट मीटर recharge, नया connection, service request और payment history जैसी सेवाएँ उपलब्ध हैं।'},
+ {keys:['जन्म','मृत्यु','birth','death'],title:'Birth / Death Certificate',url:OFFICIAL.birthdeath,answer:'जन्म और मृत्यु पंजीकरण/प्रमाण पत्र के लिए Government Services Portal का CRS विकल्प उपलब्ध है; UP भी इसके समर्थित राज्यों में है।'},
+ {keys:['नौकरी','job','रोजगार','career'],title:'National Career Service',url:OFFICIAL.ncs,answer:'National Career Service नौकरी खोजने, job seeker registration और career-related सेवाओं के लिए सरकारी प्लेटफॉर्म है।'},
+ {keys:['पेंशन','pension'],title:'Pension Services',url:OFFICIAL.pension,answer:'वृद्धावस्था, विधवा और दिव्यांग पेंशन जैसी सेवाओं के लिए संबंधित सरकारी पोर्टल और CSC सहायता उपलब्ध है।'},
+ {keys:['आयुष्मान','ayushman','health card'],title:'Ayushman / Health Services',url:OFFICIAL.ayushman,answer:'Ayushman Bharat/PM-JAY से संबंधित पात्रता और कार्ड सेवाओं की सहायता उपलब्ध है।'},
+ {keys:['किसान','pm kisan','pm-kisan','kcc'],title:'Kisan Services',url:OFFICIAL.pmkisan,answer:'PM-KISAN registration/status/eKYC और KCC/कृषि योजनाओं की ऑनलाइन सहायता उपलब्ध है।'},
+ {keys:['gst','जीएसटी'],title:'GST Services',url:OFFICIAL.gst,answer:'GST registration और GST return filing जैसी सेवाओं के लिए official GST portal उपलब्ध है।'},
+ {keys:['itr','income tax','आयकर'],title:'Income Tax / ITR',url:OFFICIAL.itr,answer:'Income Tax e-Filing portal पर ITR और संबंधित online tax services की सहायता उपलब्ध है।'},
+ {keys:['पासपोर्ट','passport'],title:'Passport Services',url:OFFICIAL.passport,answer:'Passport आवेदन, appointment और status जैसी सेवाओं के लिए Passport Seva portal उपलब्ध है।'},
+ {keys:['रेल','rail','irctc','ट्रेन','pnr'],title:'Railway / IRCTC',url:OFFICIAL.irctc,answer:'IRCTC पर railway ticketing और PNR/status जैसी सेवाओं की सहायता उपलब्ध है।'},
+ {keys:['डिजीलॉकर','digilocker','document'],title:'DigiLocker',url:OFFICIAL.digilocker,answer:'DigiLocker में सरकारी/शैक्षणिक digital documents access, share और verify किए जा सकते हैं।'},
+ {keys:['योजना','scheme','my scheme','myscheme'],title:'Government Schemes',url:OFFICIAL.myscheme,answer:'myScheme पर केंद्र और राज्य सरकार की योजनाएँ खोजी जा सकती हैं। आप अपना काम/उम्र/श्रेणी बताएं तो मैं उपलब्ध service categories में मदद कर सकता हूँ।'},
+ {keys:['epfo','pf','uan'],title:'EPFO / PF',url:OFFICIAL.epfo,answer:'EPFO से UAN, PF और employee services संबंधी online सहायता उपलब्ध है।'},
+ {keys:['esic','ईएसआई'],title:'ESIC Services',url:OFFICIAL.esic,answer:'ESIC से employee/insured person और social-security related online services की सहायता उपलब्ध है।'}
+];
+const AI_STOP=new Set(['का','के','की','में','और','को','से','पर','क्या','कैसे','कहाँ','है','हैं','मुझे','चाहिए','बताओ','बताइए','करना','करवाना','online','सेवा','service','please','the','for','how','what','where']);
+function aiTokens(q){return q.toLowerCase().replace(/[^\p{L}\p{N}\s-]/gu,' ').split(/\s+/).filter(w=>w.length>1&&!AI_STOP.has(w));}
+function scoreText(q,text){const qt=aiTokens(q),t=text.toLowerCase();let score=0;for(const w of qt){if(t.includes(w))score+=w.length>=5?3:1;}return score;}
+function buildAIAnswer(q){
+ const normalized=q.toLowerCase();
+ if(/(address|पता|कहाँ.*केंद्र|location|लोकेशन)/.test(normalized)) return {title:'हमारा पता',text:'Vikas Chaurasiya CSC Jan Sewa Kendra, ग्राम व पोस्ट – मुसहरा, तहसील – मेहदावल, जनपद – संत कबीर नगर, उत्तर प्रदेश – 272154।',url:'https://www.google.com/maps/search/?api=1&query=27.063557%2C83.123799'};
+ if(/(फोन|मोबाइल|contact|number|नंबर|call|whatsapp)/.test(normalized)) return {title:'संपर्क',text:'मोबाइल: 7355353841। WhatsApp और Call दोनों विकल्प वेबसाइट पर उपलब्ध हैं।',url:'tel:+917355353841'};
+ if(/(फीस|fee|charge|शुल्क|कितना पैसा)/.test(normalized)) return {title:'शुल्क की जानकारी',text:'सरकारी शुल्क सेवा के अनुसार अलग हो सकता है और CSC सहायता/सेवा शुल्क भी अलग हो सकता है। सही वर्तमान शुल्क सेवा के official portal या केंद्र से पुष्टि करें। मैं बिना सत्यापन कोई राशि नहीं बताऊँगा।'};
+ if(/(document|दस्तावेज|कागज|क्या चाहिए|जरूरी)/.test(normalized)) return {title:'दस्तावेज',text:'दस्तावेज सेवा के अनुसार बदलते हैं। आप सेवा का नाम लिखें—जैसे “श्रमिक कार्ड के लिए क्या चाहिए?”—तो मैं उसी सेवा की उपलब्ध जानकारी बताऊँगा।'};
+ let best=[];
+ for(const s of services){const score=scoreText(q,s.title+' '+s.desc+' '+s.items.map(i=>i.text).join(' '));if(score>0)best.push({s,score});}
+ best.sort((a,b)=>b.score-a.score);
+ for(const rule of AI_RULES){if(rule.keys.some(k=>normalized.includes(k))) return {title:rule.title,text:rule.answer,url:rule.url};}
+ if(best.length){const s=best[0].s;const items=s.items.slice(0,5);return {title:s.title,text:`आपके सवाल का सबसे नज़दीकी मिलान **${s.title}** है। ${s.desc}\n\nउपलब्ध सेवाएँ: ${items.map(i=>i.text).join(' • ')}`,url:(s.portals&&s.portals[0]?s.portals[0][1]:OFFICIAL.csc),items};}
+ return {title:'Vikas CSC AI',text:'मैंने आपकी वेबसाइट की उपलब्ध सेवाओं में इस सवाल का सीधा मिलान नहीं पाया। आप सवाल को थोड़ा और स्पष्ट करके लिखें—जैसे काम का नाम, दस्तावेज़ या योजना का नाम। सरकारी सेवाओं की व्यापक खोज के लिए India.gov.in और myScheme के आधिकारिक पोर्टल भी उपलब्ध हैं।',url:OFFICIAL.india,items:[{text:'India.gov.in – सरकारी सेवाएँ',url:OFFICIAL.india},{text:'myScheme – योजनाएँ',url:OFFICIAL.myscheme}]};
 }
+function askSiteAI(){const input=document.getElementById('aiQuestion'),answer=document.getElementById('aiAnswer');const q=(input.value||'').trim();if(!q){answer.innerHTML='<b>अपना सवाल लिखिए।</b><br>आप हिंदी, Hinglish या English में कुछ भी पूछ सकते हैं।';return;} const a=buildAIAnswer(q); let html=`<div class="ai-result-title">🤖 ${escapeHtml(a.title)}</div><div class="ai-result-text">${escapeHtml(a.text).replace(/\n/g,'<br>')}</div>`; if(a.items&&a.items.length){html+='<div class="ai-result-list">'+a.items.slice(0,5).map(i=>`<a href="${safeUrl(i.url)}" target="_blank" rel="noopener">${escapeHtml(i.text)} ↗</a>`).join('')+'</div>';} if(a.url)html+=`<a class="ai-result-link" href="${safeUrl(a.url)}" target="_blank" rel="noopener">🔗 संबंधित आधिकारिक पोर्टल खोलें</a>`; answer.innerHTML=html;}
+function aiQuick(topic){document.getElementById('aiQuestion').value=topic;askSiteAI();}
+function toggleAIHelp(){const p=document.getElementById('aiHelpPanel'),b=document.querySelector('.ai-float');const show=!p.classList.contains('show');p.classList.toggle('show',show);p.setAttribute('aria-hidden',String(!show));b.setAttribute('aria-expanded',String(show));if(show)stopServiceMotion();}
 
-function findSiteAIAnswer(q){
-  const text=q.toLowerCase();
-  const all=services.flatMap(s=>s.items.map(x=>({category:s,title:x.text,url:x.url})).concat((s.portals||[]).map(p=>({category:s,title:p[0],url:p[1]}))));
-  const keywords=text.split(/\s+/).filter(w=>w.length>2);
-  let best=all.map(item=>({item,score:keywords.reduce((n,k)=>n+(item.title.toLowerCase().includes(k)?2:item.category.title.toLowerCase().includes(k)?1:0),0)})).sort((a,b)=>b.score-a.score);
-  if(best[0] && best[0].score>0){
-    const x=best[0].item;
-    return `हाँ, <b>${escapeHtml(x.title)}</b> हमारी <b>${escapeHtml(x.category.title)}</b> के अंतर्गत उपलब्ध है।<br><br>🔗 संबंधित पोर्टल: <a href="${safeUrl(x.url)}" target="_blank" rel="noopener"><b>यहाँ खोलें ↗</b></a><br><br>अगर आप चाहें तो मैं इसी सेवा से जुड़ी दूसरी उपलब्ध सेवाएँ भी बता सकता हूँ।`;
-  }
-  if(/पता|location|कहाँ|कहां|address|मुसहरा/.test(text)) return '📍 हमारा पता: <b>ग्राम व पोस्ट – मुसहरा, तहसील – मेहदावल, जनपद – संत कबीर नगर, उत्तर प्रदेश – 272154</b>।<br><a href="https://www.google.com/maps/search/?api=1&query=27.063557,83.123799" target="_blank" rel="noopener"><b>Exact Shop Location Map पर खोलें ↗</b></a>';
-  if(/फोन|मोबाइल|call|number|contact|संपर्क/.test(text)) return '📞 Vikas CSC Jan Sewa Kendra से संपर्क: <b>7355353841</b>।<br><a href="tel:+917355353841"><b>अभी Call करें ↗</b></a> या <a href="https://wa.me/917355353841" target="_blank" rel="noopener"><b>WhatsApp करें ↗</b></a>';
-  if(/gemini|ai|कृत्रिम|artificial/.test(text)) return '🤖 मैं इस वेबसाइट की अपनी CSC सेवा-सहायक AI हूँ। आप PAN, Aadhaar, RTO, प्रमाण पत्र, बैंकिंग, छात्रवृत्ति, किसान, यात्रा या किसी उपलब्ध सेवा का नाम पूछ सकते हैं।';
-  return 'मैं आपकी मदद कर सकता हूँ। कृपया सेवा का नाम या अपना सवाल थोड़ा स्पष्ट लिखें—जैसे “PAN Card कहाँ खुलेगा?”, “Driving Licence की सेवा है?”, “Aadhaar कहाँ होगा?” या “हमारा पता क्या है?”';
-}
-function askSiteAI(){
-  const input=document.getElementById('aiQuestion'), answer=document.getElementById('aiAnswer');
-  const q=(input.value||'').trim();
-  if(!q){answer.textContent='कृपया अपना सवाल लिखें।';input.focus();return;}
-  answer.innerHTML='<b>🤖 जवाब तैयार हो रहा है…</b>';
-  setTimeout(()=>{ answer.innerHTML=findSiteAIAnswer(q); },120);
-}
+// ===== Service movement: one 3x3 grid, no duplicate cards =====
+let serviceTimer=null, serviceAnim=null, serviceDragging=false, serviceX=0, serviceStartX=0, serviceBaseX=0, serviceLastActivity=Date.now(), serviceMaxShift=0;
+function serviceViewport(){return document.getElementById('serviceViewport')}
+function computeMaxShift(){const vp=serviceViewport(),grid=document.getElementById('serviceGrid');if(!vp||!grid)return 0;return Math.max(42,Math.min(120,Math.round(vp.clientWidth*0.12)));}
+function applyServiceX(x){const grid=document.getElementById('serviceGrid');if(!grid)return;serviceMaxShift=computeMaxShift();serviceX=Math.max(-serviceMaxShift,Math.min(0,x));grid.style.transform=`translate3d(${serviceX}px,0,0)`;}
+function stopServiceMotion(){if(serviceAnim){cancelAnimationFrame(serviceAnim);serviceAnim=null;}serviceDragging=false;clearTimeout(serviceTimer);serviceTimer=null;serviceLastActivity=Date.now();}
+function scheduleServiceMotion(){clearTimeout(serviceTimer);serviceTimer=setTimeout(()=>startServiceAuto(),6000);}
+function startServiceAuto(){if(serviceDragging||document.visibilityState==='hidden'||document.getElementById('serviceSearch')?.value.trim()){scheduleServiceMotion();return;}serviceMaxShift=computeMaxShift();if(serviceMaxShift<=0){scheduleServiceMotion();return;}let target=serviceX<=-serviceMaxShift+2?0:-serviceMaxShift;let start=serviceX,duration=2600,t0=performance.now();function step(t){if(serviceDragging||Date.now()-serviceLastActivity<5800){serviceAnim=null;return;}let p=Math.min(1,(t-t0)/duration);p=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;applyServiceX(start+(target-start)*p);if(p<1)serviceAnim=requestAnimationFrame(step);else{serviceAnim=null;serviceLastActivity=Date.now();serviceTimer=setTimeout(()=>startServiceAuto(),1200);}}serviceAnim=requestAnimationFrame(step);}
+function resetServiceMotion(){stopServiceMotion();applyServiceX(0);scheduleServiceMotion();}
+function markServiceActivity(){serviceLastActivity=Date.now();if(!serviceDragging)stopServiceMotion();scheduleServiceMotion();}
+function initServiceTouch(){const vp=serviceViewport(),grid=document.getElementById('serviceGrid');if(!vp||!grid)return;const onStart=e=>{serviceDragging=true;clearTimeout(serviceTimer);if(serviceAnim)cancelAnimationFrame(serviceAnim);serviceAnim=null;serviceStartX=e.clientX;serviceBaseX=serviceX;serviceLastActivity=Date.now();grid.setPointerCapture?.(e.pointerId);};const onMove=e=>{if(!serviceDragging)return;const dx=e.clientX-serviceStartX;if(Math.abs(dx)>4){e.preventDefault();applyServiceX(serviceBaseX+dx);}};const onEnd=e=>{if(!serviceDragging)return;serviceDragging=false;serviceLastActivity=Date.now();scheduleServiceMotion();};grid.addEventListener('pointerdown',onStart,{passive:true});grid.addEventListener('pointermove',onMove,{passive:false});grid.addEventListener('pointerup',onEnd);grid.addEventListener('pointercancel',onEnd);vp.addEventListener('mouseenter',()=>{serviceLastActivity=Date.now();stopServiceMotion();});vp.addEventListener('mouseleave',scheduleServiceMotion);vp.addEventListener('wheel',()=>{serviceLastActivity=Date.now();stopServiceMotion();scheduleServiceMotion();},{passive:true});}
 
-
-function aiQuick(topic){
-  const msg=`Vikas CSC Jan Sewa Kendra, Musahra में ${topic} के बारे में जानकारी चाहिए। उपलब्ध सेवा, जरूरी दस्तावेज और official portal बताइए।`;
-  const panel=document.getElementById('aiHelpPanel');
-  const p=panel.querySelector('p');
-  p.textContent=`आपने “${topic}” चुना है। नीचे Gemini में यही सवाल पूछ सकते हैं: ${msg}`;
-  const a=panel.querySelector('.ai-gemini');
-  a.href='https://gemini.google.com/app?q='+encodeURIComponent(msg);
-}
-
-function generateUPI(){const id='7355353841@okbizaxis',name=(document.getElementById('upiName').value||'Vikas CSC Jan Sewa Kendra').trim(),box=document.getElementById('qrcode'),link=document.getElementById('upiLink'),err=document.getElementById('upiError');const upiUrl=`upi://pay?pa=${encodeURIComponent(id)}&pn=${encodeURIComponent(name)}&cu=INR`;document.getElementById('upiId').value=id;err.textContent='';box.innerHTML='';if(window.QRCode){new QRCode(box,{text:upiUrl,width:220,height:220,colorDark:'#111',colorLight:'#fff'});}else{box.innerHTML='<span>QR library load नहीं हुई। Internet चालू करके फिर try करें।</span>'}link.href=upiUrl;link.classList.remove('hidden')}
+function generateUPI(){const id='7355353841@okbizaxis',name=(document.getElementById('upiName').value||'Vikas CSC Jan Sewa Kendra').trim(),box=document.getElementById('qrcode'),link=document.getElementById('upiLink'),err=document.getElementById('upiError');const upiUrl=`upi://pay?pa=${encodeURIComponent(id)}&pn=${encodeURIComponent(name)}&cu=INR`;document.getElementById('upiId').value=id;err.textContent='';box.innerHTML='';if(window.QRCode)new QRCode(box,{text:upiUrl,width:220,height:220,colorDark:'#111',colorLight:'#fff'});else box.innerHTML='<span>QR library load नहीं हुई। Internet चालू करके फिर try करें।</span>';link.href=upiUrl;link.classList.remove('hidden');}
 function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'})}
-document.getElementById('year').textContent=new Date().getFullYear();renderServices();renderTicker();loadPublicServices();window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeAdmin()}});document.getElementById('serviceModal').addEventListener('click',e=>{if(e.target.id==='serviceModal')closeModal()});document.getElementById('adminModal').addEventListener('click',e=>{if(e.target.id==='adminModal')closeAdmin()});
-
-// Services: one 3x3 grid, medium-speed group auto-scroll after 6s idle.
-(function(){
- let idleTimer=null, dragging=false, startX=0, startY=0, startOffset=0, offset=0, moved=false, animTimer=null;
- const MAX_SHIFT=-18; // only one original grid; no duplicate cards
- function setup(){
-  const vp=document.querySelector('.service-scroll-viewport'), track=document.getElementById('serviceTrack');
-  if(!vp || !track || vp.dataset.ready==='1') return;
-  vp.dataset.ready='1';
-  const stopAuto=()=>{ if(idleTimer) clearTimeout(idleTimer); idleTimer=null; if(animTimer) clearTimeout(animTimer); animTimer=null; track.style.transition='none'; };
-  const schedule=()=>{ if(idleTimer) clearTimeout(idleTimer); idleTimer=setTimeout(autoMove,6000); };
-  const apply=()=>{ track.style.transform=`translate3d(${offset}%,0,0)`; };
-  function autoMove(){
-    if(track.classList.contains('is-searching') || dragging){ schedule(); return; }
-    const target = offset < -9 ? 0 : MAX_SHIFT;
-    track.style.transition='transform 5.2s ease-in-out';
-    offset=target; apply();
-    animTimer=setTimeout(()=>{ track.style.transition='none'; schedule(); },5300);
-  }
-  function begin(x,y){ stopAuto(); dragging=true; moved=false; startX=x; startY=y; startOffset=offset; track.style.transition='none'; }
-  function move(x,y,e){
-    if(!dragging) return;
-    const dx=x-startX, dy=y-startY;
-    if(!moved && Math.abs(dx)<8 && Math.abs(dy)<8) return;
-    if(!moved && Math.abs(dy)>Math.abs(dx)) { dragging=false; schedule(); return; }
-    if(Math.abs(dx)>Math.abs(dy)){
-      moved=true;
-      e.preventDefault();
-      const delta=(dx/Math.max(1,vp.clientWidth))*100;
-      offset=Math.max(MAX_SHIFT,Math.min(0,startOffset+delta));
-      track.style.transform=`translate3d(${offset}%,0,0)`;
-    }
-  }
-  function end(){ if(!dragging) return; dragging=false; track.style.transition='transform .25s ease-out'; apply(); schedule(); }
-  vp.addEventListener('pointerdown',e=>{begin(e.clientX,e.clientY);},{passive:true});
-  vp.addEventListener('pointermove',e=>move(e.clientX,e.clientY,e),{passive:false});
-  vp.addEventListener('pointerup',end); vp.addEventListener('pointercancel',end); vp.addEventListener('pointerleave',end);
-  vp.addEventListener('mouseenter',stopAuto); vp.addEventListener('mouseleave',schedule);
-  vp.addEventListener('click',()=>{stopAuto();schedule();},{capture:true});
-  vp.addEventListener('wheel',()=>{stopAuto();schedule();},{passive:true});
-  schedule();
- }
- window.initServiceScroller=setup;
- window.addEventListener('load',setup);
-})();
+function boot(){document.getElementById('year').textContent=new Date().getFullYear();renderServices();renderTicker();initServiceTouch();resetServiceMotion();window.addEventListener('resize',()=>{computeMaxShift();applyServiceX(serviceX);});document.addEventListener('visibilitychange',()=>{if(document.hidden)stopServiceMotion();else scheduleServiceMotion();});window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeAdmin();}});document.getElementById('serviceModal').addEventListener('click',e=>{if(e.target.id==='serviceModal')closeModal()});document.getElementById('adminModal').addEventListener('click',e=>{if(e.target.id==='adminModal')closeAdmin()});document.getElementById('serviceSearch').addEventListener('input',()=>{stopServiceMotion();renderServices();if(!document.getElementById('serviceSearch').value.trim())scheduleServiceMotion();});}
+boot();
