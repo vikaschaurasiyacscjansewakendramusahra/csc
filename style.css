@@ -240,3 +240,37 @@ body { touch-action: pan-x pan-y pinch-zoom !important; }
 }
 
 .districts .district-link{padding:7px 11px;border-radius:999px;background:#fff!important;border:1px solid #dfcfaa!important;color:#5e4c25!important;text-decoration:none;font-size:18px;font-weight:900;display:inline-block;transition:.2s}.districts .district-link:hover{transform:translateY(-2px);border-color:#c89b35!important;box-shadow:0 6px 16px rgba(120,83,5,.12)}
+
+/* FINAL: Make Ask AI label and assistant larger and clearer on desktop/mobile */
+.ai-float-label{display:block!important;font-size:16px!important;font-weight:900!important;line-height:1.1!important;margin-top:3px!important;letter-spacing:.2px!important}
+.ai-float-face{width:64px!important;height:64px!important}
+.ai-float{padding:8px 10px!important;min-width:86px!important}
+.ai-panel{width:min(480px,calc(100vw - 28px))!important;max-height:min(78vh,760px)!important;padding:18px!important;border-radius:22px!important}
+.ai-panel-top{grid-template-columns:minmax(0,1fr) 112px!important;gap:14px!important}
+.ai-panel-photo{width:112px!important;height:145px!important}
+.ai-panel-top h3{font-size:24px!important}
+.ai-panel-top p{font-size:14px!important}
+.ai-chat-log{max-height:260px!important}
+.ai-msg{font-size:14px!important;line-height:1.5!important;padding:10px 11px!important}
+.ai-quick button,.ai-language-row button{font-size:13px!important;padding:8px 10px!important}
+.ai-chat-row input{font-size:15px!important;padding:11px!important}
+.ai-chat-row button{font-size:14px!important;padding:0 10px!important}
+.ai-answer{font-size:14px!important;line-height:1.55!important;padding:11px!important}
+@media(max-width:560px){
+  .ai-float-face{width:58px!important;height:58px!important}
+  .ai-float-label{font-size:15px!important}
+  .ai-panel{width:calc(100vw - 20px)!important;right:10px!important;bottom:82px!important;max-height:82vh!important;padding:14px!important}
+  .ai-panel-top{grid-template-columns:minmax(0,1fr) 94px!important}
+  .ai-panel-photo{width:94px!important;height:125px!important}
+  .ai-panel-top h3{font-size:21px!important}
+}
+
+
+/* Service cards: smooth left-right marquee with equal clipping on both sides */
+html, body { overflow-x:hidden !important; max-width:100%; }
+.service-viewport { width:100% !important; max-width:100% !important; overflow:hidden !important; position:relative; }
+#serviceGrid.service-grid { width:110% !important; max-width:none !important; min-width:0 !important; margin-left:0 !important; margin-right:0 !important; will-change:transform; }
+#serviceGrid.service-grid .service-card { min-width:0 !important; max-width:none !important; }
+@media(max-width:900px){#serviceGrid.service-grid{width:112% !important;}}
+@media(max-width:600px){#serviceGrid.service-grid{width:116% !important;}}
+

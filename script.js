@@ -175,16 +175,39 @@ function speakAI(text){
 function speakLastAI(){if(lastAIText)speakAI(lastAIText);}
 
 
-// ===== Service movement: ONE 3x3 grid, reversible 360-style back-and-forth =====
-let serviceTimer=null, serviceAnim=null, serviceDragging=false, serviceIntent=null, serviceX=0, serviceStartX=0, serviceStartY=0, serviceBaseX=0, serviceLastActivity=Date.now(), serviceMaxShift=0, serviceDirection=-1, serviceAutoPaused=false;
+// ===== Service grid: smooth left-right scrolling, equal on both sides =====
+let serviceTimer=null, serviceAnim=null, serviceDragging=false, serviceIntent=null, serviceX=0, serviceDir=-1, serviceLast=0;
 function serviceViewport(){return document.getElementById('serviceViewport')}
-function computeMaxShift(){const vp=serviceViewport();if(!vp)return 0;return Math.max(70,Math.round(vp.clientWidth*0.12));}
-function applyServiceX(x){const grid=document.getElementById('serviceGrid');if(!grid)return;serviceMaxShift=computeMaxShift();serviceX=Math.max(-serviceMaxShift,Math.min(0,x));grid.style.transform=`translate3d(${serviceX}px,0,0)`;}
-function stopServiceMotion(pause=true){if(serviceAnim){cancelAnimationFrame(serviceAnim);serviceAnim=null;}clearTimeout(serviceTimer);serviceTimer=null;serviceAutoPaused=pause;serviceLastActivity=Date.now();}
-function scheduleServiceMotion(){clearTimeout(serviceTimer);serviceTimer=setTimeout(()=>{serviceAutoPaused=false;startServiceAuto();},6000);}
-function startServiceAuto(){if(serviceDragging||document.visibilityState==='hidden'||document.getElementById('serviceSearch')?.value.trim())return;serviceMaxShift=computeMaxShift();if(serviceMaxShift<=1)return;serviceAutoPaused=false;let last=performance.now();const speed=52;function step(t){if(serviceDragging||serviceAutoPaused||document.visibilityState==='hidden'||document.getElementById('serviceSearch')?.value.trim()){serviceAnim=null;return;}const dt=Math.min(40,t-last);last=t;let next=serviceX+serviceDirection*speed*(dt/1000);if(next<=-serviceMaxShift){next=-serviceMaxShift;serviceDirection=1;}else if(next>=0){next=0;serviceDirection=-1;}applyServiceX(next);serviceAnim=requestAnimationFrame(step);}if(!serviceAnim)serviceAnim=requestAnimationFrame(step);}
-function resetServiceMotion(){stopServiceMotion(false);serviceDragging=false;serviceIntent=null;serviceDirection=-1;applyServiceX(0);startServiceAuto();}
-function initServiceTouch(){const vp=serviceViewport(),grid=document.getElementById('serviceGrid');if(!vp||!grid)return;const onStart=e=>{stopServiceMotion(true);serviceDragging=false;serviceIntent=null;serviceStartX=e.clientX;serviceStartY=e.clientY;serviceBaseX=serviceX;serviceLastActivity=Date.now();};const onMove=e=>{const dx=e.clientX-serviceStartX,dy=e.clientY-serviceStartY;if(!serviceIntent&&Math.max(Math.abs(dx),Math.abs(dy))>8)serviceIntent=Math.abs(dx)>Math.abs(dy)?'x':'y';if(serviceIntent==='x'){serviceDragging=true;e.preventDefault();applyServiceX(serviceBaseX+dx);}};const onEnd=()=>{if(serviceDragging){serviceDragging=false;serviceLastActivity=Date.now();}serviceIntent=null;scheduleServiceMotion();};grid.addEventListener('pointerdown',onStart,{passive:true});grid.addEventListener('pointermove',onMove,{passive:false});grid.addEventListener('pointerup',onEnd);grid.addEventListener('pointercancel',onEnd);vp.addEventListener('mouseenter',()=>stopServiceMotion(true));vp.addEventListener('mouseleave',()=>scheduleServiceMotion());vp.addEventListener('wheel',()=>{stopServiceMotion(true);scheduleServiceMotion();},{passive:true});}
+function computeMaxShift(){
+ const vp=serviceViewport(), grid=document.getElementById('serviceGrid');
+ if(!vp||!grid)return 0;
+ return Math.max(0, grid.scrollWidth-vp.clientWidth);
+}
+function applyServiceX(x){
+ const grid=document.getElementById('serviceGrid'); if(!grid)return;
+ const max=computeMaxShift(); const half=max/2;
+ serviceX=Math.max(-half,Math.min(half,Number(x)||0));
+ grid.style.transform=`translate3d(${serviceX}px,0,0)`;
+}
+function stopServiceMotion(pause=true){if(serviceAnim){cancelAnimationFrame(serviceAnim);serviceAnim=null;}clearTimeout(serviceTimer);serviceTimer=null;serviceLast=0;}
+function scheduleServiceMotion(){clearTimeout(serviceTimer);serviceTimer=setTimeout(startServiceAuto,900);}
+function startServiceAuto(){
+ stopServiceMotion(false); serviceLast=performance.now();
+ const tick=(now)=>{
+  const max=computeMaxShift();
+  if(max<=1){serviceAnim=null;return;}
+  const half=max/2, dt=Math.min(40,now-serviceLast)/1000; serviceLast=now;
+  const speed=Math.max(14,Math.min(30,max/8));
+  serviceX += serviceDir*speed*dt;
+  if(serviceX<=-half){serviceX=-half;serviceDir=1;}
+  if(serviceX>=half){serviceX=half;serviceDir=-1;}
+  applyServiceX(serviceX);
+  serviceAnim=requestAnimationFrame(tick);
+ };
+ serviceAnim=requestAnimationFrame(tick);
+}
+function resetServiceMotion(){stopServiceMotion(false);serviceDragging=false;serviceIntent=null;serviceX=0;serviceDir=-1;applyServiceX(0);scheduleServiceMotion();}
+function initServiceTouch(){const vp=serviceViewport(),grid=document.getElementById('serviceGrid');if(!vp||!grid)return;applyServiceX(0);scheduleServiceMotion();}
 
 function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'})}
 function boot(){document.getElementById('year').textContent=new Date().getFullYear();renderServices();renderTicker();initServiceTouch();resetServiceMotion();window.addEventListener('resize',()=>{computeMaxShift();applyServiceX(serviceX);});document.addEventListener('visibilitychange',()=>{if(document.hidden)stopServiceMotion();else scheduleServiceMotion();});window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeAdmin();}});document.getElementById('serviceModal').addEventListener('click',e=>{if(e.target.id==='serviceModal')closeModal()});document.getElementById('adminModal').addEventListener('click',e=>{if(e.target.id==='adminModal')closeAdmin()});document.getElementById('serviceSearch').addEventListener('input',()=>{stopServiceMotion();renderServices();if(!document.getElementById('serviceSearch').value.trim())scheduleServiceMotion();});}
