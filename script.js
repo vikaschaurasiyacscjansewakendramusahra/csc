@@ -28,7 +28,6 @@ function addService(){if(!isAdmin)return;services=loadAdminDraft();const title=d
 function exportPublicServices(){if(!isAdmin)return;services=loadAdminDraft();const blob=new Blob([JSON.stringify(services,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='services.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);}
 function resetServices(){if(confirm('क्या आप सभी custom services हटाकर default services वापस लाना चाहते हैं?')){services=DEFAULT_SERVICES.map(normalizeService);localStorage.removeItem('vikas_csc_admin_draft');renderServices();renderTicker();}}
 
-
 // ===== FREE SMART AI =====
 const AI_API_ENDPOINT = '';
 const AI_LANG = {value:'hi-IN'};
@@ -154,58 +153,4 @@ function speakAI(text){
   u.lang=AI_LANG.value||'hi-IN'; u.rate=.95; u.pitch=1.05; window.speechSynthesis.speak(u);
 }
 function speakLastAI(){if(lastAIText)speakAI(lastAIText);}
-
-// ===== UPI / QR =====
-const VIKAS_UPI_IDS=['vikas3841@nyes','vikas.1240@superyes'];
-function selectedUPI(){return document.querySelector('input[name="upiAccount"]:checked')?.value||VIKAS_UPI_IDS[0];}
-function upiUrl(){
-  const pa=selectedUPI(), pn=(document.getElementById('upiName')?.value||'Vikas CSC Jan Sewa Kendra').trim();
-  return `upi://pay?pa=${encodeURIComponent(pa)}&pn=${encodeURIComponent(pn||'Vikas CSC Jan Sewa Kendra')}&cu=INR`;
-}
-function generateUPI(){
-  const qr=document.getElementById('qrcode'), err=document.getElementById('upiError'), link=document.getElementById('upiLink'), pay=document.getElementById('payByUPI');
-  if(!qr)return;
-  qr.innerHTML='';
-  const u=upiUrl();
-  if(window.QRCode)new QRCode(qr,{text:u,width:220,height:220,correctLevel:QRCode.CorrectLevel.M});
-  else qr.innerHTML='<span>QR library load नहीं हुई।</span>';
-  if(link){link.href=u;link.classList.remove('hidden');}
-  if(pay){pay.href=u;pay.classList.remove('hidden');}
-  if(err)err.textContent='';
-}
-function openPayByUPI(e){
-  if(e)e.preventDefault();
-  const u=upiUrl();
-  const a=document.createElement('a'); a.href=u; a.style.display='none'; document.body.appendChild(a); a.click(); a.remove();
-  return false;
-}
-
-// ===== Boot =====
-function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'});}
-function boot(){
-  document.querySelectorAll('input[name="upiAccount"]').forEach(el=>el.addEventListener('change',generateUPI));
-
-  const year=document.getElementById('year'); if(year)year.textContent=new Date().getFullYear();
-  renderServices(); renderTicker(); initServiceTouch(); resetServiceMotion();
-  window.addEventListener('resize',()=>{computeMaxShift();applyServiceX(serviceX);});
-  document.addEventListener('visibilitychange',()=>{if(document.hidden)stopServiceMotion();else scheduleServiceMotion();});
-  window.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
-  document.getElementById('serviceModal')?.addEventListener('click',e=>{if(e.target.id==='serviceModal')closeModal();});
-  document.getElementById('serviceSearch')?.addEventListener('input',()=>{
-    stopServiceMotion(); renderServices();
-    if(!document.getElementById('serviceSearch').value.trim())scheduleServiceMotion();
-  });
-}
-boot();
-// ===== Service movement: ONE 3x3 grid, reversible 360-style back-and-forth =====
-let serviceTimer=null, serviceAnim=null, serviceDragging=false, serviceIntent=null, serviceX=0, serviceStartX=0, serviceStartY=0, serviceBaseX=0, serviceLastActivity=Date.now(), serviceMaxShift=0, serviceDirection=-1, serviceAutoPaused=false;
-function serviceViewport(){return document.getElementById('serviceViewport')}
-function computeMaxShift(){const vp=serviceViewport();if(!vp)return 0;return Math.max(70,Math.round(vp.clientWidth*0.12));}
-function applyServiceX(x){const grid=document.getElementById('serviceGrid');if(!grid)return;serviceMaxShift=computeMaxShift();serviceX=Math.max(-serviceMaxShift,Math.min(0,x));grid.style.transform=`translate3d(${serviceX}px,0,0)`;}
-function stopServiceMotion(pause=true){if(serviceAnim){cancelAnimationFrame(serviceAnim);serviceAnim=null;}clearTimeout(serviceTimer);serviceTimer=null;serviceAutoPaused=pause;serviceLastActivity=Date.now();}
-function scheduleServiceMotion(){clearTimeout(serviceTimer);serviceTimer=setTimeout(()=>{serviceAutoPaused=false;startServiceAuto();},6000);}
-function startServiceAuto(){if(serviceDragging||document.visibilityState==='hidden'||document.getElementById('serviceSearch')?.value.trim())return;serviceMaxShift=computeMaxShift();if(serviceMaxShift<=1)return;serviceAutoPaused=false;let last=performance.now();const speed=52;function step(t){if(serviceDragging||serviceAutoPaused||document.visibilityState==='hidden'||document.getElementById('serviceSearch')?.value.trim()){serviceAnim=null;return;}const dt=Math.min(40,t-last);last=t;let next=serviceX+serviceDirection*speed*(dt/1000);if(next<=-serviceMaxShift){next=-serviceMaxShift;serviceDirection=1;}else if(next>=0){next=0;serviceDirection=-1;}applyServiceX(next);serviceAnim=requestAnimationFrame(step);}if(!serviceAnim)serviceAnim=requestAnimationFrame(step);}
-function resetServiceMotion(){stopServiceMotion(false);serviceDragging=false;serviceIntent=null;serviceDirection=-1;applyServiceX(0);startServiceAuto();}
-function initServiceTouch(){const vp=serviceViewport(),grid=document.getElementById('serviceGrid');if(!vp||!grid)return;const onStart=e=>{stopServiceMotion(true);serviceDragging=false;serviceIntent=null;serviceStartX=e.clientX;serviceStartY=e.clientY;serviceBaseX=serviceX;serviceLastActivity=Date.now();};const onMove=e=>{const dx=e.clientX-serviceStartX,dy=e.clientY-serviceStartY;if(!serviceIntent&&Math.max(Math.abs(dx),Math.abs(dy))>8)serviceIntent=Math.abs(dx)>Math.abs(dy)?'x':'y';if(serviceIntent==='x'){serviceDragging=true;e.preventDefault();applyServiceX(serviceBaseX+dx);}};const onEnd=()=>{if(serviceDragging){serviceDragging=false;serviceLastActivity=Date.now();}serviceIntent=null;scheduleServiceMotion();};grid.addEventListener('pointerdown',onStart,{passive:true});grid.addEventListener('pointermove',onMove,{passive:false});grid.addEventListener('pointerup',onEnd);grid.addEventListener('pointercancel',onEnd);vp.addEventListener('mouseenter',()=>stopServiceMotion(true));vp.addEventListener('mouseleave',()=>scheduleServiceMotion());vp.addEventListener('wheel',()=>{stopServiceMotion(true);scheduleServiceMotion();},{passive:true});}
-
 

@@ -1,17 +1,15 @@
-VIKAS CSC — FINAL PREMIUM FREE
+Vikas CSC Jan Sewa Kendra — Final V16
 
-Included:
-- Original dark/gold heading style preserved.
-- Original services preserved and rendered with scrolling/movement.
-- Premium responsive/mobile layout.
-- Mobile quick action bar: Call, WhatsApp, Pay UPI, Ask AI.
-- Free local Smart AI: service guidance, official portal links, voice input/output where browser supports it.
-- AI portrait remains in right-bottom corner.
-- QR Generate + Pay by UPI.
-- Two UPI accounts are kept in code and are not shown as plain text in the visible page.
-- SEO meta tags, canonical, OpenGraph and LocalBusiness JSON-LD.
-- robots.txt and sitemap.xml.
-- No paid API, no secret API key, no backend required.
+Services are based on V10: 9 categories / 66 original services, plus only two requested additions: UP Scholarship and UPPCL official consumer service.
 
-GitHub Pages:
-Upload/replace the package files in the existing repository and enable GitHub Pages from the repository's Pages settings.
+Service movement: one 3x3 grid, reversible right-to-left / left-to-right motion; pauses on touch/mouse and resumes after 6 seconds of inactivity. Vertical page scrolling and pinch zoom are preserved.
+
+AI: button label is Ask AI, with a larger stylized robot-lady face, voice input/output. A secure backend/API is required for full generative ChatGPT-like answers.
+
+Admin password: Vik@9585 (not stored in plain text).
+
+
+FREE GEMINI TEST SETUP (2026-08):
+- The test config uses the stable gemini-2.5-flash model. Google lists Gemini 2.5 Flash with Free Tier input/output pricing.
+- Put your own Gemini API key only in config.js for local/personal testing. Do not publish that key in a public repository.
+- For a public production site, use a server-side API proxy and keep the key in an environment secret.
