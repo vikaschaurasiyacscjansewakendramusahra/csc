@@ -1,5 +1,78 @@
 [
   {
+    "icon": "📜",
+    "title": "प्रमाण पत्र एवं सरकारी दस्तावेज",
+    "desc": "सरकारी प्रमाण-पत्र और ऑनलाइन दस्तावेजी सेवाएँ।",
+    "portals": [
+      [
+        "UP e-Sathi / e-District",
+        "https://esathi.up.gov.in/"
+      ],
+      [
+        "UP Food & Ration",
+        "https://fcs.up.gov.in/"
+      ]
+    ],
+    "items": [
+      [
+        "आय / जाति / निवास / राशन कार्ड",
+        "https://esathi.up.gov.in/"
+      ],
+      [
+        "खतौनी (प्रमाणित / अभिलेख)",
+        "https://upbhulekh.gov.in/"
+      ],
+      [
+        "भू-नक्शा / भूमि नक्शा",
+        "https://upbhunaksha.gov.in/"
+      ],
+      [
+        "विवाह पंजीकरण",
+        "https://www.igrsup.gov.in/igrsup/defaultAction.action"
+      ],
+      [
+        "चरित्र प्रमाण पत्र (Police Verification)",
+        "https://uppolice.gov.in/"
+      ],
+      [
+        "UDID कार्ड / दिव्यांग प्रमाण पत्र",
+        "https://www.swavlambancard.gov.in/"
+      ],
+      [
+        "e-District – सभी प्रमाण पत्र",
+        "https://esathi.up.gov.in/"
+      ],
+      [
+        "निर्वाचन वोटर कार्ड",
+        "https://voters.eci.gov.in/"
+      ],
+      [
+        "शादी अनुदान यूपी",
+        "https://shadianudan.upsdc.gov.in/"
+      ],
+      [
+        "जनसुनवाई समाधान पोर्टल",
+        "https://jansunwai.up.nic.in/#smooth-scroll-top"
+      ],
+      [
+        "PAN कार्ड – नया / सुधार — Protean / NSDL",
+        "https://www.protean-tinpan.com/"
+      ],
+      [
+        "PAN कार्ड — UTIITSL विकल्प",
+        "https://www.utiitsl.com/"
+      ],
+      [
+        "DigiLocker दस्तावेज सेवाएँ",
+        "https://www.digilocker.gov.in/"
+      ],
+      [
+        "Ayushman 2.0 & Health Services",
+        "https://pmjay.gov.in/"
+      ]
+    ]
+  },
+  {
     "icon": "🏦",
     "title": "बैंकिंग एवं आधार सेवाएँ",
     "desc": "दैनिक डिजिटल और नागरिक सेवाएँ एक ही जगह।",
@@ -90,79 +163,6 @@
       [
         "जिले: संत कबीर नगर, सिद्धार्थनगर, गोरखपुर, महाराजगंज, बस्ती",
         "https://parivahan.gov.in/"
-      ]
-    ]
-  },
-  {
-    "icon": "📜",
-    "title": "प्रमाण पत्र एवं सरकारी दस्तावेज",
-    "desc": "सरकारी प्रमाण-पत्र और ऑनलाइन दस्तावेजी सेवाएँ।",
-    "portals": [
-      [
-        "UP e-Sathi / e-District",
-        "https://esathi.up.gov.in/"
-      ],
-      [
-        "UP Food & Ration",
-        "https://fcs.up.gov.in/"
-      ]
-    ],
-    "items": [
-      [
-        "आय / जाति / निवास / राशन कार्ड",
-        "https://esathi.up.gov.in/"
-      ],
-      [
-        "खतौनी (प्रमाणित / अभिलेख)",
-        "https://upbhulekh.gov.in/"
-      ],
-      [
-        "भू-नक्शा / भूमि नक्शा",
-        "https://upbhunaksha.gov.in/"
-      ],
-      [
-        "विवाह पंजीकरण",
-        "https://www.igrsup.gov.in/igrsup/defaultAction.action"
-      ],
-      [
-        "चरित्र प्रमाण पत्र (Police Verification)",
-        "https://uppolice.gov.in/"
-      ],
-      [
-        "UDID कार्ड / दिव्यांग प्रमाण पत्र",
-        "https://www.swavlambancard.gov.in/"
-      ],
-      [
-        "e-District – सभी प्रमाण पत्र",
-        "https://esathi.up.gov.in/"
-      ],
-      [
-        "निर्वाचन वोटर कार्ड",
-        "https://voters.eci.gov.in/"
-      ],
-      [
-        "शादी अनुदान यूपी",
-        "https://shadianudan.upsdc.gov.in/"
-      ],
-      [
-        "जनसुनवाई समाधान पोर्टल",
-        "https://jansunwai.up.nic.in/#smooth-scroll-top"
-      ],
-      [
-        "PAN कार्ड – नया / सुधार — Protean / NSDL",
-        "https://www.protean-tinpan.com/"
-      ],
-      [
-        "PAN कार्ड — UTIITSL विकल्प",
-        "https://www.utiitsl.com/"
-      ],
-      [
-        "DigiLocker दस्तावेज सेवाएँ",
-        "https://www.digilocker.gov.in/"
-      ],
-      [
-        "Ayushman 2.0 & Health Services",
-        "https://pmjay.gov.in/"
       ]
     ]
   },

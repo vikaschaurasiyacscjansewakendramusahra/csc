@@ -46,14 +46,35 @@ function itemUrl(i){return Array.isArray(i)?String(i[1]||''):String(i?.url||'')}
 function matchesQuery(s,q){const hay=(s.title+' '+s.desc+' '+(s.items||[]).map(itemText).join(' ')).toLowerCase();return hay.includes(q)||q.split(/\s+/).filter(w=>w.length>1).some(w=>hay.includes(w));}
 function renderServices(){
  const grid=document.getElementById('serviceGrid'), input=document.getElementById('serviceSearch'); if(!grid)return;
- const q=(input?.value||'').toLowerCase().trim(); const filtered=q?services.filter(s=>matchesQuery(s,q)):services;
+ const q=(input?.value||'').toLowerCase().trim(); const source = services.length>2 ? [services[2],services[0],services[1],...services.slice(3)] : services; const filtered=q?source.filter(s=>matchesQuery(s,q)):source;
  grid.innerHTML=filtered.map(s=>{
    const isImageTools=s.title==='Compress, Resize & Edit Pictures';
    const items=(s.items||[]).map(x=>`<li><a href="${safeUrl(itemUrl(x))}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">${escapeHtml(itemText(x))} ↗</a></li>`).join('');
    return `<article class="service-card ${isImageTools?'image-tools-wide':''}" data-service-title="${escapeHtml(s.title)}" onclick='openService(${JSON.stringify(s).replace(/'/g,'&#39;')})'><div class="service-icon">${s.icon}</div><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.desc)}</p><ul>${items}</ul><div class="more">🔗 सेवा पर टच करें • आधिकारिक पोर्टल खुलेगा</div></article>`;
  }).join('')||'<div class="service-card"><h3>कोई सेवा नहीं मिली</h3><p>दूसरा शब्द खोजकर देखें।</p></div>';
+ layoutServiceMasonry();
  resetServiceMotion();
 }
+
+function layoutServiceMasonry(){
+ const grid=document.getElementById('serviceGrid'); if(!grid)return;
+ const cards=[...grid.children];
+ if(!cards.length)return;
+ cards.forEach(c=>c.style.gridRowEnd='');
+ requestAnimationFrame(()=>{
+   const styles=getComputedStyle(grid);
+   const rowH=parseFloat(styles.gridAutoRows)||8;
+   const gap=parseFloat(styles.rowGap)||8;
+   cards.forEach(card=>{
+     if(card.classList.contains('image-tools-wide')) return;
+     const h=card.getBoundingClientRect().height;
+     const span=Math.max(1,Math.ceil((h+gap)/(rowH+gap)));
+     card.style.gridRowEnd=`span ${span}`;
+   });
+ });
+}
+window.addEventListener('resize',()=>layoutServiceMasonry());
+
 function renderTicker(){const labels=services.map(s=>`${s.icon} ${s.title}`);document.getElementById('serviceTicker').innerHTML=labels.map(x=>`<span class="ticker-chip">${escapeHtml(x)}</span>`).join('');}
 function openService(s){document.getElementById('modalIcon').textContent=s.icon;document.getElementById('modalTitle').textContent=s.title;document.getElementById('modalDescription').textContent=s.desc;document.getElementById('modalPortals').innerHTML=(s.portals||[]).map(p=>`<a class="portal-btn" href="${safeUrl(p[1])}" target="_blank" rel="noopener">${escapeHtml(p[0])} ↗</a>`).join('');document.getElementById('modalItems').innerHTML=(s.items||[]).map(x=>`<li><a href="${safeUrl(itemUrl(x))}" target="_blank" rel="noopener">${escapeHtml(itemText(x))} ↗</a></li>`).join('');document.getElementById('serviceModal').classList.add('show');document.getElementById('serviceModal').setAttribute('aria-hidden','false');stopServiceMotion();}
 function closeModal(){document.getElementById('serviceModal').classList.remove('show');document.getElementById('serviceModal').setAttribute('aria-hidden','true');}
