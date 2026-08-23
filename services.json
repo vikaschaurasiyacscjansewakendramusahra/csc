@@ -41,6 +41,18 @@
       [
         "ABHA Health ID",
         "https://abha.abdm.gov.in/"
+      ],
+      [
+        "NPS / APY पेंशन सेवाएँ",
+        "https://www.npscra.nsdl.co.in/"
+      ],
+      [
+        "Ayushman 2.0 & Health Services",
+        "https://pmjay.gov.in/"
+      ],
+      [
+        "आधार आधारित e-KYC व वेरिफिकेशन",
+        "https://uidai.gov.in/en/component/search?searchword=ekyc&searchphrase=all&limit=20"
       ]
     ]
   },
@@ -131,6 +143,14 @@
       [
         "e-District – सभी प्रमाण पत्र",
         "https://esathi.up.gov.in/"
+      ],
+      [
+        "निर्वाचन वोटर कार्ड",
+        "https://voters.eci.gov.in/"
+      ],
+      [
+        "DigiLocker दस्तावेज सेवाएँ",
+        "https://www.digilocker.gov.in/"
       ]
     ]
   },
@@ -175,6 +195,10 @@
       ],
       [
         "DSC / डिजिटल सिग्नेचर",
+        "https://cca.gov.in/"
+      ],
+      [
+        "eSign – डिजिटल हस्ताक्षर",
         "https://cca.gov.in/"
       ]
     ]
@@ -350,8 +374,28 @@
         "https://consumer.uppcl.org/wss/pay_bill_home"
       ],
       [
-        "निर्वाचन वोटर कार्ड",
-        "https://voters.eci.gov.in/"
+        "Insurance – Life / Health / Motor",
+        "https://www.irdai.gov.in/"
+      ],
+      [
+        "Skill India / रोजगार पंजीकरण",
+        "https://www.skillindia.gov.in/"
+      ],
+      [
+        "Tele-Law – कानूनी सहायता",
+        "https://www.tele-law.in/"
+      ],
+      [
+        "e-Shram 2.0 अपडेट",
+        "https://eshram.gov.in/"
+      ],
+      [
+        "CSC के नए G2C / B2C डिजिटल सेवाएँ",
+        "https://www.google.com/search?q=VIKAS+CSC+e-governance+BLS+CSC+Uttar+Pradesh+Jan+Sewa+Kendra+Near+CSC+Center+Cyber+Cafe"
+      ],
+      [
+        "ऑनलाइन प्रीपेड / अन्य कोई भी नई डिजिटल सेवा",
+        "https://digitalseva.csc.gov.in/"
       ]
     ]
   },
@@ -383,56 +427,12 @@
         "https://www.utiitsl.com/"
       ],
       [
-        "DigiLocker दस्तावेज सेवाएँ",
-        "https://www.digilocker.gov.in/"
-      ],
-      [
-        "eSign – डिजिटल हस्ताक्षर",
-        "https://cca.gov.in/"
-      ],
-      [
-        "NPS / APY पेंशन सेवाएँ",
-        "https://www.npscra.nsdl.co.in/"
-      ],
-      [
-        "Ayushman 2.0 & Health Services",
-        "https://pmjay.gov.in/"
-      ],
-      [
         "PM Vishwakarma योजना",
         "https://pmvishwakarma.gov.in/"
       ],
       [
-        "Skill India / रोजगार पंजीकरण",
-        "https://www.skillindia.gov.in/"
-      ],
-      [
         "GeM Seller Registration सहायता",
         "https://gem.gov.in/"
-      ],
-      [
-        "Tele-Law – कानूनी सहायता",
-        "https://www.tele-law.in/"
-      ],
-      [
-        "Insurance – Life / Health / Motor",
-        "https://www.irdai.gov.in/"
-      ],
-      [
-        "e-Shram 2.0 अपडेट",
-        "https://eshram.gov.in/"
-      ],
-      [
-        "CSC के नए G2C / B2C डिजिटल सेवाएँ",
-        "https://www.google.com/search?q=VIKAS+CSC+e-governance+BLS+CSC+Uttar+Pradesh+Jan+Sewa+Kendra+Near+CSC+Center+Cyber+Cafe"
-      ],
-      [
-        "आधार आधारित e-KYC व वेरिफिकेशन",
-        "https://uidai.gov.in/en/component/search?searchword=ekyc&searchphrase=all&limit=20"
-      ],
-      [
-        "ऑनलाइन प्रीपेड / अन्य कोई भी नई डिजिटल सेवा",
-        "https://digitalseva.csc.gov.in/"
       ]
     ]
   },

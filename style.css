@@ -298,32 +298,52 @@ html, body { overflow-x:hidden !important; max-width:100%; }
 }
 
 
-/* Requested: image tools as one full-width card below the existing 3x3 service cards. */
-#serviceGrid.service-grid .image-tools-card {
-  grid-column: 1 / -1 !important;
-  width: 100% !important;
-  min-width: 0 !important;
-  cursor: default;
+/* Image tools card: one full-width service card below the 3x3 cards. */
+#serviceGrid.service-grid .image-tools-card{
+  grid-column:1 / -1 !important;
+  width:100% !important;
+  min-width:0 !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+  cursor:default !important;
+  overflow:hidden !important;
 }
-#serviceGrid.service-grid .image-tools-card h3 {
-  margin-bottom: 10px;
+#serviceGrid.service-grid .image-tools-card .image-tools-list{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:4px 24px !important;
+  padding-left:20px !important;
+  margin:0 !important;
+  width:auto !important;
+  min-width:0 !important;
+  animation:none !important;
 }
-#serviceGrid.service-grid .image-tools-card .image-tools-list {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
+#serviceGrid.service-grid .image-tools-card .image-tools-list li{
+  min-width:0 !important;
+  white-space:normal !important;
+  padding:0 !important;
+  margin:0 !important;
+  border:0 !important;
+  background:transparent !important;
 }
-#serviceGrid.service-grid .image-tools-card li a {
-  display: block;
-  padding: 9px 11px;
-  border: 1px solid #dfcf9f;
-  border-radius: 10px;
-  background: rgba(255,250,232,.7);
-  border-bottom: 1px solid #dfcf9f;
+#serviceGrid.service-grid .image-tools-card .image-tools-list li::marker{color:#d8b52f !important;}
+#serviceGrid.service-grid .image-tools-card .image-tools-list li a,
+#serviceGrid.service-grid .image-tools-card .image-tools-list li a:hover{
+  display:inline !important;
+  padding:0 !important;
+  margin:0 !important;
+  border:0 !important;
+  border-bottom:1px dotted rgba(255,220,110,.35) !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  color:#3f493f !important;
+  font-weight:800 !important;
+  text-decoration:none !important;
+  overflow-wrap:anywhere !important;
 }
-@media (max-width: 900px) {
-  #serviceGrid.service-grid .image-tools-card .image-tools-list { grid-template-columns: repeat(2, minmax(0,1fr)); }
+#serviceGrid.service-grid .image-tools-card .image-tools-list li a:hover{
+  color:#9a6804 !important;
+  border-bottom-color:#9a6804 !important;
 }
-@media (max-width: 560px) {
-  #serviceGrid.service-grid .image-tools-card .image-tools-list { grid-template-columns: 1fr; }
-}
+@media(max-width:900px){#serviceGrid.service-grid .image-tools-card .image-tools-list{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:560px){#serviceGrid.service-grid .image-tools-card .image-tools-list{grid-template-columns:1fr;}}
