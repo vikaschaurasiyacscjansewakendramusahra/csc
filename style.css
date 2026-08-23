@@ -312,48 +312,81 @@ html, body { overflow-x:hidden !important; max-width:100%; }
 @media(max-width:560px){.service-viewport{padding:0 8px!important;}#serviceGrid.service-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;column-gap:9px!important;row-gap:7px!important;width:108%!important;padding:0 6px!important;}#serviceGrid.service-grid .service-card{padding:13px!important;}#serviceGrid.service-grid .service-card h3{font-size:18px!important;}#serviceGrid.service-grid .service-card p{font-size:13.5px!important;}#serviceGrid.service-grid .service-card ul{font-size:15px!important;line-height:1.52!important;}#serviceGrid.service-grid .image-tools-wide ul{grid-template-columns:1fr!important;row-gap:2px!important;padding-left:20px!important;}#serviceGrid.service-grid .image-tools-wide li a{font-size:15px!important;line-height:1.5!important;}}
 
 
-/* FINAL V19 — symmetric service edges + safe text + preserve 10th Image Tools card */
+/* FINAL USER-REQUESTED SERVICE + PAYMENT POLISH — preserves all service text, links and Ask AI */
+.service-viewport{
+  width:100%!important;max-width:100%!important;overflow:hidden!important;
+  padding:0 12px 18px!important;box-sizing:border-box!important;
+}
 #serviceGrid.service-grid{
-  width:110%!important;
-  min-width:110%!important;
-  margin-left:-5%!important;
-  margin-right:0!important;
-  padding-left:16px!important;
-  padding-right:16px!important;
-  box-sizing:border-box!important;
-  column-gap:12px!important;
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  grid-auto-rows:8px!important;
+  column-gap:10px!important;
+  row-gap:8px!important;
+  width:100%!important;min-width:0!important;max-width:100%!important;
+  margin:0!important;padding:0!important;box-sizing:border-box!important;
+  overflow:visible!important;
 }
 #serviceGrid.service-grid .service-card{
-  min-width:0!important;
-  max-width:none!important;
-  overflow:hidden!important;
-  box-sizing:border-box!important;
-  margin:0!important;
+  width:auto!important;min-width:0!important;max-width:none!important;
+  margin:0!important;box-sizing:border-box!important;overflow:hidden!important;
+  padding:14px!important;align-self:start!important;
 }
-#serviceGrid.service-grid .service-card h3,
-#serviceGrid.service-grid .service-card p,
+#serviceGrid.service-grid .service-card h3{
+  font-size:19px!important;line-height:1.3!important;
+  overflow-wrap:normal!important;word-break:normal!important;
+}
+#serviceGrid.service-grid .service-card p{
+  font-size:14px!important;line-height:1.45!important;
+}
+#serviceGrid.service-grid .service-card ul{
+  font-size:15px!important;line-height:1.52!important;
+  padding-left:18px!important;margin-top:10px!important;
+}
 #serviceGrid.service-grid .service-card li,
 #serviceGrid.service-grid .service-card li a{
-  overflow-wrap:break-word!important;
-  word-break:normal!important;
+  overflow-wrap:break-word!important;word-break:normal!important;
 }
 #serviceGrid.service-grid .image-tools-wide{
-  grid-column:1/-1!important;
-  width:100%!important;
+  grid-column:1 / -1!important;width:100%!important;
+  margin-top:2px!important;
 }
-.upi-permanent-pay{display:block!important;visibility:visible!important;}
-.upi-permanent-button{display:flex!important;visibility:visible!important;}
-#qrcode{min-height:190px!important;display:flex!important;align-items:center!important;justify-content:center!important;}
+#serviceGrid.service-grid .image-tools-wide ul{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  column-gap:24px!important;row-gap:4px!important;
+  padding-left:20px!important;
+}
+.payment-card{overflow:visible!important}
+.upi-permanent-pay{
+  margin-top:14px!important;padding:13px 14px!important;border:1px solid #d8c98f!important;
+  border-radius:14px!important;background:linear-gradient(145deg,#fffdf2,#f5f9ef)!important;
+  text-align:center!important;box-shadow:0 8px 22px rgba(80,60,15,.07)!important;
+}
+.upi-permanent-title{font-size:15px!important;font-weight:900!important;color:#6f4e08!important;letter-spacing:.3px!important}
+.upi-permanent-id{margin:5px 0 8px!important;font-size:13px!important;font-weight:800!important;color:#514b40!important}
+.upi-permanent-button{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  padding:10px 14px!important;border-radius:11px!important;
+  background:linear-gradient(145deg,#fff4b9,#e5b83e)!important;color:#2b210d!important;
+  border:1px solid #d6aa36!important;font-weight:900!important;text-decoration:none!important;
+}
+.upi-permanent-pay:after{content:'• Direct UPI App payment हमेशा उपलब्ध रहेगा';display:block;margin-top:7px;font-size:11px;font-weight:800;color:#8a6a1b}
+#qrcode{min-height:205px!important;display:flex!important;align-items:center!important;justify-content:center!important}
+#upiLink{margin-top:10px!important}
 @media(max-width:760px){
- #serviceGrid.service-grid{width:108%!important;min-width:108%!important;margin-left:-4%!important;padding-left:14px!important;padding-right:14px!important;column-gap:10px!important;}
- #serviceGrid.service-grid .service-card h3{font-size:19px!important;}
- #serviceGrid.service-grid .service-card p{font-size:14px!important;}
- #serviceGrid.service-grid .service-card ul{font-size:15px!important;line-height:1.55!important;}
+  .service-viewport{padding-left:10px!important;padding-right:10px!important}
+  #serviceGrid.service-grid{column-gap:9px!important;row-gap:7px!important}
+  #serviceGrid.service-grid .service-card{padding:13px!important}
+  #serviceGrid.service-grid .service-card h3{font-size:18px!important}
+  #serviceGrid.service-grid .service-card p{font-size:13.5px!important}
+  #serviceGrid.service-grid .service-card ul{font-size:15px!important;line-height:1.5!important}
 }
 @media(max-width:560px){
- #serviceGrid.service-grid{width:108%!important;min-width:108%!important;margin-left:-4%!important;padding-left:13px!important;padding-right:13px!important;column-gap:9px!important;}
- #serviceGrid.service-grid .service-card{padding:13px!important;}
- #serviceGrid.service-grid .service-card h3{font-size:18px!important;}
- #serviceGrid.service-grid .service-card p{font-size:13.5px!important;}
- #serviceGrid.service-grid .service-card ul{font-size:15px!important;line-height:1.52!important;}
+  .service-viewport{padding-left:8px!important;padding-right:8px!important}
+  #serviceGrid.service-grid{column-gap:8px!important;row-gap:6px!important}
+  #serviceGrid.service-grid .service-card{padding:12px!important}
+  #serviceGrid.service-grid .service-card h3{font-size:17px!important;line-height:1.28!important}
+  #serviceGrid.service-grid .service-card p{font-size:13px!important}
+  #serviceGrid.service-grid .service-card ul{font-size:14.5px!important;line-height:1.48!important}
+  #serviceGrid.service-grid .image-tools-wide ul{grid-template-columns:1fr 1fr!important;column-gap:12px!important}
 }

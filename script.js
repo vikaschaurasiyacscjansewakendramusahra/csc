@@ -41,27 +41,6 @@ async function loadPublicServices(){
 const CURRENT_PASSWORD_SHA256='929dfb98067eccee61b09e7cac9d7c5b473f13f7f5c4b38378b09f9c43f8e4cc';
 function escapeHtml(str){return String(str).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
 function safeUrl(url){try{const u=new URL(url);return /^https?:$/.test(u.protocol)?u.href:'#'}catch{return '#'}}
-function generateUPI(){
- const id=(document.getElementById('upiId')?.value||'').trim();
- const name=(document.getElementById('upiName')?.value||'Vikas Chaurasiya Csc Jan Sewa Kendra').trim();
- const box=document.getElementById('qrcode');
- const link=document.getElementById('upiLink');
- const err=document.getElementById('upiError');
- if(!box)return;
- if(err)err.textContent='';
- if(!id){if(err)err.textContent='कृपया UPI ID भरें।';return;}
- const upi=`upi://pay?pa=${encodeURIComponent(id)}&pn=${encodeURIComponent(name)}&cu=INR`;
- box.innerHTML='';
- try{
-   if(typeof QRCode==='undefined') throw new Error('QR library unavailable');
-   new QRCode(box,{text:upi,width:190,height:190,correctLevel:QRCode.CorrectLevel.M});
- }catch(e){
-   box.innerHTML='<span>QR अभी लोड नहीं हो पाया। फिर से Generate करें।</span>';
-   if(err)err.textContent='QR library लोड नहीं हुई।';
-   return;
- }
- if(link){link.href=upi;link.classList.remove('hidden');}
-}
 function itemText(i){return Array.isArray(i)?String(i[0]||''):String(i?.text||'')}
 function itemUrl(i){return Array.isArray(i)?String(i[1]||''):String(i?.url||'')}
 function matchesQuery(s,q){const hay=(s.title+' '+s.desc+' '+(s.items||[]).map(itemText).join(' ')).toLowerCase();return hay.includes(q)||q.split(/\s+/).filter(w=>w.length>1).some(w=>hay.includes(w));}
@@ -95,6 +74,28 @@ function layoutServiceMasonry(){
  });
 }
 window.addEventListener('resize',()=>layoutServiceMasonry());
+
+function generateUPI(){
+  const upiId=(document.getElementById('upiId')?.value||'').trim();
+  const name=(document.getElementById('upiName')?.value||'Vikas Chaurasiya Csc Jan Sewa Kendra').trim();
+  const error=document.getElementById('upiError');
+  const box=document.getElementById('qrcode');
+  const link=document.getElementById('upiLink');
+  if(error) error.textContent='';
+  if(!upiId || !/^[^\\s@]+@[^\\s@]+$/.test(upiId)){
+    if(error) error.textContent='कृपया सही UPI ID दर्ज करें।';
+    return;
+  }
+  const upiUrl='upi://pay?pa='+encodeURIComponent(upiId)+'&pn='+encodeURIComponent(name)+'&cu=INR';
+  if(link){ link.href=upiUrl; link.classList.remove('hidden'); }
+  if(!box) return;
+  box.innerHTML='';
+  if(typeof QRCode==='undefined'){
+    box.innerHTML='<span>QR सेवा अभी लोड नहीं हुई। फिर से प्रयास करें।</span>';
+    return;
+  }
+  new QRCode(box,{text:upiUrl,width:190,height:190,correctLevel:QRCode.CorrectLevel.M});
+}
 
 function renderTicker(){const labels=services.map(s=>`${s.icon} ${s.title}`);document.getElementById('serviceTicker').innerHTML=labels.map(x=>`<span class="ticker-chip">${escapeHtml(x)}</span>`).join('');}
 function openService(s){document.getElementById('modalIcon').textContent=s.icon;document.getElementById('modalTitle').textContent=s.title;document.getElementById('modalDescription').textContent=s.desc;document.getElementById('modalPortals').innerHTML=(s.portals||[]).map(p=>`<a class="portal-btn" href="${safeUrl(p[1])}" target="_blank" rel="noopener">${escapeHtml(p[0])} ↗</a>`).join('');document.getElementById('modalItems').innerHTML=(s.items||[]).map(x=>`<li><a href="${safeUrl(itemUrl(x))}" target="_blank" rel="noopener">${escapeHtml(itemText(x))} ↗</a></li>`).join('');document.getElementById('serviceModal').classList.add('show');document.getElementById('serviceModal').setAttribute('aria-hidden','false');stopServiceMotion();}
