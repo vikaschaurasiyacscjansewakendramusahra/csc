@@ -397,3 +397,56 @@ html, body { overflow-x:hidden !important; max-width:100%; }
   #serviceGrid.service-grid .service-card ul{font-size:14.5px!important;line-height:1.48!important}
   #serviceGrid.service-grid .image-tools-wide ul{grid-template-columns:1fr 1fr!important;column-gap:12px!important}
 }
+
+/* FINAL OVERLAP FIX: Image Tools is one normal masonry card in the open column.
+   Keep all other service cards in their own columns; never stretch this card across the grid. */
+#serviceGrid.service-grid .image-tools-wide{
+  grid-column:auto!important;
+  grid-column-start:auto!important;
+  grid-column-end:auto!important;
+  width:auto!important;
+  max-width:100%!important;
+  margin:0!important;
+  align-self:start!important;
+  position:relative!important;
+  z-index:1!important;
+}
+#serviceGrid.service-grid .image-tools-wide ul{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  column-gap:14px!important;
+  row-gap:3px!important;
+}
+@media(max-width:560px){
+  #serviceGrid.service-grid .image-tools-wide ul{grid-template-columns:1fr 1fr!important;column-gap:10px!important;}
+}
+
+
+/* FINAL: Image Tools is a normal single-column masonry card; never span/overlap other services. */
+#serviceGrid.service-grid .image-tools-card{
+  grid-column:auto!important;
+  grid-column-start:auto!important;
+  grid-column-end:auto!important;
+  grid-row-start:auto!important;
+  grid-row-end:auto!important;
+  width:auto!important;
+  max-width:100%!important;
+  margin:0!important;
+  position:relative!important;
+  z-index:1!important;
+  align-self:start!important;
+}
+#serviceGrid.service-grid .image-tools-card ul{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  column-gap:14px!important;
+  row-gap:3px!important;
+  padding-left:18px!important;
+}
+#serviceGrid.service-grid .image-tools-card li a{
+  display:inline!important;
+  white-space:normal!important;
+}
+@media(max-width:560px){
+  #serviceGrid.service-grid .image-tools-card ul{grid-template-columns:1fr 1fr!important;column-gap:10px!important;}
+}
