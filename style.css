@@ -297,10 +297,13 @@ html, body { overflow-x:hidden !important; max-width:100%; }
   #serviceGrid.service-grid .service-card{margin-left:9%!important;margin-right:9%!important;}
 }
 
-/* Vikas CSC: wide image tools card */
-#serviceGrid.service-grid .service-card.image-tools-wide { grid-column: 1 / -1 !important; }
-#serviceGrid.service-grid .service-card.image-tools-wide ul { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); column-gap:28px; row-gap:2px; }
-#serviceGrid.service-grid .service-card.image-tools-wide li { min-width:0; }
-#serviceGrid.service-grid .service-card.image-tools-wide li a { border-bottom:0 !important; }
-@media(max-width:900px){#serviceGrid.service-grid .service-card.image-tools-wide ul{grid-template-columns:repeat(2,minmax(0,1fr));}}
-@media(max-width:560px){#serviceGrid.service-grid .service-card.image-tools-wide ul{grid-template-columns:1fr;} #serviceGrid.service-grid .service-card.image-tools-wide li a{overflow-wrap:anywhere;word-break:break-word;}}
+/* FINAL SERVICE LAYOUT */
+.service-viewport{width:100%!important;max-width:100%!important;overflow:hidden!important;position:relative!important;padding:0!important;}
+#serviceGrid.service-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:18px!important;width:110%!important;max-width:none!important;min-width:0!important;margin:0!important;align-items:start!important;}
+#serviceGrid.service-grid .service-card{margin:0!important;width:auto!important;min-width:0!important;max-width:none!important;overflow:hidden!important;box-sizing:border-box!important;}
+#serviceGrid.service-grid .service-card h3,#serviceGrid.service-grid .service-card p,#serviceGrid.service-grid .service-card li,#serviceGrid.service-grid .service-card li a{overflow-wrap:anywhere!important;word-break:normal!important;}
+#serviceGrid.service-grid .image-tools-wide{grid-column:1 / -1!important;width:auto!important;}
+#serviceGrid.service-grid .image-tools-wide ul{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;column-gap:28px!important;row-gap:4px!important;padding-left:22px!important;}
+#serviceGrid.service-grid .image-tools-wide li a{display:inline!important;white-space:normal!important;}
+@media(max-width:760px){#serviceGrid.service-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:9px!important;width:110%!important;}#serviceGrid.service-grid .service-card{padding:14px!important;}#serviceGrid.service-grid .image-tools-wide ul{grid-template-columns:repeat(2,minmax(0,1fr))!important;column-gap:18px!important;row-gap:3px!important;padding-left:20px!important;}}
+@media(max-width:560px){#serviceGrid.service-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;width:110%!important;}#serviceGrid.service-grid .image-tools-wide ul{grid-template-columns:1fr!important;row-gap:2px!important;padding-left:20px!important;}#serviceGrid.service-grid .image-tools-wide li a{font-size:16px!important;line-height:1.55!important;}}
