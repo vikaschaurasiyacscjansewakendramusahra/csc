@@ -102,11 +102,15 @@ function generateUPI(){
   if(link){ link.href=upiUrl; link.classList.remove('hidden'); }
   if(!box) return;
   box.innerHTML='';
-  if(typeof QRCode==='undefined'){
-    box.innerHTML='<span>QR सेवा अभी लोड नहीं हुई। फिर से प्रयास करें।</span>';
-    return;
+  if(typeof QRCode!=='undefined'){
+    new QRCode(box,{text:upiUrl,width:190,height:190,correctLevel:QRCode.CorrectLevel.M});
+  } else {
+    const img=document.createElement('img');
+    img.alt='UPI QR Code';
+    img.width=190; img.height=190;
+    img.src='https://api.qrserver.com/v1/create-qr-code/?size=190x190&data='+encodeURIComponent(upiUrl);
+    box.appendChild(img);
   }
-  new QRCode(box,{text:upiUrl,width:190,height:190,correctLevel:QRCode.CorrectLevel.M});
 }
 
 function renderTicker(){const labels=services.map(s=>`${s.icon} ${s.title}`);document.getElementById('serviceTicker').innerHTML=labels.map(x=>`<span class="ticker-chip">${escapeHtml(x)}</span>`).join('');}
