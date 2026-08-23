@@ -60,16 +60,28 @@ function layoutServiceMasonry(){
  const grid=document.getElementById('serviceGrid'); if(!grid)return;
  const cards=[...grid.children];
  if(!cards.length)return;
- cards.forEach(c=>c.style.gridRowEnd='');
+ cards.forEach(c=>{c.style.gridRowEnd='';c.style.gridRowStart='';c.style.gridColumn='';});
  requestAnimationFrame(()=>{
    const styles=getComputedStyle(grid);
    const rowH=parseFloat(styles.gridAutoRows)||8;
    const gap=parseFloat(styles.rowGap)||8;
+   const cols=Math.max(1,Math.min(3,parseInt(styles.gridTemplateColumns.split(' ').length,10)||3));
+   const heights=new Array(cols).fill(0);
+
+   // Place each card in the currently shortest column. This keeps the existing
+   // service order while filling the empty space instead of leaving a large
+   // vertical gap. The Image Tools card is intentionally treated like every
+   // other card, so it can occupy the open left column after the first nine.
    cards.forEach(card=>{
-     if(card.classList.contains('image-tools-wide')) return;
      const h=card.getBoundingClientRect().height;
      const span=Math.max(1,Math.ceil((h+gap)/(rowH+gap)));
+     let col=0;
+     for(let i=1;i<cols;i++) if(heights[i]<heights[col]) col=i;
+     const start=heights[col]+1;
+     card.style.gridColumn=`${col+1}`;
+     card.style.gridRowStart=String(start);
      card.style.gridRowEnd=`span ${span}`;
+     heights[col]=start+span-1;
    });
  });
 }

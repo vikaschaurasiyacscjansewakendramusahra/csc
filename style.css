@@ -312,6 +312,13 @@ html, body { overflow-x:hidden !important; max-width:100%; }
 @media(max-width:560px){.service-viewport{padding:0 8px!important;}#serviceGrid.service-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;column-gap:9px!important;row-gap:7px!important;width:108%!important;padding:0 6px!important;}#serviceGrid.service-grid .service-card{padding:13px!important;}#serviceGrid.service-grid .service-card h3{font-size:18px!important;}#serviceGrid.service-grid .service-card p{font-size:13.5px!important;}#serviceGrid.service-grid .service-card ul{font-size:15px!important;line-height:1.52!important;}#serviceGrid.service-grid .image-tools-wide ul{grid-template-columns:1fr!important;row-gap:2px!important;padding-left:20px!important;}#serviceGrid.service-grid .image-tools-wide li a{font-size:15px!important;line-height:1.5!important;}}
 
 
+/* FINAL MASONRY FIX — Image Tools stays a normal card and fills the open column. */
+#serviceGrid.service-grid .image-tools-wide{
+  grid-column:auto!important;
+  width:auto!important;
+  margin-top:0!important;
+}
+
 /* FINAL USER-REQUESTED SERVICE + PAYMENT POLISH — preserves all service text, links and Ask AI */
 .service-viewport{
   width:100%!important;max-width:100%!important;overflow:hidden!important;
