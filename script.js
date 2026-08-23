@@ -57,39 +57,20 @@ function renderServices(){
 }
 
 function layoutServiceMasonry(){
- const grid=document.getElementById('serviceGrid'); if(!grid)return;
- const cards=[...grid.children]; if(!cards.length)return;
- requestAnimationFrame(()=>{
-   const styles=getComputedStyle(grid);
-   const cols=3;
-   const colGap=parseFloat(styles.columnGap)||8;
-   const rowGap=parseFloat(styles.rowGap)||8;
-   const gridWidth=grid.clientWidth;
-   const padLeft=parseFloat(styles.paddingLeft)||0;
-   const padRight=parseFloat(styles.paddingRight)||0;
-   const contentWidth=Math.max(1,gridWidth-padLeft-padRight);
-   const cardWidth=(contentWidth-colGap*(cols-1))/cols;
-   const colY=[0,0,0];
-   cards.forEach((card,index)=>{
-     const col=index%cols;
-     const x=padLeft+col*(cardWidth+colGap);
-     const y=colY[col];
-     card.style.position='absolute';
-     card.style.left=x+'px';
-     card.style.top=y+'px';
-     card.style.width=cardWidth+'px';
-     card.style.gridRow='auto';
-     card.style.gridColumn='auto';
-     card.style.margin='0';
-     // Measure at the final width, then stack the next card in this column.
-     const h=card.getBoundingClientRect().height;
-     colY[col]=y+h+rowGap;
-   });
-   const height=Math.max(...colY)-rowGap;
-   grid.style.position='relative';
-   grid.style.height=Math.max(0,Math.ceil(height))+'px';
-   grid.style.minHeight=Math.max(0,Math.ceil(height))+'px';
+ const grid=document.getElementById('serviceGrid');
+ if(!grid)return;
+ // Use a real 3-column grid on mobile: the browser owns row heights, so cards
+ // can never overlap and text reflow is recalculated automatically.
+ grid.querySelectorAll('.service-card').forEach(card=>{
+   card.style.position='relative';
+   card.style.left='auto';
+   card.style.top='auto';
+   card.style.width='auto';
+   card.style.height='auto';
+   card.style.margin='0';
  });
+ grid.style.height='auto';
+ grid.style.minHeight='0';
 }
 
 window.addEventListener('resize',()=>layoutServiceMasonry());
@@ -264,11 +245,13 @@ function serviceViewport(){return document.getElementById('serviceViewport')}
 function computeMaxShift(){
  const vp=serviceViewport(), grid=document.getElementById('serviceGrid');
  if(!vp||!grid)return 0;
- return Math.max(0, grid.scrollWidth-vp.clientWidth);
+ // Keep every card fully inside the visible display while still allowing
+ // the service area to gently travel left/right.
+ return 0;
 }
 function applyServiceX(x){
  const grid=document.getElementById('serviceGrid'); if(!grid)return;
- const max=computeMaxShift(), half=max/2;
+ const max=computeMaxShift(), half=Math.max(0,max/2);
  serviceX=Math.max(-half,Math.min(half,Number(x)||0));
  grid.style.transform=`translate3d(${serviceX}px,0,0)`;
 }
