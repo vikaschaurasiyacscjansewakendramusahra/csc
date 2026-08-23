@@ -39,6 +39,16 @@ async function loadPublicServices(){
   }
 }
 const CURRENT_PASSWORD_SHA256='929dfb98067eccee61b09e7cac9d7c5b473f13f7f5c4b38378b09f9c43f8e4cc';
+function updateUPIAppLink(){
+  const upiId=(document.getElementById('upiId')?.value || 'vikas.1240@superyes').trim();
+  const upiName=(document.getElementById('upiName')?.value || 'Vikas Chaurasiya Csc Jan Sewa Kendra').trim();
+  const link=document.getElementById('upiLink');
+  if(link){
+    link.href='upi://pay?pa='+encodeURIComponent(upiId)+'&pn='+encodeURIComponent(upiName)+'&cu=INR';
+    link.classList.remove('hidden');
+  }
+}
+
 function generateUPI(){
   const upiId = (document.getElementById('upiId')?.value || 'vikas.1240@superyes').trim();
   const upiName = (document.getElementById('upiName')?.value || 'Vikas Chaurasiya Csc Jan Sewa Kendra').trim();
@@ -348,11 +358,9 @@ function initServiceTouch(){
 }
 
 function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'})}
-function boot(){document.getElementById('year').textContent=new Date().getFullYear();renderServices();renderTicker();loadPublicServices();initServiceTouch();resetServiceMotion();window.addEventListener('resize',()=>{computeMaxShift();applyServiceX(serviceX);});document.addEventListener('visibilitychange',()=>{if(document.hidden)stopServiceMotion();else scheduleServiceMotion();});window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeAdmin();}});document.getElementById('serviceModal').addEventListener('click',e=>{if(e.target.id==='serviceModal')closeModal()});document.getElementById('adminModal').addEventListener('click',e=>{if(e.target.id==='adminModal')closeAdmin()});document.getElementById('serviceSearch').addEventListener('input',()=>{stopServiceMotion();renderServices();if(!document.getElementById('serviceSearch').value.trim())scheduleServiceMotion();});}
+function boot(){document.getElementById('year').textContent=new Date().getFullYear();renderServices();renderTicker();updateUPIAppLink();
+const upiNameField=document.getElementById('upiName');
+if(upiNameField) upiNameField.addEventListener('input',updateUPIAppLink);
+loadPublicServices();initServiceTouch();resetServiceMotion();window.addEventListener('resize',()=>{computeMaxShift();applyServiceX(serviceX);});document.addEventListener('visibilitychange',()=>{if(document.hidden)stopServiceMotion();else scheduleServiceMotion();});window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeAdmin();}});document.getElementById('serviceModal').addEventListener('click',e=>{if(e.target.id==='serviceModal')closeModal()});document.getElementById('adminModal').addEventListener('click',e=>{if(e.target.id==='adminModal')closeAdmin()});document.getElementById('serviceSearch').addEventListener('input',()=>{stopServiceMotion();renderServices();if(!document.getElementById('serviceSearch').value.trim())scheduleServiceMotion();});}
 boot();
 
-
-// Generate the default UPI QR when the page finishes loading.
-window.addEventListener('load', () => {
-  try { generateUPI(); } catch (e) { console.warn('Initial UPI QR failed:', e); }
-});
