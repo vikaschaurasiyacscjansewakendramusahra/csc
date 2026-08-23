@@ -688,3 +688,37 @@ html, body { overflow-x:hidden !important; max-width:100%; }
  #serviceGrid.service-grid .service-card ul{font-size:7.5px!important;line-height:1.4!important;padding-left:11px!important;}
  #serviceGrid.service-grid .service-card .more{font-size:6.7px!important;}
 }
+
+
+/* FINAL CARD GAP FIX: preserve all 10 cards, collapse only the vertical empty space. */
+#serviceGrid.service-grid{
+  display:block !important;
+  position:relative !important;
+  width:100% !important;
+  min-width:100% !important;
+  gap:0 !important;
+  overflow:visible !important;
+}
+#serviceGrid.service-grid .service-card{
+  overflow:hidden !important;
+  min-width:0 !important;
+  max-width:100% !important;
+}
+.service-viewport{
+  overflow:hidden !important;
+  padding:6px 2px 22px !important;
+}
+@media(max-width:760px){
+  #serviceGrid.service-grid{width:100% !important;}
+  .service-card h3{font-size:18.5px !important;line-height:1.22 !important;}
+  .service-card p{font-size:13.5px !important;line-height:1.42 !important;}
+  .service-card ul{font-size:15.5px !important;line-height:1.5 !important;padding-left:18px !important;}
+  .service-card{padding:12px !important;border-radius:16px !important;}
+  .service-icon{font-size:28px !important;margin-bottom:6px !important;}
+}
+@media(max-width:560px){
+  .service-card h3{font-size:17.5px !important;}
+  .service-card p{font-size:12.5px !important;}
+  .service-card ul{font-size:14.5px !important;line-height:1.48 !important;}
+  .service-card{padding:11px !important;}
+}

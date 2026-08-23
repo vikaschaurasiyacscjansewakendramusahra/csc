@@ -58,19 +58,35 @@ function renderServices(){
 
 function layoutServiceMasonry(){
  const grid=document.getElementById('serviceGrid');
- if(!grid)return;
- // Use a real 3-column grid on mobile: the browser owns row heights, so cards
- // can never overlap and text reflow is recalculated automatically.
- grid.querySelectorAll('.service-card').forEach(card=>{
-   card.style.position='relative';
-   card.style.left='auto';
-   card.style.top='auto';
-   card.style.width='auto';
+ const vp=document.getElementById('serviceViewport');
+ if(!grid||!vp)return;
+ const cards=[...grid.querySelectorAll('.service-card')];
+ if(!cards.length)return;
+ // Row-preserving masonry: card 1/2/3 form the first row, but each next
+ // card starts immediately below the card above it in the same column.
+ // This removes the large empty gaps without removing/reordering any card.
+ const styles=getComputedStyle(grid);
+ const gap=parseFloat(styles.columnGap)||9;
+ const width=grid.clientWidth;
+ const colW=(width-gap*2)/3;
+ const tops=[0,0,0];
+ grid.style.display='block';
+ grid.style.position='relative';
+ grid.style.width='100%';
+ grid.style.minHeight='0';
+ cards.forEach((card,i)=>{
+   card.style.position='absolute';
+   card.style.left=`${(i%3)*(colW+gap)}px`;
+   card.style.top=`${tops[i%3]}px`;
+   card.style.width=`${colW}px`;
    card.style.height='auto';
    card.style.margin='0';
+   card.style.boxSizing='border-box';
+   tops[i%3]=tops[i%3]+card.offsetHeight+gap;
  });
- grid.style.height='auto';
- grid.style.minHeight='0';
+ grid.style.height=`${Math.max(...tops)-gap}px`;
+ // Keep the viewport height in sync so nothing is clipped at the bottom.
+ vp.style.minHeight=`${Math.max(...tops)-gap+20}px`;
 }
 
 window.addEventListener('resize',()=>layoutServiceMasonry());
@@ -245,9 +261,9 @@ function serviceViewport(){return document.getElementById('serviceViewport')}
 function computeMaxShift(){
  const vp=serviceViewport(), grid=document.getElementById('serviceGrid');
  if(!vp||!grid)return 0;
- // Keep every card fully inside the visible display while still allowing
- // the service area to gently travel left/right.
- return 0;
+ // Small symmetric travel: cards stay inside the viewport while the service
+ // area still visibly moves left and right.
+ return Math.min(18, Math.max(0, vp.clientWidth * 0.035));
 }
 function applyServiceX(x){
  const grid=document.getElementById('serviceGrid'); if(!grid)return;
