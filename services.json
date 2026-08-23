@@ -49,10 +49,6 @@
       [
         "Ayushman 2.0 & Health Services",
         "https://pmjay.gov.in/"
-      ],
-      [
-        "आधार आधारित e-KYC व वेरिफिकेशन",
-        "https://uidai.gov.in/en/component/search?searchword=ekyc&searchphrase=all&limit=20"
       ]
     ]
   },
@@ -151,6 +147,10 @@
       [
         "DigiLocker दस्तावेज सेवाएँ",
         "https://www.digilocker.gov.in/"
+      ],
+      [
+        "eSign – डिजिटल हस्ताक्षर",
+        "https://cca.gov.in/"
       ]
     ]
   },
@@ -198,8 +198,12 @@
         "https://cca.gov.in/"
       ],
       [
-        "eSign – डिजिटल हस्ताक्षर",
-        "https://cca.gov.in/"
+        "GeM Seller Registration सहायता",
+        "https://gem.gov.in/"
+      ],
+      [
+        "Insurance – Life / Health / Motor",
+        "https://www.irdai.gov.in/"
       ]
     ]
   },
@@ -237,6 +241,10 @@
       [
         "उत्तर प्रदेश छात्रवृत्ति (UP Scholarship)",
         "https://scholarship.up.gov.in/"
+      ],
+      [
+        "Skill India / रोजगार पंजीकरण",
+        "https://www.skillindia.gov.in/"
       ]
     ]
   },
@@ -374,28 +382,12 @@
         "https://consumer.uppcl.org/wss/pay_bill_home"
       ],
       [
-        "Insurance – Life / Health / Motor",
-        "https://www.irdai.gov.in/"
-      ],
-      [
-        "Skill India / रोजगार पंजीकरण",
-        "https://www.skillindia.gov.in/"
-      ],
-      [
         "Tele-Law – कानूनी सहायता",
         "https://www.tele-law.in/"
       ],
       [
         "e-Shram 2.0 अपडेट",
         "https://eshram.gov.in/"
-      ],
-      [
-        "CSC के नए G2C / B2C डिजिटल सेवाएँ",
-        "https://www.google.com/search?q=VIKAS+CSC+e-governance+BLS+CSC+Uttar+Pradesh+Jan+Sewa+Kendra+Near+CSC+Center+Cyber+Cafe"
-      ],
-      [
-        "ऑनलाइन प्रीपेड / अन्य कोई भी नई डिजिटल सेवा",
-        "https://digitalseva.csc.gov.in/"
       ]
     ]
   },
@@ -431,8 +423,16 @@
         "https://pmvishwakarma.gov.in/"
       ],
       [
-        "GeM Seller Registration सहायता",
-        "https://gem.gov.in/"
+        "CSC के नए G2C / B2C डिजिटल सेवाएँ",
+        "https://www.google.com/search?q=VIKAS+CSC+e-governance+BLS+CSC+Uttar+Pradesh+Jan+Sewa+Kendra+Near+CSC+Center+Cyber+Cafe"
+      ],
+      [
+        "आधार आधारित e-KYC व वेरिफिकेशन",
+        "https://uidai.gov.in/en/component/search?searchword=ekyc&searchphrase=all&limit=20"
+      ],
+      [
+        "ऑनलाइन प्रीपेड / अन्य कोई भी नई डिजिटल सेवा",
+        "https://digitalseva.csc.gov.in/"
       ]
     ]
   },

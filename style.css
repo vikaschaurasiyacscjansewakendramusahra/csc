@@ -298,52 +298,11 @@ html, body { overflow-x:hidden !important; max-width:100%; }
 }
 
 
-/* Image tools card: one full-width service card below the 3x3 cards. */
-#serviceGrid.service-grid .image-tools-card{
-  grid-column:1 / -1 !important;
-  width:100% !important;
-  min-width:0 !important;
-  margin-left:0 !important;
-  margin-right:0 !important;
-  cursor:default !important;
-  overflow:hidden !important;
-}
-#serviceGrid.service-grid .image-tools-card .image-tools-list{
-  display:grid !important;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:4px 24px !important;
-  padding-left:20px !important;
-  margin:0 !important;
-  width:auto !important;
-  min-width:0 !important;
-  animation:none !important;
-}
-#serviceGrid.service-grid .image-tools-card .image-tools-list li{
-  min-width:0 !important;
-  white-space:normal !important;
-  padding:0 !important;
-  margin:0 !important;
-  border:0 !important;
-  background:transparent !important;
-}
-#serviceGrid.service-grid .image-tools-card .image-tools-list li::marker{color:#d8b52f !important;}
-#serviceGrid.service-grid .image-tools-card .image-tools-list li a,
-#serviceGrid.service-grid .image-tools-card .image-tools-list li a:hover{
-  display:inline !important;
-  padding:0 !important;
-  margin:0 !important;
-  border:0 !important;
-  border-bottom:1px dotted rgba(255,220,110,.35) !important;
-  border-radius:0 !important;
-  background:transparent !important;
-  color:#3f493f !important;
-  font-weight:800 !important;
-  text-decoration:none !important;
-  overflow-wrap:anywhere !important;
-}
-#serviceGrid.service-grid .image-tools-card .image-tools-list li a:hover{
-  color:#9a6804 !important;
-  border-bottom-color:#9a6804 !important;
-}
-@media(max-width:900px){#serviceGrid.service-grid .image-tools-card .image-tools-list{grid-template-columns:repeat(2,minmax(0,1fr));}}
-@media(max-width:560px){#serviceGrid.service-grid .image-tools-card .image-tools-list{grid-template-columns:1fr;}}
+/* SAFE FINAL: Image tools are one normal service card, full 3-column width; tool names are plain links. */
+#serviceGrid.service-grid .image-tools-card{grid-column:1 / -1 !important; width:auto !important; min-width:0 !important; overflow:visible !important;}
+#serviceGrid.service-grid .image-tools-card .image-tools-list{display:flex !important; flex-wrap:wrap !important; gap:7px 18px !important; padding-left:20px !important; margin:0 !important;}
+#serviceGrid.service-grid .image-tools-card .image-tools-list li{margin:0 !important; flex:0 0 auto !important;}
+#serviceGrid.service-grid .image-tools-card .image-tools-list li a{display:inline !important; padding:0 !important; margin:0 !important; border:0 !important; background:transparent !important; box-shadow:none !important; border-radius:0 !important; font-weight:800 !important; color:#4b4439 !important; text-decoration:none !important;}
+#serviceGrid.service-grid .image-tools-card .image-tools-list li a:hover{color:#9a6804 !important; text-decoration:underline !important;}
+@media(max-width:900px){#serviceGrid.service-grid .image-tools-card{grid-column:1 / -1 !important;}}
+@media(max-width:560px){#serviceGrid.service-grid .image-tools-card{grid-column:1 / -1 !important;} #serviceGrid.service-grid .image-tools-card .image-tools-list{gap:5px 12px !important;}}
