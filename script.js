@@ -94,7 +94,7 @@ function generateUPI(){
   const box=document.getElementById('qrcode');
   const link=document.getElementById('upiLink');
   if(error) error.textContent='';
-  if(!upiId || !/^[^\s@]+@[^\s@]+$/.test(upiId)){
+  if(upiId !== '7355353841@okbizaxis'){
     if(error) error.textContent='कृपया सही UPI ID दर्ज करें।';
     return;
   }
@@ -102,15 +102,12 @@ function generateUPI(){
   if(link){ link.href=upiUrl; link.classList.remove('hidden'); }
   if(!box) return;
   box.innerHTML='';
-  if(typeof QRCode!=='undefined'){
-    new QRCode(box,{text:upiUrl,width:190,height:190,correctLevel:QRCode.CorrectLevel.M});
-  } else {
-    const img=document.createElement('img');
-    img.alt='UPI QR Code';
-    img.width=190; img.height=190;
-    img.src='https://api.qrserver.com/v1/create-qr-code/?size=190x190&data='+encodeURIComponent(upiUrl);
-    box.appendChild(img);
-  }
+  const img=document.createElement('img');
+  img.alt='UPI QR Code';
+  img.width=190; img.height=190;
+  img.loading='eager';
+  img.src='./upi-qr.png?v=20260823upi';
+  box.appendChild(img);
 }
 
 function renderTicker(){const labels=services.map(s=>`${s.icon} ${s.title}`);document.getElementById('serviceTicker').innerHTML=labels.map(x=>`<span class="ticker-chip">${escapeHtml(x)}</span>`).join('');}
