@@ -297,15 +297,156 @@ html, body { overflow-x:hidden !important; max-width:100%; }
   #serviceGrid.service-grid .service-card{margin-left:9%!important;margin-right:9%!important;}
 }
 
-/* FINAL SERVICE CAROUSEL: 3 cards per view, all cards horizontally scrollable */
+/* FINAL SERVICE LAYOUT V18 — masonry-like rows, safe side margins, larger text */
 .service-viewport{width:100%!important;max-width:100%!important;overflow:hidden!important;position:relative!important;padding:0 10px!important;box-sizing:border-box!important;}
-#serviceGrid.service-grid{display:grid!important;grid-template-columns:none!important;grid-template-rows:repeat(3,max-content)!important;grid-auto-flow:column!important;grid-auto-columns:calc((100% - 24px)/3)!important;column-gap:12px!important;row-gap:10px!important;width:100%!important;max-width:none!important;min-width:0!important;margin:0!important;padding:0!important;box-sizing:border-box!important;align-items:start!important;will-change:transform;}
+#serviceGrid.service-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-auto-rows:8px!important;column-gap:12px!important;row-gap:10px!important;width:108%!important;max-width:none!important;min-width:0!important;margin:0!important;align-items:start!important;padding:0 8px!important;box-sizing:border-box!important;}
 #serviceGrid.service-grid .service-card{margin:0!important;width:auto!important;min-width:0!important;max-width:none!important;overflow:hidden!important;box-sizing:border-box!important;align-self:start!important;}
 #serviceGrid.service-grid .service-card h3{font-size:19px!important;line-height:1.28!important;}
 #serviceGrid.service-grid .service-card p{font-size:14px!important;line-height:1.45!important;}
 #serviceGrid.service-grid .service-card ul{font-size:15px!important;line-height:1.55!important;}
 #serviceGrid.service-grid .service-card li,#serviceGrid.service-grid .service-card li a{overflow-wrap:anywhere!important;word-break:normal!important;}
-#serviceGrid.service-grid .image-tools-wide{grid-column:auto!important;width:auto!important;}
-#serviceGrid.service-grid .image-tools-wide ul{display:block!important;padding-left:20px!important;}
-@media(max-width:760px){#serviceGrid.service-grid{grid-auto-columns:calc((100% - 20px)/3)!important;column-gap:10px!important;row-gap:8px!important;}#serviceGrid.service-grid .service-card{padding:15px!important;}}
-@media(max-width:560px){.service-viewport{padding:0 8px!important;}#serviceGrid.service-grid{grid-auto-columns:calc((100% - 18px)/3)!important;column-gap:9px!important;row-gap:7px!important;}#serviceGrid.service-grid .service-card{padding:13px!important;}#serviceGrid.service-grid .service-card h3{font-size:18px!important;}#serviceGrid.service-grid .service-card p{font-size:13.5px!important;}#serviceGrid.service-grid .service-card ul{font-size:15px!important;line-height:1.52!important;}}
+#serviceGrid.service-grid .image-tools-wide{grid-column:1 / -1!important;width:auto!important;}
+#serviceGrid.service-grid .image-tools-wide ul{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;column-gap:28px!important;row-gap:4px!important;padding-left:22px!important;}
+#serviceGrid.service-grid .image-tools-wide li a{display:inline!important;white-space:normal!important;}
+@media(max-width:760px){#serviceGrid.service-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;column-gap:10px!important;row-gap:8px!important;width:108%!important;padding:0 7px!important;}#serviceGrid.service-grid .service-card{padding:15px!important;}#serviceGrid.service-grid .image-tools-wide ul{grid-template-columns:repeat(2,minmax(0,1fr))!important;column-gap:18px!important;row-gap:3px!important;padding-left:20px!important;}}
+@media(max-width:560px){.service-viewport{padding:0 8px!important;}#serviceGrid.service-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;column-gap:9px!important;row-gap:7px!important;width:108%!important;padding:0 6px!important;}#serviceGrid.service-grid .service-card{padding:13px!important;}#serviceGrid.service-grid .service-card h3{font-size:18px!important;}#serviceGrid.service-grid .service-card p{font-size:13.5px!important;}#serviceGrid.service-grid .service-card ul{font-size:15px!important;line-height:1.52!important;}#serviceGrid.service-grid .image-tools-wide ul{grid-template-columns:1fr!important;row-gap:2px!important;padding-left:20px!important;}#serviceGrid.service-grid .image-tools-wide li a{font-size:15px!important;line-height:1.5!important;}}
+
+
+/* FINAL MASONRY FIX — Image Tools stays a normal card and fills the open column. */
+#serviceGrid.service-grid .image-tools-wide{
+  grid-column:auto!important;
+  width:auto!important;
+  margin-top:0!important;
+}
+
+/* FINAL USER-REQUESTED SERVICE + PAYMENT POLISH — preserves all service text, links and Ask AI */
+.service-viewport{
+  width:100%!important;max-width:100%!important;overflow:hidden!important;
+  padding:0 12px 18px!important;box-sizing:border-box!important;
+}
+#serviceGrid.service-grid{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  grid-auto-rows:8px!important;
+  column-gap:10px!important;
+  row-gap:8px!important;
+  width:100%!important;min-width:0!important;max-width:100%!important;
+  margin:0!important;padding:0!important;box-sizing:border-box!important;
+  overflow:visible!important;
+}
+#serviceGrid.service-grid .service-card{
+  width:auto!important;min-width:0!important;max-width:none!important;
+  margin:0!important;box-sizing:border-box!important;overflow:hidden!important;
+  padding:14px!important;align-self:start!important;
+}
+#serviceGrid.service-grid .service-card h3{
+  font-size:19px!important;line-height:1.3!important;
+  overflow-wrap:normal!important;word-break:normal!important;
+}
+#serviceGrid.service-grid .service-card p{
+  font-size:14px!important;line-height:1.45!important;
+}
+#serviceGrid.service-grid .service-card ul{
+  font-size:15px!important;line-height:1.52!important;
+  padding-left:18px!important;margin-top:10px!important;
+}
+#serviceGrid.service-grid .service-card li,
+#serviceGrid.service-grid .service-card li a{
+  overflow-wrap:break-word!important;word-break:normal!important;
+}
+#serviceGrid.service-grid .image-tools-wide{
+  grid-column:1 / -1!important;width:100%!important;
+  margin-top:2px!important;
+}
+#serviceGrid.service-grid .image-tools-wide ul{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  column-gap:24px!important;row-gap:4px!important;
+  padding-left:20px!important;
+}
+.payment-card{overflow:visible!important}
+.upi-permanent-pay{
+  margin-top:14px!important;padding:13px 14px!important;border:1px solid #d8c98f!important;
+  border-radius:14px!important;background:linear-gradient(145deg,#fffdf2,#f5f9ef)!important;
+  text-align:center!important;box-shadow:0 8px 22px rgba(80,60,15,.07)!important;
+}
+.upi-permanent-title{font-size:15px!important;font-weight:900!important;color:#6f4e08!important;letter-spacing:.3px!important}
+.upi-permanent-id{margin:5px 0 8px!important;font-size:13px!important;font-weight:800!important;color:#514b40!important}
+.upi-permanent-button{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  padding:10px 14px!important;border-radius:11px!important;
+  background:linear-gradient(145deg,#fff4b9,#e5b83e)!important;color:#2b210d!important;
+  border:1px solid #d6aa36!important;font-weight:900!important;text-decoration:none!important;
+}
+.upi-permanent-pay:after{content:'• Direct UPI App payment हमेशा उपलब्ध रहेगा';display:block;margin-top:7px;font-size:11px;font-weight:800;color:#8a6a1b}
+#qrcode{min-height:205px!important;display:flex!important;align-items:center!important;justify-content:center!important}
+#upiLink{margin-top:10px!important}
+@media(max-width:760px){
+  .service-viewport{padding-left:10px!important;padding-right:10px!important}
+  #serviceGrid.service-grid{column-gap:9px!important;row-gap:7px!important}
+  #serviceGrid.service-grid .service-card{padding:13px!important}
+  #serviceGrid.service-grid .service-card h3{font-size:18px!important}
+  #serviceGrid.service-grid .service-card p{font-size:13.5px!important}
+  #serviceGrid.service-grid .service-card ul{font-size:15px!important;line-height:1.5!important}
+}
+@media(max-width:560px){
+  .service-viewport{padding-left:8px!important;padding-right:8px!important}
+  #serviceGrid.service-grid{column-gap:8px!important;row-gap:6px!important}
+  #serviceGrid.service-grid .service-card{padding:12px!important}
+  #serviceGrid.service-grid .service-card h3{font-size:17px!important;line-height:1.28!important}
+  #serviceGrid.service-grid .service-card p{font-size:13px!important}
+  #serviceGrid.service-grid .service-card ul{font-size:14.5px!important;line-height:1.48!important}
+  #serviceGrid.service-grid .image-tools-wide ul{grid-template-columns:1fr 1fr!important;column-gap:12px!important}
+}
+
+/* FINAL OVERLAP FIX: Image Tools is one normal masonry card in the open column.
+   Keep all other service cards in their own columns; never stretch this card across the grid. */
+#serviceGrid.service-grid .image-tools-wide{
+  grid-column:auto!important;
+  grid-column-start:auto!important;
+  grid-column-end:auto!important;
+  width:auto!important;
+  max-width:100%!important;
+  margin:0!important;
+  align-self:start!important;
+  position:relative!important;
+  z-index:1!important;
+}
+#serviceGrid.service-grid .image-tools-wide ul{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  column-gap:14px!important;
+  row-gap:3px!important;
+}
+@media(max-width:560px){
+  #serviceGrid.service-grid .image-tools-wide ul{grid-template-columns:1fr 1fr!important;column-gap:10px!important;}
+}
+
+
+/* FINAL: Image Tools is a normal single-column masonry card; never span/overlap other services. */
+#serviceGrid.service-grid .image-tools-card{
+  grid-column:auto!important;
+  grid-column-start:auto!important;
+  grid-column-end:auto!important;
+  grid-row-start:auto!important;
+  grid-row-end:auto!important;
+  width:auto!important;
+  max-width:100%!important;
+  margin:0!important;
+  position:relative!important;
+  z-index:1!important;
+  align-self:start!important;
+}
+#serviceGrid.service-grid .image-tools-card ul{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  column-gap:14px!important;
+  row-gap:3px!important;
+  padding-left:18px!important;
+}
+#serviceGrid.service-grid .image-tools-card li a{
+  display:inline!important;
+  white-space:normal!important;
+}
+@media(max-width:560px){
+  #serviceGrid.service-grid .image-tools-card ul{grid-template-columns:1fr 1fr!important;column-gap:10px!important;}
+}

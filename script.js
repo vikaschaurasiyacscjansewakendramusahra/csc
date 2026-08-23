@@ -27,7 +27,7 @@ let services = DEFAULT_SERVICES.map(normalizeService);
 let isAdmin = false;
 async function loadPublicServices(){
   try{
-    const res=await fetch('./services.json?v=20260823final2',{cache:'no-store'});
+    const res=await fetch('./services.json?v=20260823fix',{cache:'no-store'});
     if(!res.ok) throw new Error('services.json '+res.status);
     const data=await res.json();
     if(Array.isArray(data) && data.length){
@@ -50,7 +50,7 @@ function renderServices(){
  grid.innerHTML=filtered.map(s=>{
    const isImageTools=s.title==='Compress, Resize & Edit Pictures';
    const items=(s.items||[]).map(x=>`<li><a href="${safeUrl(itemUrl(x))}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">${escapeHtml(itemText(x))} ↗</a></li>`).join('');
-   return `<article class="service-card ${isImageTools?'image-tools-wide':''}" data-service-title="${escapeHtml(s.title)}" onclick='openService(${JSON.stringify(s).replace(/'/g,'&#39;')})'><div class="service-icon">${s.icon}</div><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.desc)}</p><ul>${items}</ul><div class="more">🔗 सेवा पर टच करें • आधिकारिक पोर्टल खुलेगा</div></article>`;
+   return `<article class="service-card ${isImageTools?'image-tools-card':''}" data-service-title="${escapeHtml(s.title)}" onclick='openService(${JSON.stringify(s).replace(/'/g,'&#39;')})'><div class="service-icon">${s.icon}</div><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.desc)}</p><ul>${items}</ul><div class="more">🔗 सेवा पर टच करें • आधिकारिक पोर्टल खुलेगा</div></article>`;
  }).join('')||'<div class="service-card"><h3>कोई सेवा नहीं मिली</h3><p>दूसरा शब्द खोजकर देखें।</p></div>';
  layoutServiceMasonry();
  resetServiceMotion();
@@ -60,20 +60,55 @@ function layoutServiceMasonry(){
  const grid=document.getElementById('serviceGrid'); if(!grid)return;
  const cards=[...grid.children];
  if(!cards.length)return;
- cards.forEach(c=>c.style.gridRowEnd='');
+ cards.forEach(c=>{c.style.gridRowEnd='';c.style.gridRowStart='';c.style.gridColumn='';});
  requestAnimationFrame(()=>{
    const styles=getComputedStyle(grid);
    const rowH=parseFloat(styles.gridAutoRows)||8;
    const gap=parseFloat(styles.rowGap)||8;
+   const cols=Math.max(1,Math.min(3,parseInt(styles.gridTemplateColumns.split(' ').length,10)||3));
+   const heights=new Array(cols).fill(0);
+
+   // Place each card in the currently shortest column. This keeps the existing
+   // service order while filling the empty space instead of leaving a large
+   // vertical gap. The Image Tools card is intentionally treated like every
+   // other card, so it can occupy the open left column after the first nine.
    cards.forEach(card=>{
-     if(card.classList.contains('image-tools-wide')) return;
      const h=card.getBoundingClientRect().height;
      const span=Math.max(1,Math.ceil((h+gap)/(rowH+gap)));
+     let col=0;
+     for(let i=1;i<cols;i++) if(heights[i]<heights[col]) col=i;
+     const start=heights[col]+1;
+     card.style.gridColumn=`${col+1}`;
+     card.style.gridRowStart=String(start);
      card.style.gridRowEnd=`span ${span}`;
+     heights[col]=start+span-1;
    });
  });
 }
 window.addEventListener('resize',()=>layoutServiceMasonry());
+
+function generateUPI(){
+  const upiId=(document.getElementById('upiId')?.value||'').trim();
+  const name=(document.getElementById('upiName')?.value||'Vikas Chaurasiya Csc Jan Sewa Kendra').trim();
+  const error=document.getElementById('upiError');
+  const box=document.getElementById('qrcode');
+  const link=document.getElementById('upiLink');
+  if(error) error.textContent='';
+  if(upiId !== '7355353841@okbizaxis'){
+    if(error) error.textContent='कृपया सही UPI ID दर्ज करें।';
+    return;
+  }
+  const upiUrl='upi://pay?pa='+encodeURIComponent(upiId)+'&pn='+encodeURIComponent(name)+'&cu=INR';
+  if(link){ link.href=upiUrl; link.classList.remove('hidden'); }
+  if(!box) return;
+  box.innerHTML='';
+  const img=document.createElement('img');
+  img.alt='UPI QR Code';
+  img.width=190; img.height=190;
+  img.loading='eager';
+  img.src='./upi-qr.png?v=20260823upi';
+  box.appendChild(img);
+}
 
 function renderTicker(){const labels=services.map(s=>`${s.icon} ${s.title}`);document.getElementById('serviceTicker').innerHTML=labels.map(x=>`<span class="ticker-chip">${escapeHtml(x)}</span>`).join('');}
 function openService(s){document.getElementById('modalIcon').textContent=s.icon;document.getElementById('modalTitle').textContent=s.title;document.getElementById('modalDescription').textContent=s.desc;document.getElementById('modalPortals').innerHTML=(s.portals||[]).map(p=>`<a class="portal-btn" href="${safeUrl(p[1])}" target="_blank" rel="noopener">${escapeHtml(p[0])} ↗</a>`).join('');document.getElementById('modalItems').innerHTML=(s.items||[]).map(x=>`<li><a href="${safeUrl(itemUrl(x))}" target="_blank" rel="noopener">${escapeHtml(itemText(x))} ↗</a></li>`).join('');document.getElementById('serviceModal').classList.add('show');document.getElementById('serviceModal').setAttribute('aria-hidden','false');stopServiceMotion();}
@@ -305,16 +340,6 @@ function initServiceTouch(){
  vp.addEventListener('lostpointercapture',()=>{servicePointerId=null;serviceDragActive=false;});
 }
 
-function generateUPI(){
-  const id=(document.getElementById('upiId')?.value||'').trim();
-  const name=(document.getElementById('upiName')?.value||'Vikas Chaurasiya Csc Jan Sewa Kendra').trim();
-  const err=document.getElementById('upiError'), box=document.getElementById('qrcode'), link=document.getElementById('upiLink');
-  if(!id || !/^[A-Za-z0-9.\-_]{2,}@[A-Za-z0-9.\-]{2,}$/.test(id)){ if(err) err.textContent='कृपया सही UPI ID दर्ज करें'; return; }
-  const upi='upi://pay?pa='+encodeURIComponent(id)+'&pn='+encodeURIComponent(name)+'&cu=INR';
-  if(err) err.textContent='';
-  if(box){ box.innerHTML=''; if(window.QRCode){ new QRCode(box,{text:upi,width:220,height:220,correctLevel:QRCode.CorrectLevel.M}); } else { const img=document.createElement('img'); img.alt='UPI QR Code'; img.width=220; img.height=220; img.src='https://api.qrserver.com/v1/create-qr-code/?size=220x220&data='+encodeURIComponent(upi); box.appendChild(img); } }
-  if(link){ link.href=upi; link.classList.remove('hidden'); }
-}
 function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'})}
 function boot(){document.getElementById('year').textContent=new Date().getFullYear();renderServices();renderTicker();loadPublicServices();initServiceTouch();resetServiceMotion();window.addEventListener('resize',()=>{computeMaxShift();applyServiceX(serviceX);});document.addEventListener('visibilitychange',()=>{if(document.hidden)stopServiceMotion();else scheduleServiceMotion();});window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeAdmin();}});document.getElementById('serviceModal').addEventListener('click',e=>{if(e.target.id==='serviceModal')closeModal()});document.getElementById('adminModal').addEventListener('click',e=>{if(e.target.id==='adminModal')closeAdmin()});document.getElementById('serviceSearch').addEventListener('input',()=>{stopServiceMotion();renderServices();if(!document.getElementById('serviceSearch').value.trim())scheduleServiceMotion();});}
 boot();
