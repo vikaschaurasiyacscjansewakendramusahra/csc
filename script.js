@@ -63,6 +63,8 @@ function generateUPI(){
     '&pn=' + encodeURIComponent(upiName) + '&cu=INR';
 
   qrBox.innerHTML='';
+  qrBox.classList.remove('qr-hidden');
+  qrBox.setAttribute('aria-hidden','false');
   if(link){ link.href=upiUrl; link.classList.remove('hidden'); }
 
   // Primary: QRCode.js (already loaded by index.html)
