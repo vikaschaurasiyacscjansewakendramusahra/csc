@@ -39,6 +39,48 @@ async function loadPublicServices(){
   }
 }
 const CURRENT_PASSWORD_SHA256='929dfb98067eccee61b09e7cac9d7c5b473f13f7f5c4b38378b09f9c43f8e4cc';
+function generateUPI(){
+  const upiId = (document.getElementById('upiId')?.value || 'vikas.1240@superyes').trim();
+  const upiName = (document.getElementById('upiName')?.value || 'Vikas Chaurasiya Csc Jan Sewa Kendra').trim();
+  const qrBox = document.getElementById('qrcode');
+  const link = document.getElementById('upiLink');
+  const err = document.getElementById('upiError');
+  if(!qrBox) return;
+  if(err) err.textContent='';
+  if(!upiId){ if(err) err.textContent='UPI ID उपलब्ध नहीं है।'; return; }
+
+  const upiUrl = 'upi://pay?pa=' + encodeURIComponent(upiId) +
+    '&pn=' + encodeURIComponent(upiName) + '&cu=INR';
+
+  qrBox.innerHTML='';
+  if(link){ link.href=upiUrl; link.classList.remove('hidden'); }
+
+  // Primary: QRCode.js (already loaded by index.html)
+  if(typeof window.QRCode === 'function'){
+    try{
+      new window.QRCode(qrBox, {
+        text: upiUrl,
+        width: 220,
+        height: 220,
+        correctLevel: window.QRCode.CorrectLevel?.M || 0
+      });
+      return;
+    }catch(e){ console.warn('QRCode.js failed:', e); }
+  }
+
+  // Fallback: render a QR image if the CDN library is temporarily unavailable.
+  const img=document.createElement('img');
+  img.alt='UPI Payment QR Code';
+  img.width=220; img.height=220;
+  img.loading='eager';
+  img.src='https://quickchart.io/qr?size=220&text='+encodeURIComponent(upiUrl);
+  img.onerror=()=>{
+    qrBox.innerHTML='<span>QR service अभी उपलब्ध नहीं है। नीचे “UPI App में खोलें” पर टैप करें।</span>';
+    if(err) err.textContent='QR library load नहीं हुई। UPI App वाला विकल्प उपलब्ध है।';
+  };
+  qrBox.appendChild(img);
+}
+
 function escapeHtml(str){return String(str).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
 function safeUrl(url){try{const u=new URL(url);return /^https?:$/.test(u.protocol)?u.href:'#'}catch{return '#'}}
 function itemText(i){return Array.isArray(i)?String(i[0]||''):String(i?.text||'')}
@@ -308,3 +350,9 @@ function initServiceTouch(){
 function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'})}
 function boot(){document.getElementById('year').textContent=new Date().getFullYear();renderServices();renderTicker();loadPublicServices();initServiceTouch();resetServiceMotion();window.addEventListener('resize',()=>{computeMaxShift();applyServiceX(serviceX);});document.addEventListener('visibilitychange',()=>{if(document.hidden)stopServiceMotion();else scheduleServiceMotion();});window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeAdmin();}});document.getElementById('serviceModal').addEventListener('click',e=>{if(e.target.id==='serviceModal')closeModal()});document.getElementById('adminModal').addEventListener('click',e=>{if(e.target.id==='adminModal')closeAdmin()});document.getElementById('serviceSearch').addEventListener('input',()=>{stopServiceMotion();renderServices();if(!document.getElementById('serviceSearch').value.trim())scheduleServiceMotion();});}
 boot();
+
+
+// Generate the default UPI QR when the page finishes loading.
+window.addEventListener('load', () => {
+  try { generateUPI(); } catch (e) { console.warn('Initial UPI QR failed:', e); }
+});
