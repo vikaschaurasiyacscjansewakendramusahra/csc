@@ -72,8 +72,13 @@
             <button class="gold-btn" onclick="generateUPI()">QR Generate करें</button>
           </div>
           <div id="upiError" class="error"></div>
+          <div class="upi-permanent-pay">
+            <div class="upi-permanent-title">DIRECT UPI PAYMENT</div>
+            <div class="upi-permanent-id">vikas.1240@superyes</div>
+            <a class="upi-permanent-button" href="upi://pay?pa=vikas.1240%40superyes&amp;pn=Vikas%20Chaurasiya%20Csc%20Jan%20Sewa%20Kendra&amp;cu=INR">📲 PAY DIRECTLY WITH UPI APP</a>
+          </div>
         </div>
-        <div class="qr-wrap"><div id="qrcode" class="qr-hidden" aria-hidden="true"></div><a id="upiLink" class="pay-link" href="upi://pay?pa=vikas.1240%40superyes&pn=Vikas%20Chaurasiya%20Csc%20Jan%20Sewa%20Kendra&cu=INR">📲 UPI App में खोलें</a></div>
+        <div class="qr-wrap"><div id="qrcode"><span>QR Generate करें</span></div><a id="upiLink" class="pay-link hidden" href="#">📲 UPI App में खोलें</a></div>
       </div>
     </section>
 

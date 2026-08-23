@@ -39,62 +39,29 @@ async function loadPublicServices(){
   }
 }
 const CURRENT_PASSWORD_SHA256='929dfb98067eccee61b09e7cac9d7c5b473f13f7f5c4b38378b09f9c43f8e4cc';
-function updateUPIAppLink(){
-  const upiId=(document.getElementById('upiId')?.value || 'vikas.1240@superyes').trim();
-  const upiName=(document.getElementById('upiName')?.value || 'Vikas Chaurasiya Csc Jan Sewa Kendra').trim();
-  const link=document.getElementById('upiLink');
-  if(link){
-    link.href='upi://pay?pa='+encodeURIComponent(upiId)+'&pn='+encodeURIComponent(upiName)+'&cu=INR';
-    link.classList.remove('hidden');
-  }
-}
-
-function generateUPI(){
-  const upiId = (document.getElementById('upiId')?.value || 'vikas.1240@superyes').trim();
-  const upiName = (document.getElementById('upiName')?.value || 'Vikas Chaurasiya Csc Jan Sewa Kendra').trim();
-  const qrBox = document.getElementById('qrcode');
-  const link = document.getElementById('upiLink');
-  const err = document.getElementById('upiError');
-  if(!qrBox) return;
-  if(err) err.textContent='';
-  if(!upiId){ if(err) err.textContent='UPI ID उपलब्ध नहीं है।'; return; }
-
-  const upiUrl = 'upi://pay?pa=' + encodeURIComponent(upiId) +
-    '&pn=' + encodeURIComponent(upiName) + '&cu=INR';
-
-  qrBox.innerHTML='';
-  qrBox.classList.remove('qr-hidden');
-  qrBox.setAttribute('aria-hidden','false');
-  if(link){ link.href=upiUrl; link.classList.remove('hidden'); }
-
-  // Primary: QRCode.js (already loaded by index.html)
-  if(typeof window.QRCode === 'function'){
-    try{
-      new window.QRCode(qrBox, {
-        text: upiUrl,
-        width: 220,
-        height: 220,
-        correctLevel: window.QRCode.CorrectLevel?.M || 0
-      });
-      return;
-    }catch(e){ console.warn('QRCode.js failed:', e); }
-  }
-
-  // Fallback: render a QR image if the CDN library is temporarily unavailable.
-  const img=document.createElement('img');
-  img.alt='UPI Payment QR Code';
-  img.width=220; img.height=220;
-  img.loading='eager';
-  img.src='https://quickchart.io/qr?size=220&text='+encodeURIComponent(upiUrl);
-  img.onerror=()=>{
-    qrBox.innerHTML='<span>QR service अभी उपलब्ध नहीं है। नीचे “UPI App में खोलें” पर टैप करें।</span>';
-    if(err) err.textContent='QR library load नहीं हुई। UPI App वाला विकल्प उपलब्ध है।';
-  };
-  qrBox.appendChild(img);
-}
-
 function escapeHtml(str){return String(str).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
 function safeUrl(url){try{const u=new URL(url);return /^https?:$/.test(u.protocol)?u.href:'#'}catch{return '#'}}
+function generateUPI(){
+ const id=(document.getElementById('upiId')?.value||'').trim();
+ const name=(document.getElementById('upiName')?.value||'Vikas Chaurasiya Csc Jan Sewa Kendra').trim();
+ const box=document.getElementById('qrcode');
+ const link=document.getElementById('upiLink');
+ const err=document.getElementById('upiError');
+ if(!box)return;
+ if(err)err.textContent='';
+ if(!id){if(err)err.textContent='कृपया UPI ID भरें।';return;}
+ const upi=`upi://pay?pa=${encodeURIComponent(id)}&pn=${encodeURIComponent(name)}&cu=INR`;
+ box.innerHTML='';
+ try{
+   if(typeof QRCode==='undefined') throw new Error('QR library unavailable');
+   new QRCode(box,{text:upi,width:190,height:190,correctLevel:QRCode.CorrectLevel.M});
+ }catch(e){
+   box.innerHTML='<span>QR अभी लोड नहीं हो पाया। फिर से Generate करें।</span>';
+   if(err)err.textContent='QR library लोड नहीं हुई।';
+   return;
+ }
+ if(link){link.href=upi;link.classList.remove('hidden');}
+}
 function itemText(i){return Array.isArray(i)?String(i[0]||''):String(i?.text||'')}
 function itemUrl(i){return Array.isArray(i)?String(i[1]||''):String(i?.url||'')}
 function matchesQuery(s,q){const hay=(s.title+' '+s.desc+' '+(s.items||[]).map(itemText).join(' ')).toLowerCase();return hay.includes(q)||q.split(/\s+/).filter(w=>w.length>1).some(w=>hay.includes(w));}
@@ -360,9 +327,5 @@ function initServiceTouch(){
 }
 
 function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'})}
-function boot(){document.getElementById('year').textContent=new Date().getFullYear();renderServices();renderTicker();updateUPIAppLink();
-const upiNameField=document.getElementById('upiName');
-if(upiNameField) upiNameField.addEventListener('input',updateUPIAppLink);
-loadPublicServices();initServiceTouch();resetServiceMotion();window.addEventListener('resize',()=>{computeMaxShift();applyServiceX(serviceX);});document.addEventListener('visibilitychange',()=>{if(document.hidden)stopServiceMotion();else scheduleServiceMotion();});window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeAdmin();}});document.getElementById('serviceModal').addEventListener('click',e=>{if(e.target.id==='serviceModal')closeModal()});document.getElementById('adminModal').addEventListener('click',e=>{if(e.target.id==='adminModal')closeAdmin()});document.getElementById('serviceSearch').addEventListener('input',()=>{stopServiceMotion();renderServices();if(!document.getElementById('serviceSearch').value.trim())scheduleServiceMotion();});}
+function boot(){document.getElementById('year').textContent=new Date().getFullYear();renderServices();renderTicker();loadPublicServices();initServiceTouch();resetServiceMotion();window.addEventListener('resize',()=>{computeMaxShift();applyServiceX(serviceX);});document.addEventListener('visibilitychange',()=>{if(document.hidden)stopServiceMotion();else scheduleServiceMotion();});window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeAdmin();}});document.getElementById('serviceModal').addEventListener('click',e=>{if(e.target.id==='serviceModal')closeModal()});document.getElementById('adminModal').addEventListener('click',e=>{if(e.target.id==='adminModal')closeAdmin()});document.getElementById('serviceSearch').addEventListener('input',()=>{stopServiceMotion();renderServices();if(!document.getElementById('serviceSearch').value.trim())scheduleServiceMotion();});}
 boot();
-
