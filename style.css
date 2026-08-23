@@ -296,3 +296,34 @@ html, body { overflow-x:hidden !important; max-width:100%; }
 @media(max-width:600px){
   #serviceGrid.service-grid .service-card{margin-left:9%!important;margin-right:9%!important;}
 }
+
+
+/* Requested: image tools as one full-width card below the existing 3x3 service cards. */
+#serviceGrid.service-grid .image-tools-card {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  cursor: default;
+}
+#serviceGrid.service-grid .image-tools-card h3 {
+  margin-bottom: 10px;
+}
+#serviceGrid.service-grid .image-tools-card .image-tools-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+#serviceGrid.service-grid .image-tools-card li a {
+  display: block;
+  padding: 9px 11px;
+  border: 1px solid #dfcf9f;
+  border-radius: 10px;
+  background: rgba(255,250,232,.7);
+  border-bottom: 1px solid #dfcf9f;
+}
+@media (max-width: 900px) {
+  #serviceGrid.service-grid .image-tools-card .image-tools-list { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+@media (max-width: 560px) {
+  #serviceGrid.service-grid .image-tools-card .image-tools-list { grid-template-columns: 1fr; }
+}
