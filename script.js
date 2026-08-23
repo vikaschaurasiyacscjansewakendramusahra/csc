@@ -94,7 +94,7 @@ function generateUPI(){
   const box=document.getElementById('qrcode');
   const link=document.getElementById('upiLink');
   if(error) error.textContent='';
-  if(!upiId || !/^[^\\s@]+@[^\\s@]+$/.test(upiId)){
+  if(!upiId || !/^[^\s@]+@[^\s@]+$/.test(upiId)){
     if(error) error.textContent='कृपया सही UPI ID दर्ज करें।';
     return;
   }
