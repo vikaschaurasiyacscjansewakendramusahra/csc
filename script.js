@@ -59,33 +59,39 @@ function renderServices(){
 function layoutServiceMasonry(){
  const grid=document.getElementById('serviceGrid'); if(!grid)return;
  const cards=[...grid.children]; if(!cards.length)return;
- cards.forEach(c=>{c.style.gridRow='';c.style.gridColumn='';c.style.transform='';});
  requestAnimationFrame(()=>{
    const styles=getComputedStyle(grid);
-   const gap=parseFloat(styles.rowGap)||8;
-   const cols=Math.max(1,Math.min(3,parseInt(styles.gridTemplateColumns.split(' ').length,10)||3));
-   const rowHeights=[];
-   // Fixed visual order: first 3 cards row 1, next 3 row 2, next 3 row 3,
-   // and the 10th card row 4 on the left, matching the supplied screenshot.
-   for(let i=0;i<cards.length;i+=cols){
-     let h=0;
-     for(let j=i;j<Math.min(i+cols,cards.length);j++) h=Math.max(h,cards[j].getBoundingClientRect().height);
-     rowHeights.push(h);
-   }
-   const rowStarts=[]; let y=0;
-   rowHeights.forEach((h,i)=>{rowStarts[i]=y; y+=h+(i<rowHeights.length-1?gap:0);});
-   // Use CSS grid's explicit pixel rows. Each row has enough height for the
-   // tallest card, so the 10th card can never be vertically clipped.
-   grid.style.gridTemplateRows=rowHeights.map(h=>Math.max(1,Math.ceil(h))+'px').join(' ');
+   const cols=3;
+   const colGap=parseFloat(styles.columnGap)||8;
+   const rowGap=parseFloat(styles.rowGap)||8;
+   const gridWidth=grid.clientWidth;
+   const padLeft=parseFloat(styles.paddingLeft)||0;
+   const padRight=parseFloat(styles.paddingRight)||0;
+   const contentWidth=Math.max(1,gridWidth-padLeft-padRight);
+   const cardWidth=(contentWidth-colGap*(cols-1))/cols;
+   const colY=[0,0,0];
    cards.forEach((card,index)=>{
-     const row=Math.floor(index/cols)+1;
-     const col=(index%cols)+1;
-     card.style.gridRow=`${row}`;
-     card.style.gridColumn=`${col}`;
+     const col=index%cols;
+     const x=padLeft+col*(cardWidth+colGap);
+     const y=colY[col];
+     card.style.position='absolute';
+     card.style.left=x+'px';
+     card.style.top=y+'px';
+     card.style.width=cardWidth+'px';
+     card.style.gridRow='auto';
+     card.style.gridColumn='auto';
+     card.style.margin='0';
+     // Measure at the final width, then stack the next card in this column.
+     const h=card.getBoundingClientRect().height;
+     colY[col]=y+h+rowGap;
    });
-   grid.style.minHeight=Math.max(0,y)+'px';
+   const height=Math.max(...colY)-rowGap;
+   grid.style.position='relative';
+   grid.style.height=Math.max(0,Math.ceil(height))+'px';
+   grid.style.minHeight=Math.max(0,Math.ceil(height))+'px';
  });
 }
+
 window.addEventListener('resize',()=>layoutServiceMasonry());
 
 function generateUPI(){
