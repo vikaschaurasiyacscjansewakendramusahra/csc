@@ -57,38 +57,34 @@ function renderServices(){
 }
 
 function layoutServiceMasonry(){
- const grid=document.getElementById('serviceGrid');
- const vp=document.getElementById('serviceViewport');
- if(!grid||!vp)return;
- const cards=[...grid.querySelectorAll('.service-card')];
+ const grid=document.getElementById('serviceGrid'); if(!grid)return;
+ const cards=[...grid.children];
  if(!cards.length)return;
- // Row-preserving masonry: card 1/2/3 form the first row, but each next
- // card starts immediately below the card above it in the same column.
- // This removes the large empty gaps without removing/reordering any card.
- const styles=getComputedStyle(grid);
- const gap=parseFloat(styles.columnGap)||9;
- const width=grid.clientWidth;
- const colW=(width-gap*2)/3;
- const tops=[0,0,0];
- grid.style.display='block';
- grid.style.position='relative';
- grid.style.width='100%';
- grid.style.minHeight='0';
- cards.forEach((card,i)=>{
-   card.style.position='absolute';
-   card.style.left=`${(i%3)*(colW+gap)}px`;
-   card.style.top=`${tops[i%3]}px`;
-   card.style.width=`${colW}px`;
-   card.style.height='auto';
-   card.style.margin='0';
-   card.style.boxSizing='border-box';
-   tops[i%3]=tops[i%3]+card.offsetHeight+gap;
- });
- grid.style.height=`${Math.max(...tops)-gap}px`;
- // Keep the viewport height in sync so nothing is clipped at the bottom.
- vp.style.minHeight=`${Math.max(...tops)-gap+20}px`;
-}
+ cards.forEach(c=>{c.style.gridRowEnd='';c.style.gridRowStart='';c.style.gridColumn='';});
+ requestAnimationFrame(()=>{
+   const styles=getComputedStyle(grid);
+   const rowH=parseFloat(styles.gridAutoRows)||8;
+   const gap=parseFloat(styles.rowGap)||8;
+   const cols=Math.max(1,Math.min(3,parseInt(styles.gridTemplateColumns.split(' ').length,10)||3));
+   const heights=new Array(cols).fill(0);
 
+   // Place each card in the currently shortest column. This keeps the existing
+   // service order while filling the empty space instead of leaving a large
+   // vertical gap. The Image Tools card is intentionally treated like every
+   // other card, so it can occupy the open left column after the first nine.
+   cards.forEach(card=>{
+     const h=card.getBoundingClientRect().height;
+     const span=Math.max(1,Math.ceil((h+gap)/(rowH+gap)));
+     let col=0;
+     for(let i=1;i<cols;i++) if(heights[i]<heights[col]) col=i;
+     const start=heights[col]+1;
+     card.style.gridColumn=`${col+1}`;
+     card.style.gridRowStart=String(start);
+     card.style.gridRowEnd=`span ${span}`;
+     heights[col]=start+span-1;
+   });
+ });
+}
 window.addEventListener('resize',()=>layoutServiceMasonry());
 
 function generateUPI(){
@@ -98,7 +94,7 @@ function generateUPI(){
   const box=document.getElementById('qrcode');
   const link=document.getElementById('upiLink');
   if(error) error.textContent='';
-  if(upiId !== '7355353841@okbizaxis'){
+  if(!upiId || !/^[^\s@]+@[^\s@]+$/.test(upiId)){
     if(error) error.textContent='कृपया सही UPI ID दर्ज करें।';
     return;
   }
@@ -106,12 +102,15 @@ function generateUPI(){
   if(link){ link.href=upiUrl; link.classList.remove('hidden'); }
   if(!box) return;
   box.innerHTML='';
-  const img=document.createElement('img');
-  img.alt='UPI QR Code';
-  img.width=190; img.height=190;
-  img.loading='eager';
-  img.src='./upi-qr.png?v=20260823upi';
-  box.appendChild(img);
+  if(typeof QRCode!=='undefined'){
+    new QRCode(box,{text:upiUrl,width:190,height:190,correctLevel:QRCode.CorrectLevel.M});
+  } else {
+    const img=document.createElement('img');
+    img.alt='UPI QR Code';
+    img.width=190; img.height=190;
+    img.src='https://api.qrserver.com/v1/create-qr-code/?size=190x190&data='+encodeURIComponent(upiUrl);
+    box.appendChild(img);
+  }
 }
 
 function renderTicker(){const labels=services.map(s=>`${s.icon} ${s.title}`);document.getElementById('serviceTicker').innerHTML=labels.map(x=>`<span class="ticker-chip">${escapeHtml(x)}</span>`).join('');}
@@ -261,13 +260,11 @@ function serviceViewport(){return document.getElementById('serviceViewport')}
 function computeMaxShift(){
  const vp=serviceViewport(), grid=document.getElementById('serviceGrid');
  if(!vp||!grid)return 0;
- // Small symmetric travel: cards stay inside the viewport while the service
- // area still visibly moves left and right.
- return Math.min(18, Math.max(0, vp.clientWidth * 0.035));
+ return Math.max(0, grid.scrollWidth-vp.clientWidth);
 }
 function applyServiceX(x){
  const grid=document.getElementById('serviceGrid'); if(!grid)return;
- const max=computeMaxShift(), half=Math.max(0,max/2);
+ const max=computeMaxShift(), half=max/2;
  serviceX=Math.max(-half,Math.min(half,Number(x)||0));
  grid.style.transform=`translate3d(${serviceX}px,0,0)`;
 }
