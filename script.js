@@ -46,46 +46,24 @@ function itemUrl(i){return Array.isArray(i)?String(i[1]||''):String(i?.url||'')}
 function matchesQuery(s,q){const hay=(s.title+' '+s.desc+' '+(s.items||[]).map(itemText).join(' ')).toLowerCase();return hay.includes(q)||q.split(/\s+/).filter(w=>w.length>1).some(w=>hay.includes(w));}
 function renderServices(){
  const grid=document.getElementById('serviceGrid'), input=document.getElementById('serviceSearch'); if(!grid)return;
- const q=(input?.value||'').toLowerCase().trim(); const source = services.length>2 ? [services[2],services[0],services[1],...services.slice(3)] : services; const filtered=q?source.filter(s=>matchesQuery(s,q)):source;
- grid.innerHTML=filtered.map(s=>{
+ const q=(input?.value||'').toLowerCase().trim();
+ const source = services.length>2 ? [services[2],services[0],services[1],...services.slice(3)] : services;
+ const filtered=q?source.filter(s=>matchesQuery(s,q)):source;
+ const cards=filtered.map(s=>{
    const isImageTools=s.title==='Compress, Resize & Edit Pictures';
    const items=(s.items||[]).map(x=>`<li><a href="${safeUrl(itemUrl(x))}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">${escapeHtml(itemText(x))} ↗</a></li>`).join('');
    return `<article class="service-card ${isImageTools?'image-tools-card':''}" data-service-title="${escapeHtml(s.title)}" onclick='openService(${JSON.stringify(s).replace(/'/g,'&#39;')})'><div class="service-icon">${s.icon}</div><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.desc)}</p><ul>${items}</ul><div class="more">🔗 सेवा पर टच करें • आधिकारिक पोर्टल खुलेगा</div></article>`;
- }).join('')||'<div class="service-card"><h3>कोई सेवा नहीं मिली</h3><p>दूसरा शब्द खोजकर देखें।</p></div>';
- layoutServiceMasonry();
+ });
+ // Keep the original service order and split the 10 cards into two visible 3-column pages.
+ // The last page contains the remaining cards without changing any service text.
+ const pages=[];
+ for(let i=0;i<cards.length;i+=9) pages.push(cards.slice(i,i+9));
+ grid.innerHTML=pages.map((page,idx)=>`<div class="service-page" data-page="${idx}">${page.join('')}</div>`).join('') || '<div class="service-page"><div class="service-card"><h3>कोई सेवा नहीं मिली</h3><p>दूसरा शब्द खोजकर देखें।</p></div></div>';
+ syncServicePages();
  resetServiceMotion();
 }
-
-function layoutServiceMasonry(){
- const grid=document.getElementById('serviceGrid'); if(!grid)return;
- const cards=[...grid.children];
- if(!cards.length)return;
- cards.forEach(c=>{c.style.gridRowEnd='';c.style.gridRowStart='';c.style.gridColumn='';});
- requestAnimationFrame(()=>{
-   const styles=getComputedStyle(grid);
-   const rowH=parseFloat(styles.gridAutoRows)||8;
-   const gap=parseFloat(styles.rowGap)||8;
-   const cols=Math.max(1,Math.min(3,parseInt(styles.gridTemplateColumns.split(' ').length,10)||3));
-   const heights=new Array(cols).fill(0);
-
-   // Place each card in the currently shortest column. This keeps the existing
-   // service order while filling the empty space instead of leaving a large
-   // vertical gap. The Image Tools card is intentionally treated like every
-   // other card, so it can occupy the open left column after the first nine.
-   cards.forEach(card=>{
-     const h=card.getBoundingClientRect().height;
-     const span=Math.max(1,Math.ceil((h+gap)/(rowH+gap)));
-     let col=0;
-     for(let i=1;i<cols;i++) if(heights[i]<heights[col]) col=i;
-     const start=heights[col]+1;
-     card.style.gridColumn=`${col+1}`;
-     card.style.gridRowStart=String(start);
-     card.style.gridRowEnd=`span ${span}`;
-     heights[col]=start+span-1;
-   });
- });
-}
-window.addEventListener('resize',()=>layoutServiceMasonry());
+function layoutServiceMasonry(){ /* retained for compatibility; page grid uses native rows */ }
+window.addEventListener('resize',()=>{syncServicePages();resetServiceMotion();});
 
 function generateUPI(){
   const upiId=(document.getElementById('upiId')?.value||'').trim();
@@ -249,97 +227,41 @@ function speakAI(text){
 function speakLastAI(){if(lastAIText)speakAI(lastAIText);}
 
 
-// ===== Service grid: smooth left-right auto scroll + 6s touch/mouse pause + manual drag =====
+// ===== Service pages: smooth right-to-left / left-to-right movement + touch drag =====
 let serviceTimer=null, serviceAnim=null, serviceResumeTimer=null;
-let serviceDragging=false, serviceX=0, serviceDir=-1, serviceLast=0;
-let servicePointerId=null, serviceStartX=0, serviceStartY=0, serviceDragStartX=0, serviceDragActive=false;
+let serviceDragging=false, serviceLast=0, serviceDir=1;
+let servicePointerId=null, serviceStartX=0, serviceDragStartX=0, serviceDragActive=false;
 function serviceViewport(){return document.getElementById('serviceViewport')}
-function computeMaxShift(){
- const vp=serviceViewport(), grid=document.getElementById('serviceGrid');
- if(!vp||!grid)return 0;
- return Math.max(0, grid.scrollWidth-vp.clientWidth);
-}
-function applyServiceX(x){
- const grid=document.getElementById('serviceGrid'); if(!grid)return;
- const max=computeMaxShift(), half=max/2;
- serviceX=Math.max(-half,Math.min(half,Number(x)||0));
- grid.style.transform=`translate3d(${serviceX}px,0,0)`;
-}
-function stopServiceMotion(){
- if(serviceAnim){cancelAnimationFrame(serviceAnim);serviceAnim=null;}
- clearTimeout(serviceTimer); serviceTimer=null;
- clearTimeout(serviceResumeTimer); serviceResumeTimer=null;
- serviceLast=0;
-}
-function scheduleServiceMotion(delay=900){
- clearTimeout(serviceTimer);
- serviceTimer=setTimeout(startServiceAuto,delay);
-}
-function pauseServiceForSixSeconds(){
- stopServiceMotion();
- clearTimeout(serviceResumeTimer);
- serviceResumeTimer=setTimeout(()=>scheduleServiceMotion(0),6000);
-}
+function servicePageCount(){const g=document.getElementById('serviceGrid');return g?Math.max(1,g.children.length):1}
+function syncServicePages(){const vp=serviceViewport(),grid=document.getElementById('serviceGrid');if(!vp||!grid)return;const w=Math.max(1,vp.clientWidth);const pages=[...grid.querySelectorAll('.service-page')];grid.style.width=(w*pages.length)+'px';pages.forEach(p=>{p.style.width=w+'px';p.style.flexBasis=w+'px';});}
+function servicePageWidth(){const vp=serviceViewport();return vp?Math.max(1,vp.clientWidth):1}
+function applyServicePage(){const vp=serviceViewport();if(!vp)return;const max=Math.max(0,(servicePageCount()-1)*servicePageWidth());vp.scrollLeft=Math.max(0,Math.min(max,Math.round(vp.scrollLeft/servicePageWidth())*servicePageWidth()))}
+function stopServiceMotion(){if(serviceAnim){cancelAnimationFrame(serviceAnim);serviceAnim=null;}clearTimeout(serviceTimer);serviceTimer=null;clearTimeout(serviceResumeTimer);serviceResumeTimer=null;serviceLast=0;}
+function scheduleServiceMotion(delay=1200){clearTimeout(serviceTimer);serviceTimer=setTimeout(startServiceAuto,delay)}
+function pauseServiceForSixSeconds(){stopServiceMotion();clearTimeout(serviceResumeTimer);serviceResumeTimer=setTimeout(()=>scheduleServiceMotion(0),6000)}
 function startServiceAuto(){
- stopServiceMotion();
- if(serviceDragging)return;
+ stopServiceMotion(); if(serviceDragging)return; const vp=serviceViewport(); if(!vp||servicePageCount()<2)return;
  serviceLast=performance.now();
  const tick=(now)=>{
   if(serviceDragging)return;
-  const max=computeMaxShift();
-  if(max<=1){serviceAnim=null;return;}
-  const half=max/2, dt=Math.min(40,now-serviceLast)/1000; serviceLast=now;
-  const speed=Math.max(14,Math.min(30,max/8));
-  serviceX += serviceDir*speed*dt;
-  if(serviceX<=-half){serviceX=-half;serviceDir=1;}
-  if(serviceX>=half){serviceX=half;serviceDir=-1;}
-  applyServiceX(serviceX);
+  const w=servicePageWidth(), max=Math.max(0,(servicePageCount()-1)*w); if(max<=0){serviceAnim=null;return;}
+  const target=serviceDir>0?max:0; const dt=Math.min(40,now-serviceLast)/1000; serviceLast=now;
+  const step=180*dt; const next=vp.scrollLeft + (target>vp.scrollLeft?step:-step);
+  vp.scrollLeft=target>vp.scrollLeft?Math.min(target,next):Math.max(target,next);
+  if(Math.abs(vp.scrollLeft-target)<1){vp.scrollLeft=target;serviceDir*=-1;serviceAnim=null;serviceTimer=setTimeout(startServiceAuto,900);return;}
   serviceAnim=requestAnimationFrame(tick);
  };
  serviceAnim=requestAnimationFrame(tick);
 }
-function resetServiceMotion(){
- stopServiceMotion();
- serviceDragging=false;serviceDragActive=false;servicePointerId=null;serviceX=0;serviceDir=-1;
- applyServiceX(0);scheduleServiceMotion(900);
-}
+function resetServiceMotion(){stopServiceMotion();serviceDragging=false;servicePointerId=null;serviceDir=1;const vp=serviceViewport();if(vp)vp.scrollLeft=0;scheduleServiceMotion(1200)}
 function initServiceTouch(){
- const vp=serviceViewport(),grid=document.getElementById('serviceGrid');
- if(!vp||!grid)return;
- applyServiceX(0);
- const pointerDown=(e)=>{
-  if(e.pointerType==='mouse' && e.button!==0)return;
-  servicePointerId=e.pointerId;
-  serviceStartX=e.clientX;serviceStartY=e.clientY;serviceDragStartX=serviceX;
-  serviceDragActive=false;
-  pauseServiceForSixSeconds();
-  try{vp.setPointerCapture(e.pointerId)}catch(_){ }
- };
- const pointerMove=(e)=>{
-  if(servicePointerId!==e.pointerId)return;
-  const dx=e.clientX-serviceStartX, dy=e.clientY-serviceStartY;
-  if(!serviceDragActive){
-   if(Math.abs(dx)<8 && Math.abs(dy)<8)return;
-   if(Math.abs(dx)<=Math.abs(dy)){return;}
-   serviceDragActive=true;
-  }
-  e.preventDefault();
-  applyServiceX(serviceDragStartX+dx);
- };
- const pointerUp=(e)=>{
-  if(servicePointerId!==e.pointerId)return;
-  servicePointerId=null;serviceDragActive=false;
-  try{vp.releasePointerCapture(e.pointerId)}catch(_){ }
-  // Keep auto-scroll paused for the full 6 seconds after the touch/mouse interaction.
-  pauseServiceForSixSeconds();
- };
- vp.addEventListener('pointerdown',pointerDown,{passive:true});
- vp.addEventListener('pointermove',pointerMove,{passive:false});
- vp.addEventListener('pointerup',pointerUp,{passive:true});
- vp.addEventListener('pointercancel',pointerUp,{passive:true});
- vp.addEventListener('lostpointercapture',()=>{servicePointerId=null;serviceDragActive=false;});
+ const vp=serviceViewport();if(!vp)return;
+ const pointerDown=e=>{if(e.pointerType==='mouse'&&e.button!==0)return;servicePointerId=e.pointerId;serviceStartX=e.clientX;serviceDragStartX=vp.scrollLeft;serviceDragActive=false;serviceDragging=true;pauseServiceForSixSeconds();try{vp.setPointerCapture(e.pointerId)}catch(_){} };
+ const pointerMove=e=>{if(servicePointerId!==e.pointerId)return;const dx=e.clientX-serviceStartX;if(!serviceDragActive){if(Math.abs(dx)<8)return;serviceDragActive=true;}e.preventDefault();vp.scrollLeft=Math.max(0,Math.min(Math.max(0,(servicePageCount()-1)*servicePageWidth()),serviceDragStartX-dx));};
+ const pointerUp=e=>{if(servicePointerId!==e.pointerId)return;servicePointerId=null;serviceDragActive=false;serviceDragging=false;try{vp.releasePointerCapture(e.pointerId)}catch(_){}pauseServiceForSixSeconds()};
+ vp.addEventListener('pointerdown',pointerDown,{passive:true});vp.addEventListener('pointermove',pointerMove,{passive:false});vp.addEventListener('pointerup',pointerUp,{passive:true});vp.addEventListener('pointercancel',pointerUp,{passive:true});
 }
 
 function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'})}
-function boot(){document.getElementById('year').textContent=new Date().getFullYear();renderServices();renderTicker();loadPublicServices();initServiceTouch();resetServiceMotion();window.addEventListener('resize',()=>{computeMaxShift();applyServiceX(serviceX);});document.addEventListener('visibilitychange',()=>{if(document.hidden)stopServiceMotion();else scheduleServiceMotion();});window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeAdmin();}});document.getElementById('serviceModal').addEventListener('click',e=>{if(e.target.id==='serviceModal')closeModal()});document.getElementById('adminModal').addEventListener('click',e=>{if(e.target.id==='adminModal')closeAdmin()});document.getElementById('serviceSearch').addEventListener('input',()=>{stopServiceMotion();renderServices();if(!document.getElementById('serviceSearch').value.trim())scheduleServiceMotion();});}
+function boot(){document.getElementById('year').textContent=new Date().getFullYear();renderServices();renderTicker();loadPublicServices();initServiceTouch();resetServiceMotion();window.addEventListener('resize',()=>{computeMaxShift();applyServiceX(serviceX);syncServicePages();resetServiceMotion();});document.addEventListener('visibilitychange',()=>{if(document.hidden)stopServiceMotion();else scheduleServiceMotion();});window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeAdmin();}});document.getElementById('serviceModal').addEventListener('click',e=>{if(e.target.id==='serviceModal')closeModal()});document.getElementById('adminModal').addEventListener('click',e=>{if(e.target.id==='adminModal')closeAdmin()});document.getElementById('serviceSearch').addEventListener('input',()=>{stopServiceMotion();renderServices();if(!document.getElementById('serviceSearch').value.trim())scheduleServiceMotion();});}
 boot();

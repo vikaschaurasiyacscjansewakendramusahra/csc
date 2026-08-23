@@ -450,3 +450,48 @@ html, body { overflow-x:hidden !important; max-width:100%; }
 @media(max-width:560px){
   #serviceGrid.service-grid .image-tools-card ul{grid-template-columns:1fr 1fr!important;column-gap:10px!important;}
 }
+
+
+/* FINAL SERVICE SCROLL: each visible page is a normal 3-column service grid.
+   Pages move left/right; no card is stretched or overlapped. */
+#serviceViewport.service-viewport{
+  overflow:hidden!important;
+  width:100%!important;
+  touch-action:pan-y pinch-zoom!important;
+  padding:6px 0 18px!important;
+}
+#serviceGrid.service-grid{
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  align-items:flex-start!important;
+  gap:0!important;
+  width:100%!important;
+  min-width:100%!important;
+  padding:0!important;
+  margin:0!important;
+  transform:none!important;
+  will-change:transform;
+}
+.service-page{
+  flex:0 0 100%!important;
+  width:100%!important;
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  column-gap:9px!important;
+  row-gap:7px!important;
+  align-items:start!important;
+  box-sizing:border-box!important;
+  padding:0 8px!important;
+}
+.service-page .service-card{margin:0!important;width:auto!important;max-width:100%!important;min-width:0!important;transform:none!important;position:relative!important;z-index:1!important;}
+.service-page .image-tools-card{grid-column:auto!important;grid-row:auto!important;}
+@media(max-width:560px){
+ .service-page{grid-template-columns:repeat(3,minmax(0,1fr))!important;column-gap:8px!important;row-gap:6px!important;padding:0 7px!important}
+ .service-page .service-card{padding:12px!important}
+}
+
+/* FINAL SERVICE PAGE SCROLL FIX: exact-width pages, no overlap, touch-friendly. */
+#serviceViewport.service-viewport{overflow-x:auto!important;overflow-y:hidden!important;scroll-behavior:auto!important;scroll-snap-type:x mandatory!important;overscroll-behavior-x:contain!important;-webkit-overflow-scrolling:touch!important;}
+#serviceGrid.service-grid{display:flex!important;flex-wrap:nowrap!important;align-items:flex-start!important;gap:0!important;max-width:none!important;min-width:0!important;}
+#serviceGrid.service-grid .service-page{flex:0 0 auto!important;scroll-snap-align:start!important;box-sizing:border-box!important;}
+#serviceGrid.service-grid .service-card{transform:none!important;}
