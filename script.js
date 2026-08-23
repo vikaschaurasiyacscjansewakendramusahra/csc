@@ -58,31 +58,32 @@ function renderServices(){
 
 function layoutServiceMasonry(){
  const grid=document.getElementById('serviceGrid'); if(!grid)return;
- const cards=[...grid.children];
- if(!cards.length)return;
- cards.forEach(c=>{c.style.gridRowEnd='';c.style.gridRowStart='';c.style.gridColumn='';});
+ const cards=[...grid.children]; if(!cards.length)return;
+ cards.forEach(c=>{c.style.gridRow='';c.style.gridColumn='';c.style.transform='';});
  requestAnimationFrame(()=>{
    const styles=getComputedStyle(grid);
-   const rowH=parseFloat(styles.gridAutoRows)||8;
    const gap=parseFloat(styles.rowGap)||8;
    const cols=Math.max(1,Math.min(3,parseInt(styles.gridTemplateColumns.split(' ').length,10)||3));
-   const heights=new Array(cols).fill(0);
-
-   // Place each card in the currently shortest column. This keeps the existing
-   // service order while filling the empty space instead of leaving a large
-   // vertical gap. The Image Tools card is intentionally treated like every
-   // other card, so it can occupy the open left column after the first nine.
-   cards.forEach(card=>{
-     const h=card.getBoundingClientRect().height;
-     const span=Math.max(1,Math.ceil((h+gap)/(rowH+gap)));
-     let col=0;
-     for(let i=1;i<cols;i++) if(heights[i]<heights[col]) col=i;
-     const start=heights[col]+1;
-     card.style.gridColumn=`${col+1}`;
-     card.style.gridRowStart=String(start);
-     card.style.gridRowEnd=`span ${span}`;
-     heights[col]=start+span-1;
+   const rowHeights=[];
+   // Fixed visual order: first 3 cards row 1, next 3 row 2, next 3 row 3,
+   // and the 10th card row 4 on the left, matching the supplied screenshot.
+   for(let i=0;i<cards.length;i+=cols){
+     let h=0;
+     for(let j=i;j<Math.min(i+cols,cards.length);j++) h=Math.max(h,cards[j].getBoundingClientRect().height);
+     rowHeights.push(h);
+   }
+   const rowStarts=[]; let y=0;
+   rowHeights.forEach((h,i)=>{rowStarts[i]=y; y+=h+(i<rowHeights.length-1?gap:0);});
+   // Use CSS grid's explicit pixel rows. Each row has enough height for the
+   // tallest card, so the 10th card can never be vertically clipped.
+   grid.style.gridTemplateRows=rowHeights.map(h=>Math.max(1,Math.ceil(h))+'px').join(' ');
+   cards.forEach((card,index)=>{
+     const row=Math.floor(index/cols)+1;
+     const col=(index%cols)+1;
+     card.style.gridRow=`${row}`;
+     card.style.gridColumn=`${col}`;
    });
+   grid.style.minHeight=Math.max(0,y)+'px';
  });
 }
 window.addEventListener('resize',()=>layoutServiceMasonry());

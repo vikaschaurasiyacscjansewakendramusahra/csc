@@ -450,3 +450,45 @@ html, body { overflow-x:hidden !important; max-width:100%; }
 @media(max-width:560px){
   #serviceGrid.service-grid .image-tools-card ul{grid-template-columns:1fr 1fr!important;column-gap:10px!important;}
 }
+
+
+/* FINAL USER FIX — service-only horizontal movement + safe 10th card height. */
+#services .service-viewport{
+  overflow-x:hidden!important;
+  overflow-y:visible!important;
+  position:relative!important;
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+  touch-action:pan-y pinch-zoom!important;
+}
+#serviceGrid.service-grid{
+  width:116%!important;
+  min-width:116%!important;
+  max-width:none!important;
+  box-sizing:border-box!important;
+  margin:0!important;
+  padding:0!important;
+  column-gap:10px!important;
+  row-gap:8px!important;
+  overflow:visible!important;
+  will-change:transform!important;
+  transform:translate3d(0,0,0);
+}
+#serviceGrid.service-grid .service-card{
+  overflow:visible!important;
+  min-width:0!important;
+  max-width:none!important;
+  box-sizing:border-box!important;
+}
+#serviceGrid.service-grid .service-card ul,
+#serviceGrid.service-grid .service-card li,
+#serviceGrid.service-grid .service-card li a{
+  overflow:visible!important;
+}
+@media(max-width:760px){
+  #serviceGrid.service-grid{width:116%!important;min-width:116%!important;column-gap:9px!important;row-gap:7px!important;}
+}
+@media(max-width:560px){
+  #serviceGrid.service-grid{width:120%!important;min-width:120%!important;column-gap:8px!important;row-gap:7px!important;}
+}
