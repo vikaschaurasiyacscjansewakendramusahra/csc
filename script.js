@@ -58,33 +58,31 @@ function renderServices(){
 
 function layoutServiceMasonry(){
  const grid=document.getElementById('serviceGrid'); if(!grid)return;
- const cards=[...grid.children];
- if(!cards.length)return;
+ const cards=[...grid.children]; if(!cards.length)return;
+ // Keep the three columns and the existing gap, but align each row to the
+ // tallest card in that row. This prevents later cards from climbing into
+ // the card above while keeping all ten cards visible.
  cards.forEach(c=>{c.style.gridRowEnd='';c.style.gridRowStart='';c.style.gridColumn='';});
  requestAnimationFrame(()=>{
    const styles=getComputedStyle(grid);
-   const rowH=parseFloat(styles.gridAutoRows)||8;
-   const gap=parseFloat(styles.rowGap)||8;
    const cols=Math.max(1,Math.min(3,parseInt(styles.gridTemplateColumns.split(' ').length,10)||3));
-   const heights=new Array(cols).fill(0);
-
-   // Place each card in the currently shortest column. This keeps the existing
-   // service order while filling the empty space instead of leaving a large
-   // vertical gap. The Image Tools card is intentionally treated like every
-   // other card, so it can occupy the open left column after the first nine.
-   cards.forEach(card=>{
-     const h=card.getBoundingClientRect().height;
-     const span=Math.max(1,Math.ceil((h+gap)/(rowH+gap)));
-     let col=0;
-     for(let i=1;i<cols;i++) if(heights[i]<heights[col]) col=i;
-     const start=heights[col]+1;
-     card.style.gridColumn=`${col+1}`;
-     card.style.gridRowStart=String(start);
-     card.style.gridRowEnd=`span ${span}`;
-     heights[col]=start+span-1;
+   const gap=parseFloat(styles.rowGap)||8;
+   const rows=[];
+   cards.forEach((card,i)=>{
+     const r=Math.floor(i/cols), c=i%cols;
+     (rows[r] ||= []).push(card);
+     card.style.gridColumn=String(c+1);
+   });
+   let rowStart=1;
+   rows.forEach(row=>{
+     const maxH=Math.max(...row.map(c=>c.getBoundingClientRect().height));
+     const rowH=Math.max(1,Math.ceil(maxH));
+     row.forEach(c=>{c.style.gridRowStart=String(rowStart);c.style.gridRowEnd=`span ${Math.ceil(rowH/8)}`;});
+     rowStart += Math.ceil((rowH+gap)/8);
    });
  });
 }
+
 window.addEventListener('resize',()=>layoutServiceMasonry());
 
 function generateUPI(){
@@ -252,95 +250,22 @@ function speakAI(text){
 function speakLastAI(){if(lastAIText)speakAI(lastAIText);}
 
 
-// ===== Service grid: smooth left-right auto scroll + 6s touch/mouse pause + manual drag =====
+// ===== Service grid: native horizontal scroll + smooth auto-scroll + 6s touch pause =====
 let serviceTimer=null, serviceAnim=null, serviceResumeTimer=null;
-let serviceDragging=false, serviceX=0, serviceDir=-1, serviceLast=0;
-let servicePointerId=null, serviceStartX=0, serviceStartY=0, serviceDragStartX=0, serviceDragActive=false;
+let serviceDragging=false, servicePointerId=null, serviceStartX=0, serviceStartY=0, serviceDragStartX=0, serviceDragActive=false;
 function serviceViewport(){return document.getElementById('serviceViewport')}
-function computeMaxShift(){
- const vp=serviceViewport(), grid=document.getElementById('serviceGrid');
- if(!vp||!grid)return 0;
- return Math.max(0, grid.scrollWidth-vp.clientWidth);
-}
-function applyServiceX(x){
- const grid=document.getElementById('serviceGrid'); if(!grid)return;
- const max=computeMaxShift(), half=max/2;
- serviceX=Math.max(-half,Math.min(half,Number(x)||0));
- grid.style.transform=`translate3d(${serviceX}px,0,0)`;
-}
-function stopServiceMotion(){
- if(serviceAnim){cancelAnimationFrame(serviceAnim);serviceAnim=null;}
- clearTimeout(serviceTimer); serviceTimer=null;
- clearTimeout(serviceResumeTimer); serviceResumeTimer=null;
- serviceLast=0;
-}
-function scheduleServiceMotion(delay=900){
- clearTimeout(serviceTimer);
- serviceTimer=setTimeout(startServiceAuto,delay);
-}
-function pauseServiceForSixSeconds(){
- stopServiceMotion();
- clearTimeout(serviceResumeTimer);
- serviceResumeTimer=setTimeout(()=>scheduleServiceMotion(0),6000);
-}
-function startServiceAuto(){
- stopServiceMotion();
- if(serviceDragging)return;
- serviceLast=performance.now();
- const tick=(now)=>{
-  if(serviceDragging)return;
-  const max=computeMaxShift();
-  if(max<=1){serviceAnim=null;return;}
-  const half=max/2, dt=Math.min(40,now-serviceLast)/1000; serviceLast=now;
-  const speed=Math.max(14,Math.min(30,max/8));
-  serviceX += serviceDir*speed*dt;
-  if(serviceX<=-half){serviceX=-half;serviceDir=1;}
-  if(serviceX>=half){serviceX=half;serviceDir=-1;}
-  applyServiceX(serviceX);
-  serviceAnim=requestAnimationFrame(tick);
- };
- serviceAnim=requestAnimationFrame(tick);
-}
-function resetServiceMotion(){
- stopServiceMotion();
- serviceDragging=false;serviceDragActive=false;servicePointerId=null;serviceX=0;serviceDir=-1;
- applyServiceX(0);scheduleServiceMotion(900);
-}
+function computeMaxShift(){const vp=serviceViewport();return vp?Math.max(0,vp.scrollWidth-vp.clientWidth):0;}
+function stopServiceMotion(){if(serviceAnim){cancelAnimationFrame(serviceAnim);serviceAnim=null;}clearTimeout(serviceTimer);serviceTimer=null;clearTimeout(serviceResumeTimer);serviceResumeTimer=null;}
+function scheduleServiceMotion(delay=900){clearTimeout(serviceTimer);serviceTimer=setTimeout(startServiceAuto,delay);}
+function pauseServiceForSixSeconds(){stopServiceMotion();clearTimeout(serviceResumeTimer);serviceResumeTimer=setTimeout(()=>scheduleServiceMotion(0),6000);}
+function startServiceAuto(){stopServiceMotion();if(serviceDragging)return;const vp=serviceViewport();if(!vp)return;let last=performance.now();const tick=now=>{if(serviceDragging){serviceAnim=null;return;}const max=computeMaxShift();if(max<=1){serviceAnim=null;return;}const dt=Math.min(40,now-last)/1000;last=now;vp.scrollLeft += 22*dt;if(vp.scrollLeft>=max-1){vp.scrollLeft=max;serviceAnim=null;serviceTimer=setTimeout(()=>{vp.scrollLeft=0;startServiceAuto();},700);return;}serviceAnim=requestAnimationFrame(tick);};serviceAnim=requestAnimationFrame(tick);}
+function resetServiceMotion(){stopServiceMotion();serviceDragging=false;serviceDragActive=false;servicePointerId=null;const vp=serviceViewport();if(vp)vp.scrollLeft=0;scheduleServiceMotion(900);}
 function initServiceTouch(){
- const vp=serviceViewport(),grid=document.getElementById('serviceGrid');
- if(!vp||!grid)return;
- applyServiceX(0);
- const pointerDown=(e)=>{
-  if(e.pointerType==='mouse' && e.button!==0)return;
-  servicePointerId=e.pointerId;
-  serviceStartX=e.clientX;serviceStartY=e.clientY;serviceDragStartX=serviceX;
-  serviceDragActive=false;
-  pauseServiceForSixSeconds();
-  try{vp.setPointerCapture(e.pointerId)}catch(_){ }
- };
- const pointerMove=(e)=>{
-  if(servicePointerId!==e.pointerId)return;
-  const dx=e.clientX-serviceStartX, dy=e.clientY-serviceStartY;
-  if(!serviceDragActive){
-   if(Math.abs(dx)<8 && Math.abs(dy)<8)return;
-   if(Math.abs(dx)<=Math.abs(dy)){return;}
-   serviceDragActive=true;
-  }
-  e.preventDefault();
-  applyServiceX(serviceDragStartX+dx);
- };
- const pointerUp=(e)=>{
-  if(servicePointerId!==e.pointerId)return;
-  servicePointerId=null;serviceDragActive=false;
-  try{vp.releasePointerCapture(e.pointerId)}catch(_){ }
-  // Keep auto-scroll paused for the full 6 seconds after the touch/mouse interaction.
-  pauseServiceForSixSeconds();
- };
- vp.addEventListener('pointerdown',pointerDown,{passive:true});
- vp.addEventListener('pointermove',pointerMove,{passive:false});
- vp.addEventListener('pointerup',pointerUp,{passive:true});
- vp.addEventListener('pointercancel',pointerUp,{passive:true});
- vp.addEventListener('lostpointercapture',()=>{servicePointerId=null;serviceDragActive=false;});
+ const vp=serviceViewport();if(!vp)return;
+ const pointerDown=e=>{if(e.pointerType==='mouse'&&e.button!==0)return;servicePointerId=e.pointerId;serviceStartX=e.clientX;serviceStartY=e.clientY;serviceDragStartX=vp.scrollLeft;serviceDragActive=false;pauseServiceForSixSeconds();try{vp.setPointerCapture(e.pointerId)}catch(_){};};
+ const pointerMove=e=>{if(servicePointerId!==e.pointerId)return;const dx=e.clientX-serviceStartX,dy=e.clientY-serviceStartY;if(!serviceDragActive){if(Math.abs(dx)<8&&Math.abs(dy)<8)return;if(Math.abs(dx)<=Math.abs(dy))return;serviceDragActive=true;}e.preventDefault();vp.scrollLeft=Math.max(0,Math.min(computeMaxShift(),serviceDragStartX-dx));};
+ const pointerUp=e=>{if(servicePointerId!==e.pointerId)return;servicePointerId=null;serviceDragActive=false;try{vp.releasePointerCapture(e.pointerId)}catch(_){}pauseServiceForSixSeconds();};
+ vp.addEventListener('pointerdown',pointerDown,{passive:true});vp.addEventListener('pointermove',pointerMove,{passive:false});vp.addEventListener('pointerup',pointerUp,{passive:true});vp.addEventListener('pointercancel',pointerUp,{passive:true});
 }
 
 function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'})}

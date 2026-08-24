@@ -450,3 +450,23 @@ html, body { overflow-x:hidden !important; max-width:100%; }
 @media(max-width:560px){
   #serviceGrid.service-grid .image-tools-card ul{grid-template-columns:1fr 1fr!important;column-gap:10px!important;}
 }
+
+/* FINAL USER REQUEST: keep the same card gap, align rows cleanly, and allow
+   real native horizontal scrolling after browser zoom. */
+.service-viewport{
+  overflow-x:auto!important; overflow-y:visible!important;
+  -webkit-overflow-scrolling:touch!important;
+  touch-action:pan-y!important;
+  scrollbar-width:none!important;
+  overscroll-behavior-x:contain!important;
+}
+.service-viewport::-webkit-scrollbar{display:none!important}
+#serviceGrid.service-grid{
+  width:100%!important;
+  min-width:900px!important;
+  max-width:none!important;
+  transform:none!important;
+}
+@media(min-width:901px){#serviceGrid.service-grid{min-width:0!important;width:100%!important;}}
+#serviceGrid.service-grid .service-card{z-index:1!important;}
+#serviceGrid.service-grid .image-tools-card{z-index:1!important;}
