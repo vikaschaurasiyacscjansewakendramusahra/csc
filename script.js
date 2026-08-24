@@ -44,6 +44,7 @@ function safeUrl(url){try{const u=new URL(url);return /^https?:$/.test(u.protoco
 function itemText(i){return Array.isArray(i)?String(i[0]||''):String(i?.text||'')}
 function itemUrl(i){return Array.isArray(i)?String(i[1]||''):String(i?.url||'')}
 function matchesQuery(s,q){const hay=(s.title+' '+s.desc+' '+(s.items||[]).map(itemText).join(' ')).toLowerCase();return hay.includes(q)||q.split(/\s+/).filter(w=>w.length>1).some(w=>hay.includes(w));}
+function lockServiceColumnWidth(){ /* preserve existing card dimensions; no layout changes */ }
 function renderServices(){
  const grid=document.getElementById('serviceGrid'), input=document.getElementById('serviceSearch'); if(!grid)return;
  const q=(input?.value||'').toLowerCase().trim();
