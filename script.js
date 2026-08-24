@@ -247,7 +247,7 @@ function serviceMaxShift(){
 }
 function applyServiceOffset(){
   const grid=serviceGrid();
-  if(grid) grid.style.setProperty('transform',`translate3d(${-serviceOffset}px,0,0)`,'important');
+  if(grid) grid.style.setProperty('transform',`translate3d(${serviceOffset}px,0,0)`,'important');
 }
 function stopServiceMotion(){
   if(serviceAnim){cancelAnimationFrame(serviceAnim);serviceAnim=null;}
@@ -267,7 +267,7 @@ function startServiceAuto(){
     if(max>0){
       serviceOffset += dir*speed*dt/1000;
       if(serviceOffset>=max){serviceOffset=max;dir=-1;}
-      else if(serviceOffset<=0){serviceOffset=0;dir=1;}
+      else if(serviceOffset<=-max){serviceOffset=-max;dir=1;}
       applyServiceOffset();
     }
     serviceAnim=requestAnimationFrame(tick);
@@ -309,7 +309,7 @@ function initServiceTouch(){
     if(Math.abs(dx)<1)return;
     e.preventDefault();
     const max=serviceMaxShift();
-    serviceOffset=Math.max(0,Math.min(max,serviceDragStartX-dx));
+    serviceOffset=Math.max(-max,Math.min(max,serviceDragStartX+dx));
     applyServiceOffset();
   };
   const pointerUp=e=>{
