@@ -250,7 +250,7 @@ function startServiceAuto(){
 function resetServiceMotion(){stopServiceMotion();serviceDragging=false;serviceDragActive=false;servicePointerId=null;const vp=serviceViewport();if(vp)vp.scrollLeft=0;scheduleServiceMotion(900)}
 function initServiceTouch(){
  const vp=serviceViewport(); if(!vp)return;
- const pointerDown=e=>{if(e.pointerType==='mouse'&&e.button!==0)return;servicePointerId=e.pointerId;serviceStartX=e.clientX;serviceDragStartX=vp.scrollLeft;serviceDragActive=false;pauseServiceForSixSeconds();try{vp.setPointerCapture(e.pointerId)}catch(_){}};
+ const pointerDown=e=>{if(e.pointerType==='mouse'&&e.button!==0)return;servicePointerId=e.pointerId;serviceStartX=e.clientX;serviceDragStartX=vp.scrollLeft;serviceDragActive=false;serviceDragging=true;pauseServiceForSixSeconds();try{vp.setPointerCapture(e.pointerId)}catch(_){}};
  const pointerMove=e=>{if(servicePointerId!==e.pointerId)return;const dx=e.clientX-serviceStartX;if(!serviceDragActive){if(Math.abs(dx)<8)return;serviceDragActive=true;}e.preventDefault();const max=computeMaxShift();vp.scrollLeft=Math.max(0,Math.min(max,serviceDragStartX-dx));};
  const pointerUp=e=>{if(servicePointerId!==e.pointerId)return;servicePointerId=null;serviceDragActive=false;serviceDragging=false;try{vp.releasePointerCapture(e.pointerId)}catch(_){}pauseServiceForSixSeconds()};
  vp.addEventListener('pointerdown',pointerDown,{passive:true});vp.addEventListener('pointermove',pointerMove,{passive:false});vp.addEventListener('pointerup',pointerUp,{passive:true});vp.addEventListener('pointercancel',pointerUp,{passive:true});

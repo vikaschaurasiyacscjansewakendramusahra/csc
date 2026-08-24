@@ -477,7 +477,7 @@ html, body { overflow-x:auto !important; }
    pannable so browser/desktop-mode zoom can be explored with a finger. */
 .service-viewport{
   width:100%!important;max-width:100%!important;overflow-x:auto!important;overflow-y:visible!important;
-  -webkit-overflow-scrolling:touch!important;scrollbar-width:none!important;touch-action:pan-x pan-y pinch-zoom!important;
+  -webkit-overflow-scrolling:touch!important;scrollbar-width:none!important;touch-action:pan-y pinch-zoom!important;
   padding:0 10px 18px!important;box-sizing:border-box!important;
 }
 .service-viewport::-webkit-scrollbar{display:none!important}
