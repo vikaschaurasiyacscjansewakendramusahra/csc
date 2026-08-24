@@ -46,46 +46,26 @@ function itemUrl(i){return Array.isArray(i)?String(i[1]||''):String(i?.url||'')}
 function matchesQuery(s,q){const hay=(s.title+' '+s.desc+' '+(s.items||[]).map(itemText).join(' ')).toLowerCase();return hay.includes(q)||q.split(/\s+/).filter(w=>w.length>1).some(w=>hay.includes(w));}
 function renderServices(){
  const grid=document.getElementById('serviceGrid'), input=document.getElementById('serviceSearch'); if(!grid)return;
- const q=(input?.value||'').toLowerCase().trim(); const source = services.length>2 ? [services[2],services[0],services[1],...services.slice(3)] : services; const filtered=q?source.filter(s=>matchesQuery(s,q)):source;
- grid.innerHTML=filtered.map(s=>{
+ const q=(input?.value||'').toLowerCase().trim();
+ const source = services.length>2 ? [services[2],services[0],services[1],...services.slice(3)] : services;
+ const filtered=q?source.filter(s=>matchesQuery(s,q)):source;
+ const cols=[[],[],[]];
+ filtered.forEach((s,i)=>{
    const isImageTools=s.title==='Compress, Resize & Edit Pictures';
-   const items=(s.items||[]).map(x=>`<li><a href="${safeUrl(itemUrl(x))}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">${escapeHtml(itemText(x))} ↗</a></li>`).join('');
-   return `<article class="service-card ${isImageTools?'image-tools-card':''}" data-service-title="${escapeHtml(s.title)}" onclick='openService(${JSON.stringify(s).replace(/'/g,'&#39;')})'><div class="service-icon">${s.icon}</div><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.desc)}</p><ul>${items}</ul><div class="more">🔗 सेवा पर टच करें • आधिकारिक पोर्टल खुलेगा</div></article>`;
- }).join('')||'<div class="service-card"><h3>कोई सेवा नहीं मिली</h3><p>दूसरा शब्द खोजकर देखें।</p></div>';
- layoutServiceMasonry();
+   const card=`<article class="service-card ${isImageTools?'image-tools-card':''}" data-service-title="${escapeHtml(s.title)}" onclick='openService(${JSON.stringify(s).replace(/'/g,'&#39;')})'><div class="service-icon">${s.icon}</div><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.desc)}</p><ul>${(s.items||[]).map(x=>`<li><a href="${safeUrl(itemUrl(x))}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">${escapeHtml(itemText(x))} ↗</a></li>`).join('')}</ul><div class="more">🔗 सेवा पर टच करें • आधिकारिक पोर्टल खुलेगा</div></article>`;
+   // Default layout: RTO/Tax/Agriculture/Compress | Certificate/Travel/New | Bank/Education/Other
+   const col = [0,3,6,9].includes(i) ? 0 : ([1,5,8].includes(i) ? 1 : 2);
+   cols[col].push(card);
+ });
+ grid.innerHTML=cols.map(c=>`<div class="service-column">${c.join('')}</div>`).join('') || '<div class="service-card"><h3>कोई सेवा नहीं मिली</h3><p>दूसरा शब्द खोजकर देखें।</p></div>';
  resetServiceMotion();
 }
 
 function layoutServiceMasonry(){
- const grid=document.getElementById('serviceGrid'); if(!grid)return;
- const cards=[...grid.children];
- if(!cards.length)return;
- cards.forEach(c=>{c.style.gridRowEnd='';c.style.gridRowStart='';c.style.gridColumn='';});
- requestAnimationFrame(()=>{
-   const styles=getComputedStyle(grid);
-   const rowH=parseFloat(styles.gridAutoRows)||8;
-   const gap=parseFloat(styles.rowGap)||8;
-   const cols=Math.max(1,Math.min(3,parseInt(styles.gridTemplateColumns.split(' ').length,10)||3));
-   const heights=new Array(cols).fill(0);
-
-   // Place each card in the currently shortest column. This keeps the existing
-   // service order while filling the empty space instead of leaving a large
-   // vertical gap. The Image Tools card is intentionally treated like every
-   // other card, so it can occupy the open left column after the first nine.
-   cards.forEach(card=>{
-     const h=card.getBoundingClientRect().height;
-     const span=Math.max(1,Math.ceil((h+gap)/(rowH+gap)));
-     let col=0;
-     for(let i=1;i<cols;i++) if(heights[i]<heights[col]) col=i;
-     const start=heights[col]+1;
-     card.style.gridColumn=`${col+1}`;
-     card.style.gridRowStart=String(start);
-     card.style.gridRowEnd=`span ${span}`;
-     heights[col]=start+span-1;
-   });
- });
+ // Kept as a compatibility hook for the existing resize/render flow.
+ return;
 }
-window.addEventListener('resize',()=>layoutServiceMasonry());
+window.addEventListener('resize',()=>{ /* card columns remain fixed and compact */ });
 
 function generateUPI(){
   const upiId=(document.getElementById('upiId')?.value||'').trim();
@@ -252,97 +232,28 @@ function speakAI(text){
 function speakLastAI(){if(lastAIText)speakAI(lastAIText);}
 
 
-// ===== Service grid: smooth left-right auto scroll + 6s touch/mouse pause + manual drag =====
+// ===== Service grid: auto-scroll + 6s touch pause + manual left/right drag =====
 let serviceTimer=null, serviceAnim=null, serviceResumeTimer=null;
-let serviceDragging=false, serviceX=0, serviceDir=-1, serviceLast=0;
-let servicePointerId=null, serviceStartX=0, serviceStartY=0, serviceDragStartX=0, serviceDragActive=false;
+let serviceDragging=false, servicePointerId=null, serviceStartX=0, serviceDragStartX=0, serviceDragActive=false;
 function serviceViewport(){return document.getElementById('serviceViewport')}
-function computeMaxShift(){
- const vp=serviceViewport(), grid=document.getElementById('serviceGrid');
- if(!vp||!grid)return 0;
- // Use the real rendered width so manual dragging can reach the complete
- // left/right edge even after browser zoom. Never limit it to half.
- const a=grid.getBoundingClientRect(), b=vp.getBoundingClientRect();
- return Math.max(0, a.width-b.width);
-}
-function applyServiceX(x){
- const grid=document.getElementById('serviceGrid'); if(!grid)return;
- const max=computeMaxShift();
- serviceX=Math.max(-max,Math.min(0,Number(x)||0));
- grid.style.transform=`translate3d(${serviceX}px,0,0)`;
-}
-function stopServiceMotion(){
- if(serviceAnim){cancelAnimationFrame(serviceAnim);serviceAnim=null;}
- clearTimeout(serviceTimer); serviceTimer=null;
- clearTimeout(serviceResumeTimer); serviceResumeTimer=null;
- serviceLast=0;
-}
-function scheduleServiceMotion(delay=900){
- clearTimeout(serviceTimer); serviceTimer=setTimeout(startServiceAuto,delay);
-}
-function pauseServiceForSixSeconds(){
- stopServiceMotion();
- clearTimeout(serviceResumeTimer);
- serviceResumeTimer=setTimeout(()=>scheduleServiceMotion(0),6000);
-}
+function computeMaxShift(){const vp=serviceViewport(); if(!vp)return 0; return Math.max(0,vp.scrollWidth-vp.clientWidth)}
+function stopServiceMotion(){if(serviceAnim){cancelAnimationFrame(serviceAnim);serviceAnim=null;}clearTimeout(serviceTimer);serviceTimer=null;clearTimeout(serviceResumeTimer);serviceResumeTimer=null;}
+function scheduleServiceMotion(delay=900){clearTimeout(serviceTimer);serviceTimer=setTimeout(startServiceAuto,delay)}
+function pauseServiceForSixSeconds(){stopServiceMotion();serviceResumeTimer=setTimeout(()=>scheduleServiceMotion(0),6000)}
 function startServiceAuto(){
- stopServiceMotion();
- if(serviceDragging)return;
- serviceLast=performance.now();
- const tick=(now)=>{
-  if(serviceDragging)return;
-  const max=computeMaxShift();
-  if(max<=1){serviceAnim=null;return;}
-  const dt=Math.min(40,now-serviceLast)/1000; serviceLast=now;
-  const speed=Math.max(14,Math.min(30,max/8));
-  serviceX += serviceDir*speed*dt;
-  if(serviceX<=-max){serviceX=-max;serviceDir=1;}
-  if(serviceX>=0){serviceX=0;serviceDir=-1;}
-  applyServiceX(serviceX);
-  serviceAnim=requestAnimationFrame(tick);
- };
+ stopServiceMotion(); const vp=serviceViewport(); if(!vp||serviceDragging)return;
+ const max=computeMaxShift(); if(max<=1)return;
+ let last=performance.now(),dir=1;
+ const tick=now=>{if(serviceDragging){serviceAnim=null;return;}const m=computeMaxShift();if(m<=1){serviceAnim=null;return;}const dt=Math.min(40,now-last)/1000;last=now;vp.scrollLeft+=28*dt*dir;if(vp.scrollLeft>=m-1){vp.scrollLeft=m;dir=-1}if(vp.scrollLeft<=1){vp.scrollLeft=0;dir=1}serviceAnim=requestAnimationFrame(tick)};
  serviceAnim=requestAnimationFrame(tick);
 }
-function resetServiceMotion(){
- stopServiceMotion();
- serviceDragging=false;serviceDragActive=false;servicePointerId=null;serviceX=0;serviceDir=-1;
- applyServiceX(0);scheduleServiceMotion(900);
-}
+function resetServiceMotion(){stopServiceMotion();serviceDragging=false;serviceDragActive=false;servicePointerId=null;const vp=serviceViewport();if(vp)vp.scrollLeft=0;scheduleServiceMotion(900)}
 function initServiceTouch(){
- const vp=serviceViewport(),grid=document.getElementById('serviceGrid');
- if(!vp||!grid)return;
- applyServiceX(0);
- const pointerDown=(e)=>{
-  if(e.pointerType==='mouse' && e.button!==0)return;
-  servicePointerId=e.pointerId;
-  serviceStartX=e.clientX;serviceStartY=e.clientY;serviceDragStartX=serviceX;
-  serviceDragActive=false;
-  pauseServiceForSixSeconds();
-  try{vp.setPointerCapture(e.pointerId)}catch(_){ }
- };
- const pointerMove=(e)=>{
-  if(servicePointerId!==e.pointerId)return;
-  const dx=e.clientX-serviceStartX, dy=e.clientY-serviceStartY;
-  if(!serviceDragActive){
-   if(Math.abs(dx)<8 && Math.abs(dy)<8)return;
-   if(Math.abs(dx)<=Math.abs(dy))return;
-   serviceDragActive=true;
-  }
-  e.preventDefault();
-  applyServiceX(serviceDragStartX+dx);
- };
- const pointerUp=(e)=>{
-  if(servicePointerId!==e.pointerId)return;
-  servicePointerId=null;serviceDragActive=false;
-  try{vp.releasePointerCapture(e.pointerId)}catch(_){ }
-  // After the finger/mouse is released, keep the service movement paused for 6s.
-  pauseServiceForSixSeconds();
- };
- vp.addEventListener('pointerdown',pointerDown,{passive:true});
- vp.addEventListener('pointermove',pointerMove,{passive:false});
- vp.addEventListener('pointerup',pointerUp,{passive:true});
- vp.addEventListener('pointercancel',pointerUp,{passive:true});
- vp.addEventListener('lostpointercapture',()=>{servicePointerId=null;serviceDragActive=false;});
+ const vp=serviceViewport(); if(!vp)return;
+ const pointerDown=e=>{if(e.pointerType==='mouse'&&e.button!==0)return;servicePointerId=e.pointerId;serviceStartX=e.clientX;serviceDragStartX=vp.scrollLeft;serviceDragActive=false;pauseServiceForSixSeconds();try{vp.setPointerCapture(e.pointerId)}catch(_){}};
+ const pointerMove=e=>{if(servicePointerId!==e.pointerId)return;const dx=e.clientX-serviceStartX;if(!serviceDragActive){if(Math.abs(dx)<8)return;serviceDragActive=true;}e.preventDefault();const max=computeMaxShift();vp.scrollLeft=Math.max(0,Math.min(max,serviceDragStartX-dx));};
+ const pointerUp=e=>{if(servicePointerId!==e.pointerId)return;servicePointerId=null;serviceDragActive=false;serviceDragging=false;try{vp.releasePointerCapture(e.pointerId)}catch(_){}pauseServiceForSixSeconds()};
+ vp.addEventListener('pointerdown',pointerDown,{passive:true});vp.addEventListener('pointermove',pointerMove,{passive:false});vp.addEventListener('pointerup',pointerUp,{passive:true});vp.addEventListener('pointercancel',pointerUp,{passive:true});
 }
 
 function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'})}

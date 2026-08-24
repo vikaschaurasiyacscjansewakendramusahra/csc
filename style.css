@@ -452,15 +452,47 @@ html, body { overflow-x:hidden !important; max-width:100%; }
 }
 
 
-/* FINAL USER REQUEST: keep existing card gap/appearance, but allow the service
-   strip to be manually dragged left/right after browser zoom. */
+/* FINAL FIX: restore the original compact masonry cards and allow real horizontal
+   panning after desktop-mode/browser zoom. Do not change card dimensions or gaps. */
+html, body { overflow-x:auto !important; }
+.service-viewport {
+  overflow-x:auto !important;
+  overflow-y:visible !important;
+  -webkit-overflow-scrolling:touch !important;
+  scrollbar-width:none !important;
+  touch-action:pan-x pan-y pinch-zoom !important;
+}
+.service-viewport::-webkit-scrollbar{display:none!important}
 #serviceGrid.service-grid{
-  transform:translate3d(0,0,0);
-  will-change:transform;
+  width:100% !important;
+  min-width:100% !important;
+  max-width:none !important;
+  transform:none !important;
+  will-change:auto !important;
 }
+
+
+/* FINAL USER FIX: preserve the original compact 3-column masonry arrangement.
+   Independent columns remove the large empty row gaps. The viewport remains horizontally
+   pannable so browser/desktop-mode zoom can be explored with a finger. */
 .service-viewport{
-  overflow:hidden!important;
-  touch-action:pan-y pinch-zoom!important;
-  overscroll-behavior-x:contain!important;
+  width:100%!important;max-width:100%!important;overflow-x:auto!important;overflow-y:visible!important;
+  -webkit-overflow-scrolling:touch!important;scrollbar-width:none!important;touch-action:pan-x pan-y pinch-zoom!important;
+  padding:0 10px 18px!important;box-sizing:border-box!important;
 }
-#serviceGrid.service-grid .service-card{touch-action:pan-y pinch-zoom!important;}
+.service-viewport::-webkit-scrollbar{display:none!important}
+#serviceGrid.service-grid{
+  display:flex!important;align-items:flex-start!important;gap:10px!important;
+  width:100%!important;min-width:100%!important;max-width:none!important;
+  margin:0!important;padding:0!important;overflow:visible!important;box-sizing:border-box!important;
+}
+.service-column{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:10px;align-items:stretch;}
+#serviceGrid.service-grid .service-card{width:100%!important;min-width:0!important;max-width:none!important;margin:0!important;align-self:stretch!important;}
+@media(max-width:760px){
+  #serviceGrid.service-grid{min-width:674px!important;width:674px!important;}
+  .service-column{gap:10px!important;}
+}
+@media(max-width:560px){
+  #serviceGrid.service-grid{min-width:674px!important;width:674px!important;}
+  .service-column{gap:9px!important;}
+}
