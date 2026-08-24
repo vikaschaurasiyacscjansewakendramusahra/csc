@@ -58,6 +58,7 @@ function renderServices(){
    cols[col].push(card);
  });
  grid.innerHTML=cols.map(c=>`<div class="service-column">${c.join('')}</div>`).join('') || '<div class="service-card"><h3>कोई सेवा नहीं मिली</h3><p>दूसरा शब्द खोजकर देखें।</p></div>';
+ lockServiceColumnWidth();
  resetServiceMotion();
 }
 
@@ -236,6 +237,17 @@ function speakLastAI(){if(lastAIText)speakAI(lastAIText);}
 let serviceTimer=null, serviceAnim=null, serviceResumeTimer=null;
 let serviceDragging=false, servicePointerId=null, serviceStartX=0, serviceDragStartX=0, serviceDragActive=false;
 function serviceViewport(){return document.getElementById('serviceViewport')}
+function lockServiceColumnWidth(){
+ const vp=serviceViewport(), grid=document.getElementById('serviceGrid');
+ if(!vp||!grid)return;
+ const cols=[...grid.querySelectorAll('.service-column')]; if(cols.length!==3)return;
+ const gap=parseFloat(getComputedStyle(grid).columnGap||getComputedStyle(grid).gap||'10')||10;
+ const inner=Math.max(0,vp.clientWidth-20);
+ const w=Math.max(1,(inner-gap*2)/3);
+ cols.forEach(c=>{c.style.flex='0 0 '+w+'px';c.style.width=w+'px';c.style.minWidth=w+'px';});
+ grid.style.width=(w*3+gap*2)+'px';
+ grid.style.minWidth=(w*3+gap*2)+'px';
+}
 function computeMaxShift(){const vp=serviceViewport(); if(!vp)return 0; return Math.max(0,vp.scrollWidth-vp.clientWidth)}
 function stopServiceMotion(){if(serviceAnim){cancelAnimationFrame(serviceAnim);serviceAnim=null;}clearTimeout(serviceTimer);serviceTimer=null;clearTimeout(serviceResumeTimer);serviceResumeTimer=null;}
 function scheduleServiceMotion(delay=900){clearTimeout(serviceTimer);serviceTimer=setTimeout(startServiceAuto,delay)}
@@ -247,7 +259,7 @@ function startServiceAuto(){
  const tick=now=>{if(serviceDragging){serviceAnim=null;return;}const m=computeMaxShift();if(m<=1){serviceAnim=null;return;}const dt=Math.min(40,now-last)/1000;last=now;vp.scrollLeft+=28*dt*dir;if(vp.scrollLeft>=m-1){vp.scrollLeft=m;dir=-1}if(vp.scrollLeft<=1){vp.scrollLeft=0;dir=1}serviceAnim=requestAnimationFrame(tick)};
  serviceAnim=requestAnimationFrame(tick);
 }
-function resetServiceMotion(){stopServiceMotion();serviceDragging=false;serviceDragActive=false;servicePointerId=null;const vp=serviceViewport();if(vp)vp.scrollLeft=0;scheduleServiceMotion(900)}
+function resetServiceMotion(){stopServiceMotion();serviceDragging=false;serviceDragActive=false;servicePointerId=null;const vp=serviceViewport();if(vp){lockServiceColumnWidth();vp.scrollLeft=0;}scheduleServiceMotion(900)}
 function initServiceTouch(){
  const vp=serviceViewport(); if(!vp)return;
  const pointerDown=e=>{if(e.pointerType==='mouse'&&e.button!==0)return;servicePointerId=e.pointerId;serviceStartX=e.clientX;serviceDragStartX=vp.scrollLeft;serviceDragActive=false;serviceDragging=true;pauseServiceForSixSeconds();try{vp.setPointerCapture(e.pointerId)}catch(_){}};
@@ -257,5 +269,5 @@ function initServiceTouch(){
 }
 
 function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'})}
-function boot(){document.getElementById('year').textContent=new Date().getFullYear();renderServices();renderTicker();loadPublicServices();initServiceTouch();resetServiceMotion();window.addEventListener('resize',()=>{computeMaxShift();applyServiceX(serviceX);});document.addEventListener('visibilitychange',()=>{if(document.hidden)stopServiceMotion();else scheduleServiceMotion();});window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeAdmin();}});document.getElementById('serviceModal').addEventListener('click',e=>{if(e.target.id==='serviceModal')closeModal()});document.getElementById('adminModal').addEventListener('click',e=>{if(e.target.id==='adminModal')closeAdmin()});document.getElementById('serviceSearch').addEventListener('input',()=>{stopServiceMotion();renderServices();if(!document.getElementById('serviceSearch').value.trim())scheduleServiceMotion();});}
+function boot(){document.getElementById('year').textContent=new Date().getFullYear();renderServices();renderTicker();loadPublicServices();initServiceTouch();resetServiceMotion();window.addEventListener('resize',()=>{ /* Keep card widths locked; zoom creates overflow without resizing cards. */ computeMaxShift(); });document.addEventListener('visibilitychange',()=>{if(document.hidden)stopServiceMotion();else scheduleServiceMotion();});window.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeAdmin();}});document.getElementById('serviceModal').addEventListener('click',e=>{if(e.target.id==='serviceModal')closeModal()});document.getElementById('adminModal').addEventListener('click',e=>{if(e.target.id==='adminModal')closeAdmin()});document.getElementById('serviceSearch').addEventListener('input',()=>{stopServiceMotion();renderServices();if(!document.getElementById('serviceSearch').value.trim())scheduleServiceMotion();});}
 boot();
