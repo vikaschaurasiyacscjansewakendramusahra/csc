@@ -243,11 +243,11 @@ function serviceMaxShift(){
   const vp=serviceViewport();
   if(!vp) return 0;
   // Move the existing 3-column layout visually. Card dimensions and gaps are untouched.
-  return Math.max(1, Math.round(vp.clientWidth * 0.42));
+  return Math.max(1, Math.round(vp.clientWidth * 0.55));
 }
 function applyServiceOffset(){
   const grid=serviceGrid();
-  if(grid) grid.style.setProperty('left',`${-serviceOffset}px`,'important');
+  if(grid) grid.style.setProperty('transform',`translate3d(${-serviceOffset}px,0,0)`,'important');
 }
 function stopServiceMotion(){
   if(serviceAnim){cancelAnimationFrame(serviceAnim);serviceAnim=null;}

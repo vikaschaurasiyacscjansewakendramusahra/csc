@@ -494,3 +494,6 @@ html, body { overflow-x:auto !important; }
 
 /* Scroll-only fix: preserve exact card dimensions; move the existing grid with left. */
 #serviceGrid.service-grid{position:relative!important;left:0!important;transform:none!important;will-change:left!important;}
+
+/* FINAL AUTO-SCROLL ENGINE: visual-only movement; card dimensions/gaps untouched. */
+#serviceGrid.service-grid{position:relative!important;left:0!important;transform:translate3d(0,0,0)!important;will-change:transform!important;}
