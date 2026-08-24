@@ -488,6 +488,3 @@ html, body { overflow-x:auto !important; }
 }
 .service-column{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:10px;align-items:stretch;}
 #serviceGrid.service-grid .service-card{width:100%!important;min-width:0!important;max-width:none!important;margin:0!important;align-self:stretch!important;}
-/* SCROLL-ONLY FIX: keep the exact card sizes/layout; move the existing grid visually. */
-.service-viewport{overflow:hidden!important;touch-action:pan-x pan-y pinch-zoom!important;}
-#serviceGrid.service-grid{width:100%!important;min-width:100%!important;max-width:none!important;transform:translate3d(0,0,0)!important;will-change:transform!important;}

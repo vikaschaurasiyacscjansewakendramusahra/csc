@@ -234,60 +234,38 @@ function speakLastAI(){if(lastAIText)speakAI(lastAIText);}
 
 
 // ===== Service grid: auto-scroll + 6s touch pause + manual left/right drag =====
-let serviceAnim=null, serviceResumeTimer=null;
-let serviceDragging=false, servicePointerId=null, serviceStartX=0, serviceDragStartX=0, serviceOffset=0;
+let serviceTimer=null, serviceAnim=null, serviceResumeTimer=null;
+let serviceDragging=false, servicePointerId=null, serviceStartX=0, serviceDragStartX=0, serviceDragActive=false;
 function serviceViewport(){return document.getElementById('serviceViewport')}
-function serviceGrid(){return document.getElementById('serviceGrid')}
-function serviceMaxShift(){const vp=serviceViewport(); if(!vp)return 0; return Math.max(0, Math.round(vp.clientWidth*0.42));}
-function applyServiceOffset(){const grid=serviceGrid(); if(grid) grid.style.transform=`translate3d(${-serviceOffset}px,0,0)`;}
-function stopServiceMotion(){if(serviceAnim){cancelAnimationFrame(serviceAnim);serviceAnim=null;}clearTimeout(serviceResumeTimer);serviceResumeTimer=null;}
-function pauseServiceForSixSeconds(){stopServiceMotion();serviceResumeTimer=setTimeout(()=>startServiceAuto(),6000);}
+function lockServiceColumnWidth(){
+ const vp=serviceViewport(), grid=document.getElementById('serviceGrid');
+ if(!vp||!grid)return;
+ const cols=[...grid.querySelectorAll('.service-column')]; if(cols.length!==3)return;
+ const gap=parseFloat(getComputedStyle(grid).columnGap||getComputedStyle(grid).gap||'10')||10;
+ const inner=Math.max(0,vp.clientWidth-20);
+ const w=Math.max(1,(inner-gap*2)/3);
+ cols.forEach(c=>{c.style.flex='0 0 '+w+'px';c.style.width=w+'px';c.style.minWidth=w+'px';});
+ grid.style.width=(w*3+gap*2)+'px';
+ grid.style.minWidth=(w*3+gap*2)+'px';
+}
+function computeMaxShift(){const vp=serviceViewport(); if(!vp)return 0; return Math.max(0,vp.scrollWidth-vp.clientWidth)}
+function stopServiceMotion(){if(serviceAnim){cancelAnimationFrame(serviceAnim);serviceAnim=null;}clearTimeout(serviceTimer);serviceTimer=null;clearTimeout(serviceResumeTimer);serviceResumeTimer=null;}
+function scheduleServiceMotion(delay=900){clearTimeout(serviceTimer);serviceTimer=setTimeout(startServiceAuto,delay)}
+function pauseServiceForSixSeconds(){stopServiceMotion();serviceResumeTimer=setTimeout(()=>scheduleServiceMotion(0),6000)}
 function startServiceAuto(){
- stopServiceMotion();
- const vp=serviceViewport();
- if(!vp||serviceDragging)return;
- let dir=1,last=performance.now();
- const tick=now=>{
-   if(serviceDragging){serviceAnim=null;return;}
-   const max=serviceMaxShift();
-   if(max<=1){serviceAnim=null;return;}
-   const dt=Math.min(40,now-last)/1000; last=now;
-   serviceOffset+=34*dt*dir;
-   if(serviceOffset>=max){serviceOffset=max;dir=-1;}
-   if(serviceOffset<=0){serviceOffset=0;dir=1;}
-   applyServiceOffset();
-   serviceAnim=requestAnimationFrame(tick);
- };
+ stopServiceMotion(); const vp=serviceViewport(); if(!vp||serviceDragging)return;
+ const max=computeMaxShift(); if(max<=1)return;
+ let last=performance.now(),dir=1;
+ const tick=now=>{if(serviceDragging){serviceAnim=null;return;}const m=computeMaxShift();if(m<=1){serviceAnim=null;return;}const dt=Math.min(40,now-last)/1000;last=now;vp.scrollLeft+=28*dt*dir;if(vp.scrollLeft>=m-1){vp.scrollLeft=m;dir=-1}if(vp.scrollLeft<=1){vp.scrollLeft=0;dir=1}serviceAnim=requestAnimationFrame(tick)};
  serviceAnim=requestAnimationFrame(tick);
 }
-function resetServiceMotion(){stopServiceMotion();serviceDragging=false;servicePointerId=null;serviceOffset=0;applyServiceOffset();setTimeout(()=>startServiceAuto(),900);}
+function resetServiceMotion(){stopServiceMotion();serviceDragging=false;serviceDragActive=false;servicePointerId=null;const vp=serviceViewport();if(vp){lockServiceColumnWidth();vp.scrollLeft=0;}scheduleServiceMotion(900)}
 function initServiceTouch(){
  const vp=serviceViewport(); if(!vp)return;
- const pointerDown=e=>{
-   if(e.pointerType==='mouse'&&e.button!==0)return;
-   servicePointerId=e.pointerId; serviceStartX=e.clientX; serviceDragStartX=serviceOffset; serviceDragging=true;
-   pauseServiceForSixSeconds();
-   try{vp.setPointerCapture(e.pointerId)}catch(_){}
- };
- const pointerMove=e=>{
-   if(servicePointerId!==e.pointerId)return;
-   const dx=e.clientX-serviceStartX;
-   if(Math.abs(dx)<2)return;
-   e.preventDefault();
-   const max=serviceMaxShift();
-   serviceOffset=Math.max(0,Math.min(max,serviceDragStartX-dx));
-   applyServiceOffset();
- };
- const pointerUp=e=>{
-   if(servicePointerId!==e.pointerId)return;
-   servicePointerId=null; serviceDragging=false;
-   try{vp.releasePointerCapture(e.pointerId)}catch(_){}
-   pauseServiceForSixSeconds();
- };
- vp.addEventListener('pointerdown',pointerDown,{passive:true});
- vp.addEventListener('pointermove',pointerMove,{passive:false});
- vp.addEventListener('pointerup',pointerUp,{passive:true});
- vp.addEventListener('pointercancel',pointerUp,{passive:true});
+ const pointerDown=e=>{if(e.pointerType==='mouse'&&e.button!==0)return;servicePointerId=e.pointerId;serviceStartX=e.clientX;serviceDragStartX=vp.scrollLeft;serviceDragActive=false;serviceDragging=true;pauseServiceForSixSeconds();try{vp.setPointerCapture(e.pointerId)}catch(_){}};
+ const pointerMove=e=>{if(servicePointerId!==e.pointerId)return;const dx=e.clientX-serviceStartX;if(!serviceDragActive){if(Math.abs(dx)<8)return;serviceDragActive=true;}e.preventDefault();const max=computeMaxShift();vp.scrollLeft=Math.max(0,Math.min(max,serviceDragStartX-dx));};
+ const pointerUp=e=>{if(servicePointerId!==e.pointerId)return;servicePointerId=null;serviceDragActive=false;serviceDragging=false;try{vp.releasePointerCapture(e.pointerId)}catch(_){}pauseServiceForSixSeconds()};
+ vp.addEventListener('pointerdown',pointerDown,{passive:true});vp.addEventListener('pointermove',pointerMove,{passive:false});vp.addEventListener('pointerup',pointerUp,{passive:true});vp.addEventListener('pointercancel',pointerUp,{passive:true});
 }
 
 function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'})}
